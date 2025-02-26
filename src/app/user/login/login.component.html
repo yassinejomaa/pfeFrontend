@@ -1,0 +1,49 @@
+<div class="main">
+
+    <section class="sign-in">
+        <div class="container">
+            <div class="signin-content">
+                <div class="signin-image">
+                    <figure><img src="images/login.png" alt="sing up image"></figure>
+                    <a routerLink="/register" class="signup-image-link">Create an account</a>
+                </div>
+
+                <div class="signin-form">
+                    <h2 class="form-title">Sign in</h2>
+                    <form [formGroup]="form" class="register-form" id="login-form" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label for="email"><fa-icon [icon]="faEmail"></fa-icon></label>
+                            <input type="text" name="email" id="email" placeholder="Your Email" formControlName="email"/>
+                            <div class="error-feedback" *ngIf="hasDisplayableError('email')">
+                                Please enter your email adresse
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="your_pass"><fa-icon [icon]="faLock"></fa-icon></label>
+                            <input type="password" name="your_pass" id="your_pass" placeholder="Password" formControlName="password"/>
+                            <div class="error-feedback" *ngIf="hasDisplayableError('password')">
+                                Please enter your password
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                            <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                        </div>
+                        <div class="form-group form-button">
+                            <button type="submit" name="signin" id="signin" class="form-submit" value="Log in">Log in</button>
+                        </div>
+                    </form>
+                    <div class="social-login">
+                        <span class="social-label">Or login with</span>
+                        <ul class="socials">
+                            <li><a href="#"><fa-icon [icon]="faFacebook"></fa-icon></a></li>
+                            <li><a href="#"><fa-icon [icon]="faTwitter"></fa-icon></a></li>
+                            <li><a href="#"><fa-icon [icon]="faYoutube"></fa-icon></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
