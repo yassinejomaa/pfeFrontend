@@ -6,7 +6,7 @@
          </div>
       </div>
       <div class="iq-card-body">
-         <form>
+         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="form-group row align-items-center">
                <div class="col-md-12">
                   <div class="profile-img-edit">
@@ -21,19 +21,29 @@
             <div class=" row align-items-center">
                <div class="form-group col-sm-6">
                   <label for="fname">First Name:</label>
-                  <input type="text" class="form-control" id="fname" value="Barry">
+                  <input type="text" class="form-control" id="fname" [value]="first_Name" formControlName="first_Name">
+                  <div class="error-feedback" *ngIf="hasDisplayableError('first_Name')">
+                     Please enter your First Name
+                 </div>
                </div>
                <div class="form-group col-sm-6">
                   <label for="lname">Last Name:</label>
-                  <input type="text" class="form-control" id="lname" value="Tech">
+                  <input type="text" class="form-control" id="lname" [value]="last_Name" formControlName="last_Name">
+                  <div class="error-feedback" *ngIf="hasDisplayableError('last_Name')">
+                     Please enter your Last Name
+                 </div>
                </div>
                <div class="form-group col-sm-6">
                   <label for="uname">Email:</label>
-                  <input type="text" class="form-control" id="uname" value="Barry@01">
+                  <input type="text" class="form-control" id="uname" [value]="Email" formControlName="email" readonly>
+                  
                </div>
                <div class="form-group col-sm-6">
                   <label for="cname">Phone number:</label>
-                  <input type="text" class="form-control" id="cname" value="Atlanta">
+                  <input type="text" class="form-control" id="cname" [value]="PhoneNumber" formControlName="phoneNumber">
+                  <div class="error-feedback" *ngIf="hasDisplayableError('PhoneNumber')">
+                     Please enter your phoneNumber
+                 </div>
                </div>
             </div>
             <div class="d-flex justify-content-end gap-2 align-items-center w-100" style="margin-top: 2%;">

@@ -14,4 +14,15 @@ export class AuthService {
   signin(formData:any){
     return this.http.post(this.baseUrl+'/signin',formData)
   }
+  resetPassword(formData:any){
+    return this.http.post(this.baseUrl+'/resetpassword',formData)
+  }
+  update(formData: any) {
+    return this.http.put(this.baseUrl + '/update', formData, {
+        headers: { 'Content-Type': 'application/json' },
+        responseType: 'text' 
+    });
+}
+
+ 
 }

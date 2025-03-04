@@ -11,5 +11,4 @@ import { Component, Input } from '@angular/core';
     '../../../../public/css/teamplate/responsive.css']
 })
 export class ChangePasswordComponent {
-  @Input() activeTab: string = '';
 }

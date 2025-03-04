@@ -45,7 +45,7 @@ export class LoginComponent {
             next: (res: any) => {
                 console.log(res);
                 localStorage.setItem('token', res.token);
-                localStorage.setItem('userData',res.userData);
+                localStorage.setItem('userData',JSON.stringify(res.userData));
                 this.router.navigateByUrl('/mainPage');
             },
             error: (err) => {

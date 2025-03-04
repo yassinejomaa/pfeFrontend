@@ -97,6 +97,7 @@ export class RegisterComponent {
   
     } else {
       this.toastr.error('Please fill all required fields correctly', 'Validation Error');
+      
     }
   }
   
