@@ -43,7 +43,9 @@ export class LoginComponent {
     if (this.form.valid) {
         this.service.signin(this.form.value).subscribe({
             next: (res: any) => {
+                console.log(res);
                 localStorage.setItem('token', res.token);
+                localStorage.setItem('userData',res.userData);
                 this.router.navigateByUrl('/mainPage');
             },
             error: (err) => {

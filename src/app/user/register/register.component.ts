@@ -36,7 +36,7 @@ export class RegisterComponent {
   isSubmitted:boolean=false;
 
   passwordMatchValidator(control: AbstractControl): null {
-    const pass = control.get('password'); // Correction de 'pass' à 'password'
+    const pass = control.get('password'); 
     const re_pass = control.get('re_pass');
     if (pass && re_pass) {
       if (pass.value !== re_pass.value) {

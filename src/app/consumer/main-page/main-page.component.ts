@@ -15,11 +15,5 @@ import { FooterComponent } from '../../user/footer/footer.component';
     '../../../../public/css/teamplate/responsive.css']
 })
 export class MainPageComponent {
-  constructor(private router:Router){
-
-  }
-  onLogout(){
-    localStorage.removeItem('token');
-    this.router.navigateByUrl("/login");
-  }
+  
 }

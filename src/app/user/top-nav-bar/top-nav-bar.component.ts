@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -11,7 +11,10 @@ import { Router, RouterModule } from '@angular/router';
     '../../../../public/css/teamplate/responsive.css']
 })
 export class TopNavBarComponent {
-  isDropdownOpen = false; // État du menu
+  isDropdownOpen = false;
+  isShow: boolean = false;
+  isShowMessage: boolean = false;
+
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen; // Basculer entre ouvert/fermé
@@ -23,4 +26,23 @@ export class TopNavBarComponent {
     localStorage.removeItem('token');
     this.router.navigateByUrl("/login");
   }
+
+  toggleShow(event: Event) {
+    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
+    this.isShow = !this.isShow;
+    this.isShowMessage=false;
+    this.isDropdownOpen;
+  }
+  toggleShowMessage(event: Event) {
+    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
+    this.isShowMessage = !this.isShowMessage;
+    this.isShow =false;
+  }
+  @HostListener('document:click')
+  closeDropdown() {
+    this.isShow = false;
+    this.isShowMessage=false;
+  }
+  
+
 }
