@@ -14,7 +14,10 @@ import { Router, RouterLink } from '@angular/router';
   standalone: true,
   imports: [FontAwesomeModule, ReactiveFormsModule,CommonModule,FirstKeyPipe,RouterLink],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css',
+    '../../../../public/css/teamplate/style.css',
+    '../../../../public/css/teamplate/typography.css',
+    '../../../../public/css/teamplate/responsive.css']
 })
 export class RegisterComponent {
   form: FormGroup; 

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { FirstKeyPipe } from '../../../shared/pipes/first-key.pipe';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule,FirstKeyPipe],
   templateUrl: './reset-password.component.html',
   styleUrls: [
     './reset-password.component.css',
@@ -31,9 +32,13 @@ export class ResetPasswordComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.form = this.formBuilder.group({
-      newPassword: ['', [Validators.required]],
-      confirmPassword:['', [Validators.required]],
-    });
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/(?=.*[^a-zA-Z0-9])/)
+      ]],
+      confirmPassword: ['', Validators.required],
+    }, { validators: this.passwordMatchValidator }); 
   }
 
   ngOnInit(): void {
@@ -76,4 +81,22 @@ export class ResetPasswordComponent implements OnInit {
         });
     }
   }
+
+  passwordMatchValidator(control: AbstractControl): null {
+      const pass = control.get('newPassword'); 
+      const re_pass = control.get('confirmPassword');
+      if (pass && re_pass) {
+        if (pass.value !== re_pass.value) {
+          re_pass?.setErrors({ passwordMismatch: true });
+          this.toastr.error('Passwords do not match', 'Update Failed'); // Afficher le message d'erreur
+        } else {
+          re_pass?.setErrors(null);
+        }
+      }
+      return null;
+    }
+    hasDisplayableError(controlName: string): boolean {
+      const control = this.form.get(controlName);
+      return control?.invalid && (this.isSubmitted || control.touched) ? true : false;
+    }
 }
