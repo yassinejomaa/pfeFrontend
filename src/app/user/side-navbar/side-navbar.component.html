@@ -1,4 +1,4 @@
-<body>
+<body [ngClass]="{'sidebar-main': changeMenu}" class="line-height">
    <!-- loader Start -->
    <div id="loading">
       <div id="loading-center">
@@ -14,8 +14,8 @@
             <img src="images/logo.png" class="img-fluid rounded" alt="">
             <span>FinDash</span>
             </a>
-            <div class="iq-menu-bt align-self-center">
-               <div class="wrapper-menu">
+            <div class="iq-menu-bt align-self-center" (click)="menuChange($event)">
+               <div class="wrapper-menu" [ngClass]="{'open': changeMenu}">
                   <div class="main-circle"><i class="ri-menu-line"></i></div>
                   <div class="hover-circle"><i class="ri-close-fill"></i></div>
                </div>

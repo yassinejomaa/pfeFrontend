@@ -12,5 +12,10 @@ import { Component } from '@angular/core';
     '../../../../public/css/teamplate/responsive.css']
 })
 export class SideNavbarComponent {
+  changeMenu=false;
+  menuChange(event: Event) {
+    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
+    this.changeMenu = !this.changeMenu;
   
+  }
 }
