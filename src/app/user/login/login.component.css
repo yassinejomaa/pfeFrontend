@@ -490,5 +490,9 @@ display-flex, .display-flex, .display-flex-center, .signup-content, .signin-cont
     margin: 0.3rem !important;
     margin-top:0.1rem !important;
   }
-
+  .right-align-link {
+    display: block;
+    text-align: right;
+  }
+  
   

@@ -17,6 +17,9 @@ export class AuthService {
   resetPassword(formData:any){
     return this.http.post(this.baseUrl+'/resetpassword',formData)
   }
+  forgotPassword(formData:any){
+    return this.http.post(this.baseUrl+'/forgotpassword',formData)
+  }
   update(formData: any) {
     return this.http.put(this.baseUrl + '/update', formData, {
         headers: { 'Content-Type': 'application/json' },

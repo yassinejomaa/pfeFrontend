@@ -212,17 +212,61 @@ a:hover { text-decoration: none; }
 .iq-social-media li:last-child { margin-right: 0; }
 .iq-social-media li a { height: 30px; width: 30px; text-align: center; font-size: 18px; line-height: 30px; display: inline-block; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; background: #e7ecee; color: #1e3d73 !important; }
 .iq-social-media li a:hover { text-decoration: none; }
-.cube { position: absolute; top: 80vh; left: 45vw; width: 10px; height: 10px; border: solid 1px #1e3d73; transform-origin: top left; transform: scale(0) rotate(0deg) translate(-50%, -50%); animation: cube 12s ease-in forwards infinite; }
-.cube:nth-child(2n) { border-color: #1e3d73; }
-.cube:nth-child(2) { animation-delay: 2s; left: 25vw; top: 40vh; }
-.cube:nth-child(3) { animation-delay: 4s; left: 75vw; top: 50vh; }
-.cube:nth-child(4) { animation-delay: 6s; left: 90vw; top: 10vh; }
-.cube:nth-child(5) { animation-delay: 8s; left: 10vw; top: 85vh; }
-.cube:nth-child(6) { animation-delay: 10s; left: 50vw; top: 10vh; }
-@keyframes cube {
-  from { transform: scale(0) rotate(0deg) translate(-50%, -50%); opacity: 1; }
-  to { transform: scale(20) rotate(960deg) translate(-50%, -50%); opacity: 0; }
+.cube {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: solid 2px #1e3d73;
+  background-color: rgba(30, 61, 115, 0.2);
+  transform-origin: center;
+  animation: cube 8s ease-in-out infinite alternate;
 }
+
+.cube:nth-child(1) {
+  top: 20vh;
+  left: 10vw;
+  animation-delay: 0s;
+}
+
+.cube:nth-child(2) {
+  top: 40vh;
+  left: 5vw;
+  animation-delay: 1s;
+}
+
+.cube:nth-child(3) {
+  top: 60vh;
+  left: 90vw;
+  animation-delay: 2s;
+}
+
+.cube:nth-child(4) {
+  top: 80vh;
+  left: 70vw;
+  animation-delay: 3s;
+}
+
+.cube:nth-child(5) {
+  top: 30vh;
+  left: 90vw;
+  animation-delay: 4s;
+}
+
+@keyframes cube {
+  0% {
+      transform: scale(0.5) rotate(0deg);
+      opacity: 0.5;
+  }
+  50% {
+      transform: scale(1.5) rotate(180deg);
+      opacity: 1;
+  }
+  100% {
+      transform: scale(0.5) rotate(360deg);
+      opacity: 0.5;
+  }
+}
+
 
 /*---------------------------------------------------------------------
                                Dash Hover

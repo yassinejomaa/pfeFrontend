@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FirstKeyPipe } from '../../shared/pipes/first-key.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { RouterLink } from '@angular/router';
 export class RegisterComponent {
   form: FormGroup; 
 
-  constructor(private formBuilder: FormBuilder,private service:AuthService,private toastr:ToastrService) {
+  constructor(private formBuilder: FormBuilder,private service:AuthService,private toastr:ToastrService,private router:Router) {
     this.form = this.formBuilder.group({
       first_Name: ['', Validators.required],
       last_Name: ['', Validators.required],
@@ -74,6 +74,7 @@ export class RegisterComponent {
             this.form.reset();
             this.isSubmitted = false;
             this.toastr.success('New user created', 'Registration Successful');
+            this.router.navigateByUrl('/login');
           }
         },
         error: (err: { error: { errors: Array<{ code: string }> } }) => {
