@@ -15,7 +15,10 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [FontAwesomeModule,RouterLink,CommonModule,ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css',    
+    '../../../../public/css/teamplate/style.css',
+    '../../../../public/css/teamplate/typography.css',
+    '../../../../public/css/teamplate/responsive.css']
 })
 export class LoginComponent {
   form: FormGroup;

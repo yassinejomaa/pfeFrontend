@@ -1,51 +1,72 @@
-<div class="main">
 
-    <section class="sign-in">
-        <div class="container">
-            <div class="signin-content">
-                <div class="signin-image">
-                    <figure><img src="images/login.png" alt="sing up image"></figure>
-                    <a routerLink="/register" class="signup-image-link">Create an account</a>
-                </div>
-
-                <div class="signin-form">
-                    <h2 class="form-title">Sign in</h2>
-                    <form [formGroup]="form" class="register-form" id="login-form" (ngSubmit)="onSubmit()">
-                        <div class="form-group">
-                            <label for="email"><fa-icon [icon]="faEmail"></fa-icon></label>
-                            <input type="text" name="email" id="email" placeholder="Your Email" formControlName="email"/>
-                            <div class="error-feedback" *ngIf="hasDisplayableError('email')">
-                                Please enter your email adresse
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="your_pass"><fa-icon [icon]="faLock"></fa-icon></label>
-                            <input type="password" name="your_pass" id="your_pass" placeholder="Password" formControlName="password"/>
-                            <div class="error-feedback" *ngIf="hasDisplayableError('password')">
-                                Please enter your password
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                            <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
-                        </div>
-                        <a [routerLink]="['/recoverPassword']" class="right-align-link">Forgot Password</a>
-
-                        <div class="form-group form-button">
-                            <button type="submit" name="signin" id="signin" class="form-submit" value="Log in">Log in</button>
-                        </div>
-                    </form>
-                    <div class="social-login">
-                        <span class="social-label">Or login with</span>
-                        <ul class="socials">
-                            <li><a href="#"><fa-icon [icon]="faFacebook"></fa-icon></a></li>
-                            <li><a href="#"><fa-icon [icon]="faTwitter"></fa-icon></a></li>
-                            <li><a href="#"><fa-icon [icon]="faYoutube"></fa-icon></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
+       <section class="sign-in-page">
+         <div id="container-inside">
+             <div class="cube"></div>
+             <div class="cube"></div>
+             <div class="cube"></div>
+             <div class="cube"></div>
+             <div class="cube"></div>
+         </div>
+           <div class="container p-0">
+               <div class="row no-gutters height-self-center">
+                 <div style="z-index: 0;" class="col-sm-12 align-self-center bg-primary rounded">
+                   <div class="row m-0">
+                     <div class="col-md-5 bg-white sign-in-page-data">
+                         <div class="sign-in-from">
+                             <h1 style="color: black;" class="mb-0 text-center">Sign in</h1>
+                             <p class="text-center text-dark">Enter your email address and password to access admin panel.</p>
+                             <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()" class="mt-4">
+                                 <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text">
+                                            <fa-icon [icon]="faEmail" style="font-size: 1.3rem;"></fa-icon>
+                                          </span>
+                                        </div>
+                                        <input type="text" class="form-control mb-2" id="email" name="email" placeholder="Your Email" formControlName="email"/>
+                                      </div>
+                                        <div style="color: red;" class="error-feedback" *ngIf="hasDisplayableError('email')">
+                                            Please enter your email adresse
+                                        </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text">
+                                            <fa-icon [icon]="faLock" style="font-size: 1.4rem;"></fa-icon>
+                                          </span>
+                                        </div>
+                                        <input type="password" class="form-control mb-0" name="your_pass" id="your_pass" placeholder="Password" formControlName="password"/>
+                                      </div>
+                                      <div style="color: red;"  class="error-feedback" *ngIf="hasDisplayableError('password')">
+                                        Please enter your password
+                                      </div>
+                                      
+                                 </div>
+                                 <div class="d-flex justify-content-end">
+                                    <a [routerLink]="['/recoverPassword']" class="mt-3">Forgot password?</a>
+                                  </div>
+                                 <div class="sign-info text-center">
+                                     <button type="submit" class="btn btn-primary d-block w-100 mb-2" value="Log in">Sign in</button>
+                                     <span class="text-dark dark-color d-inline-block line-height-2">Don't have an account? <a href="/register">Sign up</a></span>
+                                 </div>
+                             </form>
+                         </div>
+                     </div>
+                     <div class="col-md-7 text-center sign-in-page-image">
+                         <div class="sign-in-detail text-white">
+                           <a class="sign-in-logo mb-5" href="#"><img src="images/logo-full.png" class="img-fluid" alt="logo"></a>
+                             <div class="owl-carousel" data-autoplay="true" data-loop="true" data-nav="false" data-dots="true" data-items="1" data-items-laptop="1" data-items-tab="1" data-items-mobile="1" data-items-mobile-sm="1" data-margin="0">
+                                 <div class="item">
+                                     <img src="images/login/1.png" class="img-fluid mb-4" alt="logo">
+                                     <h4 class="mb-1 text-white">Find new friends</h4>
+                                     <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+           </div>
+       </section>
