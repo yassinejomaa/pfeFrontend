@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -45,7 +45,7 @@ export class TopNavBarComponent implements OnInit {
     localStorage.removeItem('userData');
     this.router.navigateByUrl("/login");
   }
-
+  @Input() bodyClass: any = {};
   toggleShow(event: Event) {
     event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
     this.isShow = !this.isShow;

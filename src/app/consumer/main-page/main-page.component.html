@@ -3,7 +3,7 @@
 <div class="wrapper">
    <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
 
-    <app-top-nav-bar/>
+    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}"/>
      <!-- Page Content  -->
      <div id="content-page" class="content-page">
         <div class="container-fluid">
