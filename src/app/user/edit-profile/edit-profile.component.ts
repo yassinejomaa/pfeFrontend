@@ -22,5 +22,10 @@ export class EditProfileComponent {
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
+  changeMenu: boolean = false;
+
+  recevoirMessage(message: boolean) {
+    this.changeMenu = message; // Stocke la valeur reçue
+  }
 
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-side-navbar',
@@ -12,10 +12,19 @@ import { Component } from '@angular/core';
     '../../../../public/css/teamplate/responsive.css']
 })
 export class SideNavbarComponent {
-  changeMenu=false;
-  menuChange(event: Event) {
-    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
-    this.changeMenu = !this.changeMenu;
+  changeMenu = false;
   
+  @Output() clicked = new EventEmitter<boolean>(); // Déclare l'événement
+
+  menuChange(event: Event) {
+    event.stopPropagation();
+    this.changeMenu = !this.changeMenu;
+    console.log(this.changeMenu)
+    this.sendEvent(); // Envoie la valeur mise à jour au parent
   }
+
+  sendEvent() {
+    this.clicked.emit(this.changeMenu); // Envoie la valeur correcte au parent
+  }
+
 }

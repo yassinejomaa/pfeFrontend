@@ -1,5 +1,5 @@
-<body [ngClass]="{'sidebar-main': changeMenu}" class="line-height">
    <!-- loader Start -->
+  <body [ngClass]="{'sidebar-main': changeMenu}">
    <div id="loading">
       <div id="loading-center">
       </div>
@@ -15,7 +15,7 @@
             <span>FinDash</span>
             </a>
             <div class="iq-menu-bt align-self-center" (click)="menuChange($event)">
-               <div class="wrapper-menu" [ngClass]="{'open': changeMenu}">
+               <div class="wrapper-menu open" [ngClass]="{'open': changeMenu}">
                   <div class="main-circle"><i class="ri-menu-line"></i></div>
                   <div class="hover-circle"><i class="ri-close-fill"></i></div>
                </div>
@@ -153,5 +153,4 @@
             <div class="p-3"></div>
          </div>
       </div>
-      
-     
+   </body>

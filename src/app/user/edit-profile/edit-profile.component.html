@@ -1,5 +1,7 @@
+<body [ngClass]="{'sidebar-main': changeMenu}" class="line-height">
+
 <div class="wrapper">
-    <app-side-navbar/>
+   <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
     <app-top-nav-bar/>
      <!-- Page Content  -->
      <div id="content-page" class="content-page">
@@ -147,3 +149,4 @@
         </div>
      </div>
 </div>
+</body>

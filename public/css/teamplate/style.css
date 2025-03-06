@@ -266,10 +266,6 @@ a:hover { text-decoration: none; }
       opacity: 0.5;
   }
 }
-a{
-
-  text-decoration: none;
-}
 
 
 /*---------------------------------------------------------------------
@@ -440,6 +436,9 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt { opacity: 1; }
  * animation fade-in-bottom
  * ----------------------------------------
  */
+ a{
+  text-decoration: none;
+ }
 @-webkit-keyframes fade-in-bottom {
   0% { -webkit-transform: translateY(50px); transform: translateY(50px); opacity: 0; }
   100% { -webkit-transform: translateY(0); transform: translateY(0); opacity: 1; }
