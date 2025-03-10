@@ -4,6 +4,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-enter-mail',
@@ -19,7 +20,7 @@ export class EnterMailComponent {
     form: FormGroup;
     isSubmitted:boolean=false;
   
-constructor(public formBuilder:FormBuilder,private service:AuthService,private router:Router,private toastr:ToastrService){
+constructor(public formBuilder:FormBuilder,private service:UserService,private router:Router,private toastr:ToastrService){
     this.form=this.formBuilder.group({
       email: ['', [Validators.required,Validators.email]],})
       

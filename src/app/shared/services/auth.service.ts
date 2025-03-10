@@ -1,31 +1,34 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TOKEN_KEY } from '../constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http:HttpClient) { }
-  baseUrl = 'https://localhost:7171/IdentityUser';
-  createUser(formData:any){
-    return this.http.post(this.baseUrl+'/signup',formData)
+  constructor(private http: HttpClient) { }
+  createUser(formData: any) {
+    return this.http.post(environment.apiBaseUrl +'/IdentityUser/signup', formData)
   }
-  signin(formData:any){
-    return this.http.post(this.baseUrl+'/signin',formData)
+  signin(formData: any) {
+    return this.http.post(environment.apiBaseUrl + '/IdentityUser/signin', formData)
   }
-  resetPassword(formData:any){
-    return this.http.post(this.baseUrl+'/resetpassword',formData)
-  }
-  forgotPassword(formData:any){
-    return this.http.post(this.baseUrl+'/forgotpassword',formData)
-  }
-  update(formData: any) {
-    return this.http.put(this.baseUrl + '/update', formData, {
-        headers: { 'Content-Type': 'application/json' },
-        responseType: 'text' 
-    });
-}
+  
 
- 
+  isLoggedIn() {
+    return this.getToken() != null ? true : false;
+  }
+  deleteToken() {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+  saveToken(token: string) {
+    localStorage.setItem(TOKEN_KEY, token)
+  }
+
+  getToken(){
+    return localStorage.getItem(TOKEN_KEY) ;
+  }
+
 }

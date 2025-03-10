@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -19,11 +20,11 @@ export class TopNavBarComponent implements OnInit {
 
   ngOnInit() {
     const userDataString = localStorage.getItem("userData");
-  
+
     if (userDataString) {
       try {
         const userData = JSON.parse(userDataString);
-        this.firstName = userData?.first_Name ?? ''; 
+        this.firstName = userData?.first_Name ?? '';
         this.lastName = userData?.last_Name ?? '';
         console.log(this.firstName);
       } catch (error) {
@@ -33,15 +34,15 @@ export class TopNavBarComponent implements OnInit {
       console.log("Aucune donnée trouvée dans localStorage.");
     }
   }
-  
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen; // Basculer entre ouvert/fermé
   }
-  constructor(private router: Router) {
+  constructor(private router: Router,private authService: AuthService) {
 
   }
   onLogout() {
-    localStorage.removeItem('token');
+    this.authService.deleteToken()
     localStorage.removeItem('userData');
     this.router.navigateByUrl("/login");
   }

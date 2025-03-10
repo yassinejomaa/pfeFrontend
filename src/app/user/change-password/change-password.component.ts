@@ -4,6 +4,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FirstKeyPipe } from '../../shared/pipes/first-key.pipe';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-change-password',
@@ -20,7 +21,7 @@ export class ChangePasswordComponent implements OnInit {
   isSubmitted: boolean = false;
   email!: String;
 
-  constructor(private formBuilder: FormBuilder, private service: AuthService, private toastr: ToastrService) { }
+  constructor(private formBuilder: FormBuilder, private service: UserService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     const userDataString = localStorage.getItem("userData");
@@ -70,22 +71,33 @@ export class ChangePasswordComponent implements OnInit {
 
   onSubmit() {
     this.isSubmitted = true;
-
+  
     if (this.form.invalid) {
       if (this.form.hasError('passwordMismatch')) {
         this.toastr.error("Passwords do not match", "Validation Error");
       }
       return;
     }
-
+  
     this.service.resetPassword(this.form.value).subscribe({
       next: () => {
         this.toastr.success('Password Updated successfully', 'Update Password');
       },
       error: (err) => {
-        console.log(err);
-        this.toastr.error('An unknown error occurred', 'Update Failed');
+        console.error('Error details:', err);  // Afficher les détails complets de l'erreur dans la console
+  
+        // Vérifie si l'erreur provient d'un serveur
+        if (err.error && err.error.message) {
+          this.toastr.error(err.error.message, 'Update Failed'); // Message personnalisé depuis le serveur
+        } else if (err.status) {
+          // Si un code d'état est retourné, on l'affiche aussi
+          this.toastr.error(`Error ${err.status}: ${err.statusText}`, 'Update Failed');
+        } else {
+          // Erreur générale
+          this.toastr.error('An unknown error occurred', 'Update Failed');
+        }
       }
     });
   }
+  
 }

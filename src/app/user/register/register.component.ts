@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEnvelope, faLock, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
@@ -19,9 +19,14 @@ import { Router, RouterLink } from '@angular/router';
     '../../../../public/css/teamplate/typography.css',
     '../../../../public/css/teamplate/responsive.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   form: FormGroup; 
-
+  ngOnInit(): void {
+    if(this.service.isLoggedIn()){
+      this.router.navigateByUrl("/mainPage");
+  
+    }
+  }
   constructor(private formBuilder: FormBuilder,private service:AuthService,private toastr:ToastrService,private router:Router) {
     this.form = this.formBuilder.group({
       first_Name: ['', Validators.required],

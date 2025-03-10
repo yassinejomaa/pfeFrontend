@@ -4,6 +4,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-personal-information',
@@ -29,7 +30,7 @@ export class PersonalInformationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private service: AuthService,
+    private service: UserService,
     private router: Router,
     private toastr: ToastrService
   ) { }
@@ -75,7 +76,6 @@ export class PersonalInformationComponent implements OnInit {
     console.log("Valeurs du formulaire :", this.form.value);
 
     if (this.form.valid) {
-      console.log("Envoi de la requête PUT à :", this.service.baseUrl + '/update');
       console.log("Données envoyées :", JSON.stringify(this.form.value));
 
       this.service.update(this.form.value).subscribe({

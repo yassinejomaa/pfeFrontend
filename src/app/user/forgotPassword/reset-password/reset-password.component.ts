@@ -5,6 +5,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FirstKeyPipe } from '../../../shared/pipes/first-key.pipe';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -26,7 +27,7 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(
     public formBuilder: FormBuilder,
-    private service: AuthService,
+    private service: UserService,
     private router: Router,
     private toastr: ToastrService,
     private route: ActivatedRoute
