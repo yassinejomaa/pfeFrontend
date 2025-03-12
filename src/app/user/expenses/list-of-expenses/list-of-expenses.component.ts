@@ -124,7 +124,6 @@ export class ListOfExpensesComponent implements OnInit {
     console.log("hello");
     event.stopPropagation();
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message: 'Do you want to delete this Expense?',
       header: 'Delete Expense',
       icon: 'pi pi-info-circle',

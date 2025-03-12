@@ -65,7 +65,7 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService,priva
         this.expenseService.addExpenseManually(this.form.value).subscribe({
           next: (res: any) => {
             console.log(res);
-            //window.location.reload();
+            window.location.reload();
             
           },
           error: (err) => {

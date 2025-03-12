@@ -1,0 +1,27 @@
+/* Aligner toutes les entrées sur le même niveau */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Espacement entre label et input */
+    margin-bottom: 1rem; /* Espacement entre chaque champ */
+}
+
+.form-group label {
+    width: 150px; /* Taille uniforme pour tous les labels */
+    text-align: right; /* Alignement du texte */
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group p-select,
+.form-group p-datepicker,
+.form-group p-inputnumber {
+    flex: 1; /* Pour que tous les inputs aient la même largeur */
+    max-width: 400px; /* Largeur maximale */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem; /* Espacement entre les boutons */
+}
