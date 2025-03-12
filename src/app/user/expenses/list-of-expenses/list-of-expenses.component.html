@@ -13,7 +13,8 @@
 
 
 
-
+               <p-toast Style="z-index: 50;"/>
+               <p-confirmdialog Style="z-index: 50;"/>
                <div class="card">
                   <p-table #dt1 [value]="expenses" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
                      [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']">
@@ -63,6 +64,7 @@
                            </th>
                         </tr>
                      </ng-template>
+                     
                      <ng-template #body let-expense>
                         <tr>
                            <td>
@@ -82,14 +84,13 @@
                               {{ expense.amount }}
                            </td>
 
-
+                           
                            <td>
-                              <div class="d-flex gap-2">
+                              <div class="d-flex gap-2" >
                                  <app-update-expense [expense]="expense"></app-update-expense>
 
 
-                                 <p-toast />
-                                 <p-confirmdialog />
+                                 
 
                                  <p-button (click)="delete($event,expense.id)" severity="danger" [outlined]="true">
                                     <i class="ri-delete-bin-6-line"></i>
