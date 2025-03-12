@@ -5,6 +5,7 @@ import { TopNavBarComponent } from '../../user/top-nav-bar/top-nav-bar.component
 import { FooterComponent } from '../../user/footer/footer.component';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-main-page',
   standalone: true,

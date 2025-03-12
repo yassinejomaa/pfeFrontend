@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../shared/services/user.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-personal-information',
@@ -32,7 +33,8 @@ export class PersonalInformationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: UserService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService:AuthService
   ) { }
 
   ngOnInit() {

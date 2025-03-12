@@ -1,0 +1,52 @@
+<div class="card flex justify-center">
+    <p-button (click)="showDialog()" label="Show" />
+    <p-dialog header="Add Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '75rem' ,height:'100rem'}">
+        <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
+            <span class="p-text-secondary block mb-8">Add an Expense.</span>
+            
+            <input type="hidden" formControlName="UserId">
+            
+            <div class="flex items-center gap-4 mb-4">
+                <label for="name" class="font-semibold w-24">Name</label>
+                <input pInputText id="name" class="flex-auto" autocomplete="off" formControlName="Name" />
+            </div>
+
+            <div class="flex items-center gap-4 mb-4">
+                <label for="Category" class="font-semibold w-24">Category</label>
+                <div class="card flex justify-center">
+                    <p-select [options]="categories" formControlName="Category" optionLabel="name" optionValue="code" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category" class="w-full md:w-56">
+                        <ng-template #selectedItem let-selectedOption>
+                            <div class="flex items-center gap-2">
+                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
+                                     [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
+                                <div>{{ selectedOption.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template #item let-item>
+                            <div class="flex items-center gap-2">
+                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
+                                     [class]="'flag flag-' + item.code.toLowerCase()" style="width: 18px" />
+                                <div>{{ item.name }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 mb-4">
+                <label for="date" class="font-semibold w-24">Date</label>
+                <p-datepicker inputId="date" [showTime]="true" [hourFormat]="'24'" formControlName="Date"/>
+            </div>
+
+            <div class="flex items-center gap-4 mb-4">
+                <label for="withoutgrouping">Amount</label>
+                <p-inputnumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN" formControlName="Amount"/>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+                <p-button type="submit" label="Save" />
+            </div>
+        </form>
+    </p-dialog>
+</div>

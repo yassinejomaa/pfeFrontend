@@ -1,0 +1,115 @@
+<div class="wrapper">
+   <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
+
+   <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+
+   <div id="content-page" class="content-page">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-lg-12">
+               <!-- Here Add Your HTML Content -->
+               <app-add-expenses-manually />
+
+
+
+
+
+               <div class="card">
+                  <p-table #dt1 [value]="expenses" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                     [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']">
+                     <ng-template #caption>
+                        <div class="flex">
+                           <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                           <p-iconfield iconPosition="left" class="ml-auto">
+                              <p-inputicon>
+                                 <i class="pi pi-search"></i>
+                              </p-inputicon>
+                              <input pInputText type="text" (input)="filterTable($event)"
+                                 placeholder="Search keyword" />
+
+                           </p-iconfield>
+                        </div>
+                     </ng-template>
+                     <ng-template #header>
+                        <tr>
+                           <th style="min-width:15rem">
+                              <div class="flex items-center">
+                                 Name
+                                 <p-columnFilter type="text" field="name" display="menu" />
+                              </div>
+                           </th>
+                           <th style="min-width:15rem">
+                              <div class="flex items-center">
+                                 Category
+                                 <p-columnFilter type="text" field="categoryName" display="menu" />
+                              </div>
+                           </th>
+
+                           <th style="min-width:10rem">
+                              <div class="flex items-center">
+                                 Date
+                                 <p-columnFilter type="date" field="date" display="menu" />
+                              </div>
+                           </th>
+                           <th style="min-width:10rem">
+                              <div class="flex items-center">
+                                 Amount
+                                 <p-columnFilter type="numeric" field="amount" display="menu" currency="TND" />
+                              </div>
+                           </th>
+
+                           <th style="width: 3rem">
+                              Action
+                           </th>
+                        </tr>
+                     </ng-template>
+                     <ng-template #body let-expense>
+                        <tr>
+                           <td>
+                              {{ expense.name }}
+                           </td>
+
+                           <td>
+                              {{ getCategoryName(expense.category) }}
+                           </td>
+
+
+                           <td>
+                              {{ expense.date | date:'yyyy-MM-dd' }}
+                           </td>
+
+                           <td>
+                              {{ expense.amount }}
+                           </td>
+
+
+                           <td>
+                              <div class="d-flex gap-2">
+                                 <app-update-expense [expense]="expense"></app-update-expense>
+
+
+                                 <p-toast />
+                                 <p-confirmdialog />
+
+                                 <p-button (click)="delete($event,expense.id)" severity="danger" [outlined]="true">
+                                    <i class="ri-delete-bin-6-line"></i>
+                                 </p-button>
+
+
+                              </div>
+                           </td>
+
+                        </tr>
+                     </ng-template>
+                     <ng-template #emptymessage>
+                        <tr>
+                           <td colspan="5">No expenses found.</td>
+                        </tr>
+                     </ng-template>
+                  </p-table>
+               </div>
+            </div>
+
+
+         </div>
+         <app-footer />

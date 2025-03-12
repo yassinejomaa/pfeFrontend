@@ -7,6 +7,7 @@ import { ChangePasswordComponent } from './user/change-password/change-password.
 import { EnterMailComponent } from './user/forgotPassword/enter-mail/enter-mail.component';
 import { ResetPasswordComponent } from './user/forgotPassword/reset-password/reset-password.component';
 import { authGuard } from './shared/auth.guard';
+import { ListOfExpensesComponent } from './user/expenses/list-of-expenses/list-of-expenses.component';
 
 export const routes: Routes = [
 
@@ -17,4 +18,6 @@ export const routes: Routes = [
     { path: 'pswd', component: ChangePasswordComponent ,canActivate:[authGuard]},
     { path: 'recoverPassword', component: EnterMailComponent },
     { path: 'resetPassword', component: ResetPasswordComponent },
+    { path: 'listExpenses', component: ListOfExpensesComponent },
+    
 ];

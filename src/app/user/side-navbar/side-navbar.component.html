@@ -25,11 +25,8 @@
             <nav class="iq-sidebar-menu">
                <ul id="iq-sidebar-toggle" class="iq-menu">
                   <li class="active">
-                     <a href="#dashboard" class="iq-waves-effect" data-toggle="collapse" aria-expanded="true"><span class="ripple rippleEffect"></span><i class="las la-home iq-arrow-left"></i><span>Dashboard</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                     <ul id="dashboard" class="iq-submenu collapse show" data-parent="#iq-sidebar-toggle">
-                        <li class="active"><a href="index.html"><i class="las la-laptop-code"></i>Account Dashboard</a></li>
-                        
-                     </ul>
+                     <a [routerLink]="['/listExpenses']" class="iq-waves-effect" data-toggle="collapse" aria-expanded="true"><span class="ripple rippleEffect"></span><i class="iq-arrow-left ri-wallet-3-line"></i><span>Manage Expenses</span></a>
+                     
                   </li>
                 
                   
