@@ -23,6 +23,10 @@ export class ExpenseService {
 deleteExpense(id: number) {
   return this.http.delete(`${environment.apiBaseUrl}/api/Expenses/${id}`);
 }
+importCsv(formData :any){
+  return this.http.post(environment.apiBaseUrl + '/api/Expenses/import-csv', formData)
+
+}
 
 
   

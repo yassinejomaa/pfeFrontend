@@ -24,6 +24,7 @@ import { UpdateExpenseComponent } from '../update-expense/update-expense.compone
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ImportCsvComponent } from '../import-csv/import-csv.component';
 
 
 
@@ -32,7 +33,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   standalone: true,
   imports: [AddExpensesManuallyComponent,SideNavbarComponent,TopNavBarComponent,
     FooterComponent,CommonModule,ButtonModule,TableModule, TagModule, IconFieldModule, 
-    InputTextModule, InputIconModule, MultiSelectModule, SelectModule,UpdateExpenseComponent,ConfirmDialog, ToastModule, ButtonModule,ConfirmDialogModule],
+    InputTextModule, InputIconModule, MultiSelectModule, SelectModule,UpdateExpenseComponent,ConfirmDialog,
+     ToastModule, ButtonModule,ConfirmDialogModule,ImportCsvComponent],
   templateUrl: './list-of-expenses.component.html',
   styleUrls: ['./list-of-expenses.component.css',
     '../../../../../public/css/teamplate/style.css',
@@ -64,7 +66,8 @@ export class ListOfExpensesComponent implements OnInit {
 
   activityValues: number[] = [0, 100];
 
-  constructor(private expenseService: ExpenseService,private confirmationService: ConfirmationService, private messageService: MessageService,private toastr: ToastrService) {}
+  constructor(private expenseService: ExpenseService,private confirmationService: ConfirmationService,
+     private messageService: MessageService,private toastr: ToastrService) {}
 
 
   statuses!: any[];
