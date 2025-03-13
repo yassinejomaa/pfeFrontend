@@ -1,2 +1,5 @@
-<input type="file" style="display:none" #importCSV (change)="fileSelection($event)"/>
-<label>Select a file:</label><button (click)="importCSV.click();">Browse</button>
+<input type="file" style="display:none" #importCSV (change)="fileSelection($event)" />
+<label for="importCSV"></label>
+<button class="custom-file-btn" (click)="importCSV.click();">
+  Import CSV
+</button>

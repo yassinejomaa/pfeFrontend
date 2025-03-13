@@ -30,6 +30,8 @@ export class ImportCsvComponent {
       next: (result) => {
         console.log(result);
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode' });
+        window.location.reload();
+
       },
       error: (error) => {
         console.error("Upload error:", error);

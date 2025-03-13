@@ -1,0 +1,8 @@
+/* Container for buttons */
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;  /* Align buttons to the right */
+    gap: 4%;  /* Optional: Space between the buttons */
+    margin-top: 0%;  /* Optional: Adjust margin at the top */
+  }
+  

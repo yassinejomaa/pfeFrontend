@@ -1,5 +1,10 @@
 <div class="flex justify-center">
-    <p-button (click)="showDialog()" label="Add Expense" />
+    <button (click)="showDialog()" class="custom-blue-btn top-right-btn">
+        <i class="ri-add-line"></i>
+    </button>
+      
+      
+
     
     <p-dialog header="Add Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
         <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">

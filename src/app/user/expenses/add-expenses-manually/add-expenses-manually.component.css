@@ -25,3 +25,30 @@
     justify-content: flex-end;
     gap: 0.5rem; /* Espacement entre les boutons */
 }
+.custom-blue-btn {
+    background-color: #1e3d73;
+    color: white;
+    border: 2px solid #1e3d73;
+    padding: 12px 14px; /* Adjust padding for a circular button */
+    border-radius: 50%; /* Makes the button circular */
+    font-size: 20px; /* Adjust icon size */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Set a fixed width and height for a perfect circle */
+    height: 50px; /* Set a fixed width and height for a perfect circle */
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .custom-blue-btn:hover {
+    background-color: #16325c; /* Darker blue on hover */
+    border-color: #16325c; /* Darker border on hover */
+  }
+  
+  .custom-blue-btn i {
+    font-size: 24px; /* Icon size adjustment */
+  }
+  .top-right-btn {
+    margin-left: 95%;
+  }
