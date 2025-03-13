@@ -25,7 +25,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ImportCsvComponent } from '../import-csv/import-csv.component';
+<<<<<<< HEAD
 import { AuthService } from '../../../shared/services/auth.service';
+=======
+import { FormsModule } from '@angular/forms'; // Importation de FormsModule
+
+>>>>>>> d32e18e041e3e9be3f4944c166c5dd73d1cece81
 
 
 
@@ -35,7 +40,7 @@ import { AuthService } from '../../../shared/services/auth.service';
   imports: [AddExpensesManuallyComponent,SideNavbarComponent,TopNavBarComponent,
     FooterComponent,CommonModule,ButtonModule,TableModule, TagModule, IconFieldModule, 
     InputTextModule, InputIconModule, MultiSelectModule, SelectModule,UpdateExpenseComponent,ConfirmDialog,
-     ToastModule, ButtonModule,ConfirmDialogModule,ImportCsvComponent],
+     ToastModule, ButtonModule,ConfirmDialogModule,ImportCsvComponent,FormsModule],
   templateUrl: './list-of-expenses.component.html',
   styleUrls: ['./list-of-expenses.component.css',
     '../../../../../public/css/teamplate/style.css',
@@ -119,10 +124,11 @@ export class ListOfExpensesComponent implements OnInit {
   
   
 
-  clear(table: Table) {
-      table.clear();
-      this.searchValue = ''
-  }
+      clear(table: Table) {
+        table.clear();  // Cette ligne vide le tableau
+        this.searchValue = '';  // Si tu veux réinitialiser la recherche
+    }
+    
 
 
   delete(event: Event, id: any) {

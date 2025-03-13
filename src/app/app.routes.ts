@@ -18,6 +18,6 @@ export const routes: Routes = [
     { path: 'pswd', component: ChangePasswordComponent ,canActivate:[authGuard]},
     { path: 'recoverPassword', component: EnterMailComponent },
     { path: 'resetPassword', component: ResetPasswordComponent },
-    { path: 'listExpenses', component: ListOfExpensesComponent },
+    { path: 'listExpenses', component: ListOfExpensesComponent ,canActivate:[authGuard]},
     
 ];
