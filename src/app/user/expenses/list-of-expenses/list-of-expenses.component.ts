@@ -25,12 +25,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ImportCsvComponent } from '../import-csv/import-csv.component';
-<<<<<<< HEAD
+
 import { AuthService } from '../../../shared/services/auth.service';
-=======
+
 import { FormsModule } from '@angular/forms'; // Importation de FormsModule
 
->>>>>>> d32e18e041e3e9be3f4944c166c5dd73d1cece81
 
 
 
