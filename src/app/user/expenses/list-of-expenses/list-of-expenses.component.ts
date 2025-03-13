@@ -25,6 +25,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ImportCsvComponent } from '../import-csv/import-csv.component';
+import { AuthService } from '../../../shared/services/auth.service';
 
 
 
@@ -59,7 +60,7 @@ export class ListOfExpensesComponent implements OnInit {
 
 
   expenses!: Expense[];
-  
+  userid:any; 
 
 
   loading: boolean = true;
@@ -67,7 +68,7 @@ export class ListOfExpensesComponent implements OnInit {
   activityValues: number[] = [0, 100];
 
   constructor(private expenseService: ExpenseService,private confirmationService: ConfirmationService,
-     private messageService: MessageService,private toastr: ToastrService) {}
+     private messageService: MessageService,private toastr: ToastrService,private authService:AuthService) {}
 
 
   statuses!: any[];
@@ -79,7 +80,8 @@ export class ListOfExpensesComponent implements OnInit {
 
  
       ngOnInit() {
-        this.expenseService.getExpensesList().subscribe(expenses => {
+        this.userid =this.authService.getUserId();
+        this.expenseService.getExpensesOfUser(this.userid).subscribe(expenses => {
           this.expenses = expenses.map(expense => ({
             ...expense,
             categoryName: this.getCategoryName(expense.category),

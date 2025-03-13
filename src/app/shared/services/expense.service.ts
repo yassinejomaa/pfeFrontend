@@ -15,6 +15,9 @@ export class ExpenseService {
   getExpensesList() {
     return this.http.get<Expense[]>(`${environment.apiBaseUrl}/api/Expenses`);
   }
+  getExpensesOfUser(userId:any) {
+    return this.http.get<Expense[]>(`${environment.apiBaseUrl}/api/Expenses/getUserExpensesById/${userId}`);
+  }
 
   updateExpense(id: number, formData: any) {
     return this.http.put(`${environment.apiBaseUrl}/api/Expenses/${id}`, formData);
