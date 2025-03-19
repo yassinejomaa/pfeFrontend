@@ -1,8 +1,12 @@
 export const categoryMap: Record<number, string> = {
   0: "Food",
-  1: "Rent",
-  2: "Transportation",
+  1: "Transport",
+  2: "Entertainment",
   3: "Health",
-  4: "Entertainment",
-  5: "Other"
+  4: "Electronics",
+  5: "Fashion",
+  6: "Housing",
+  7: "Others"
+
+  
 };

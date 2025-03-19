@@ -11,13 +11,21 @@ import { Fluid } from 'primeng/fluid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ExpenseService } from '../../../shared/services/expense.service';
+import { categoryMap } from '../../../shared/model/CategoryType';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CommonModule } from '@angular/common';
+
 
 
 
 @Component({
   selector: 'app-add-expenses-manually',
   standalone: true,
-  imports: [Dialog, ButtonModule, InputTextModule,FormsModule, SelectModule,InputNumber,DatePicker,Fluid, ReactiveFormsModule],
+  imports: [Dialog, ButtonModule, InputTextModule,FormsModule,
+     SelectModule,InputNumber,DatePicker,Fluid, ReactiveFormsModule,
+     ProgressSpinnerModule,CommonModule
+     ],
   templateUrl: './add-expenses-manually.component.html',
   styleUrl: './add-expenses-manually.component.css'
 })
@@ -28,20 +36,25 @@ export class AddExpensesManuallyComponent implements OnInit {
   value1!: number;
   datetime24h: Date[] | undefined;
   form: FormGroup;
+  product!:any;
+  loading: boolean = false;
 
   selectedCategories: string | undefined;
   ngOnInit() {
     this.categories = [
-        { name: 'Food', code: '0' },
-        { name: 'Rent', code: '1' },
-        { name: 'Transportation', code: '2' },
-        { name: 'Health', code: '3' },
-        { name: 'Entertainment', code: '4' },
-        { name: 'Other', code: '5' },
-        
+      { name: 'Food', code: '0' },
+      { name: 'Transport', code: '1' },
+      { name: 'Entertainment', code: '2' },
+      { name: 'Health', code: '3' },
+      { name: 'Electronics', code: '4' },
+      { name: 'Fashion', code: '5' },
+      { name: 'Housing', code: '6' },
+      { name: 'Others', code: '7' },
+
     ];
 }
-constructor(public formBuilder: FormBuilder, private toastr: ToastrService,private authService:AuthService,private expenseService:ExpenseService) {
+constructor(public formBuilder: FormBuilder, private toastr: ToastrService
+  ,private authService:AuthService,private expenseService:ExpenseService,private messageService: MessageService) {
     this.form = this.formBuilder.group({
       UserId: [this.authService.getUserId(), Validators.required],
       Name: ['', Validators.required],
@@ -79,6 +92,36 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService,priva
       }
      console.log(this.form.value)
     }
+
+    predictCategory() {
+      if (this.form.value.Name) {
+        this.loading = true; // ➜ Afficher le spinner avant l'appel API
+        const product = { product: this.form.value.Name };
+        
+        this.expenseService.predictCategoy(product).subscribe({
+          next: (res: any) => {
+            console.log("🔥 Catégorie prédite :", res.predicted_category);
+    
+            const categoryCode = Object.keys(categoryMap).find(
+              key => categoryMap[Number(key)] === res.predicted_category
+            );
+    
+            if (categoryCode !== undefined) {
+              this.form.patchValue({ Category: categoryCode });
+            } else {
+              console.warn("❌ Catégorie non trouvée dans le mapping");
+            }
+          },
+          error: (err) => {
+            console.error("Erreur API :", err);
+            this.toastr.error('Erreur lors de la prédiction', 'Erreur');
+          },
+          complete: () => {
+            this.loading = false; // ➜ Cacher le spinner après la réponse API
+          }
+        });
+      }
+    }
+    
   
-  
-}
+  }

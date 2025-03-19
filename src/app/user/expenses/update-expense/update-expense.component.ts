@@ -32,11 +32,13 @@ export class UpdateExpenseComponent implements OnInit {
   ngOnInit() {
     this.categories = [
       { name: 'Food', code: '0' },
-      { name: 'Rent', code: '1' },
-      { name: 'Transportation', code: '2' },
+      { name: 'Transport', code: '1' },
+      { name: 'Entertainment', code: '2' },
       { name: 'Health', code: '3' },
-      { name: 'Entertainment', code: '4' },
-      { name: 'Other', code: '5' },
+      { name: 'Electronics', code: '4' },
+      { name: 'Fashion', code: '5' },
+      { name: 'Housing', code: '6' },
+      { name: 'Others', code: '7' },
 
     ];
     this.initForm();

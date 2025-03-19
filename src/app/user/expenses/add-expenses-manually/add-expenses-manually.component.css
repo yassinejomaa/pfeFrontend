@@ -52,3 +52,16 @@
   .top-right-btn {
     margin-left: 95%;
   }
+  #buttonIa {
+    background: none; /* Supprime l'arrière-plan */
+    border: none; /* Supprime la bordure */
+    padding: 0; /* Supprime le padding */
+    outline: none; /* Supprime l'effet de focus */
+}
+
+#buttonIa img {
+    display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+

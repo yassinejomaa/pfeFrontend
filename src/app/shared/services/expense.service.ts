@@ -30,6 +30,10 @@ importCsv(formData :any){
   return this.http.post(environment.apiBaseUrl + '/api/Expenses/import-csv', formData)
 
 }
+predictCategoy(product :any){
+  return this.http.post(environment.flaskApi + '/predict', product)
+
+}
 
 
   
