@@ -12,11 +12,19 @@ import { Fluid } from 'primeng/fluid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ExpenseService } from '../../../shared/services/expense.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { categoryMap } from '../../../shared/model/CategoryType';
+import { CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-update-expense',
   standalone: true,
-  imports: [Dialog, ButtonModule, InputTextModule,FormsModule, SelectModule,InputNumber,DatePicker,Fluid, ReactiveFormsModule],
+  imports: [Dialog, ButtonModule, InputTextModule
+    ,FormsModule, SelectModule,InputNumber
+    ,DatePicker,Fluid, ReactiveFormsModule,ProgressSpinnerModule,CommonModule],
   templateUrl: './update-expense.component.html',
   styleUrl: './update-expense.component.css'
 })
@@ -27,6 +35,8 @@ export class UpdateExpenseComponent implements OnInit {
   value1!: number;
   datetime24h: Date[] | undefined;
   form!: FormGroup;
+  loading: boolean = false;
+
   @Input() expense!: Expense;
 
   ngOnInit() {
@@ -43,7 +53,9 @@ export class UpdateExpenseComponent implements OnInit {
     ];
     this.initForm();
   }
-  constructor(public formBuilder: FormBuilder, private toastr: ToastrService, private authService: AuthService, private expenseService: ExpenseService) {
+  constructor(public formBuilder: FormBuilder, private toastr: ToastrService,
+     private authService: AuthService, private expenseService: ExpenseService,
+     private messageService: MessageService) {
 
   }
 
@@ -91,4 +103,42 @@ export class UpdateExpenseComponent implements OnInit {
       });
     }
   }
+   predictCategory() {
+    console.log("hello")
+        if (this.form.value.Name) {
+          this.loading = true; // ➜ Afficher le spinner avant l'appel API
+          const product = { product: this.form.value.Name };
+          
+          this.expenseService.predictCategoy(product).subscribe({
+            next: (res: any) => {
+              console.log("🔥 Catégorie prédite :", res.predicted_category);
+      
+              const categoryCode = Object.keys(categoryMap).find(
+                key => categoryMap[Number(key)] === res.predicted_category
+              );
+      
+              if (categoryCode !== undefined) {
+                this.form.patchValue({ Category: categoryCode });
+              } else {
+                console.warn("❌ Catégorie non trouvée dans le mapping");
+              }
+            },
+            error: (err) => {
+              console.error("Erreur API :", err);
+              this.toastr.error('Erreur lors de la prédiction', 'Erreur');
+            },
+            complete: () => {
+              this.loading = false; // ➜ Cacher le spinner après la réponse API
+            }
+          });
+        }
+        else{
+          this.messageService.add({ severity: 'error', summary: 'error', detail: 'fill the name of the product' });
+  
+        }
+      }
+      
+    
+    
+  
 }
