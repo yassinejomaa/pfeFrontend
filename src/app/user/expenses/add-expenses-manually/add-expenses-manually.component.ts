@@ -121,6 +121,10 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
           }
         });
       }
+      else{
+        this.messageService.add({ severity: 'error', summary: 'error', detail: 'fill the name of the product' });
+
+      }
     }
     
   
