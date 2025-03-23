@@ -18,32 +18,32 @@
                             <form class="mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
                                 <!-- First Name -->
                                 <div class="form-group">
-                                    <label for="first_Name">First Name</label>
+                                    <label for="firstName">First Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control mb-2" id="first_Name" placeholder="Your First Name" formControlName="first_Name" />
+                                        <input type="text" class="form-control mb-2" id="firstName" placeholder="Your First Name" formControlName="firstName" />
                                     </div>
-                                    <div class="error-feedback" *ngIf="hasDisplayableError('first_Name')">
+                                    <div class="error-feedback" *ngIf="hasDisplayableError('firstName')">
                                         Please enter your First Name
                                     </div>
                                 </div>
 
                                 <!-- Last Name -->
                                 <div class="form-group">
-                                    <label for="last_Name">Last Name</label>
+                                    <label for="lastName">Last Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control mb-2" id="last_Name" placeholder="Your Last Name" formControlName="last_Name" />
+                                        <input type="text" class="form-control mb-2" id="lastName" placeholder="Your Last Name" formControlName="lastName" />
                                     </div>
-                                    <div class="error-feedback" *ngIf="hasDisplayableError('last_Name')">
+                                    <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
                                         Please enter your Last Name
                                     </div>
                                 </div>

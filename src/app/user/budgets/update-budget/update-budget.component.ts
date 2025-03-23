@@ -66,6 +66,7 @@ export class UpdateBudgetComponent implements OnInit {
         UserId: [this.authService.getUserId(), Validators.required],
         limitValue: [this.budget.limitValue, Validators.required],
         alertValue: [this.budget.alertValue, Validators.required],
+        Category: [String(this.budget.category), Validators.required],
       });
     
       console.log("Valeur initialisée dans le formulaire :", this.form.value);

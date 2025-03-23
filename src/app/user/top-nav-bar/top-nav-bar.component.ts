@@ -24,8 +24,8 @@ export class TopNavBarComponent implements OnInit {
     if (userDataString) {
       try {
         const userData = JSON.parse(userDataString);
-        this.firstName = userData?.first_Name ?? '';
-        this.lastName = userData?.last_Name ?? '';
+        this.firstName = userData?.firstName ?? '';
+        this.lastName = userData?.lastName ?? '';
         console.log(this.firstName);
       } catch (error) {
         console.error("Erreur lors de la conversion JSON :", error);

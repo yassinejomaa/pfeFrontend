@@ -21,15 +21,15 @@
             <div class=" row align-items-center">
                <div class="form-group col-sm-6">
                   <label for="fname">First Name:</label>
-                  <input type="text" class="form-control" id="fname" [value]="first_Name" formControlName="first_Name">
-                  <div class="error-feedback" *ngIf="hasDisplayableError('first_Name')">
+                  <input type="text" class="form-control" id="fname" [value]="firstName" formControlName="firstName">
+                  <div class="error-feedback" *ngIf="hasDisplayableError('firstName')">
                      Please enter your First Name
                  </div>
                </div>
                <div class="form-group col-sm-6">
                   <label for="lname">Last Name:</label>
-                  <input type="text" class="form-control" id="lname" [value]="last_Name" formControlName="last_Name">
-                  <div class="error-feedback" *ngIf="hasDisplayableError('last_Name')">
+                  <input type="text" class="form-control" id="lname" [value]="lastName" formControlName="lastName">
+                  <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
                      Please enter your Last Name
                  </div>
                </div>

@@ -22,8 +22,8 @@ import { HttpHeaders } from '@angular/common/http';
   ]
 })
 export class PersonalInformationComponent implements OnInit {
-  first_Name: string = '';
-  last_Name: string = '';
+  firstName: string = '';
+  lastName: string = '';
   PhoneNumber: string = '';
   Email: string = '';
   form!: FormGroup; // ✅ Enlever "?" et utiliser "!" pour garantir l'initialisation
@@ -40,8 +40,8 @@ export class PersonalInformationComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      last_Name: ['', Validators.required],
-      first_Name: ['', Validators.required],
+      lastName: ['', Validators.required],
+      firstName: ['', Validators.required],
       phoneNumber: ['', Validators.required]
     });
   
@@ -56,8 +56,8 @@ export class PersonalInformationComponent implements OnInit {
   
           this.form.patchValue({
             email: userData.email || '',
-            first_Name: userData.first_Name || '',
-            last_Name: userData.last_Name || '',
+            firstName: userData.firstName || '',
+            lastName: userData.lastName || '',
             phoneNumber: userData.phoneNumber || ''
           });
   
