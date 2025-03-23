@@ -1,0 +1,112 @@
+<div class="wrapper">
+    <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
+ 
+    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+ 
+    <div id="content-page" class="content-page">
+       <div class="container-fluid">
+          <div class="row">
+             <div class="col-lg-12">
+                
+                <div class="buttons-container">
+                   <app-add-budget></app-add-budget>
+                   
+                 </div>
+                 
+ 
+ 
+                <p-toast Style="z-index: 50;"/>
+                <p-confirmdialog Style="z-index: 50;"/>
+                <div class="card">
+                   <p-table #dt1 [value]="budgets" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"
+                      [loading]="loading" [paginator]="true" [globalFilterFields]="['limitValue', 'categoryName','alertValue']">
+                      <ng-template #caption>
+                         <div class="flex" style="display: flex; align-items: center; gap: 10px;">
+                            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                            
+                            <p-iconfield iconPosition="left" class="ml-auto">
+                              <p-inputicon>
+                                <i class="pi pi-search"></i>
+                              </p-inputicon>
+                              <input pInputText type="text" [(ngModel)]="searchValue" (input)="filterTable($event)" placeholder="Search keyword" />
+                            </p-iconfield>
+                          </div>
+                          
+                      </ng-template>
+                      <ng-template #header>
+                         <tr>
+                            
+                            <th style="min-width:15rem">
+                               <div class="flex items-center">
+                                  Category
+                                  <p-columnFilter type="text" field="categoryName" display="menu" />
+                               </div>
+                            </th>
+ 
+                            <th style="min-width:10rem">
+                               <div class="flex items-center">
+                                  limit Value
+                                  <p-columnFilter type="numeric" field="limitValue" display="menu" currency="TND" />
+                               </div>
+                            </th>
+
+                            <th style="min-width:10rem">
+                                <div class="flex items-center">
+                                   alert Value
+                                   <p-columnFilter type="numeric" field="alertValue" display="menu" currency="TND" />
+                                </div>
+                             </th>
+ 
+                            <th style="width: 3rem">
+                               Action
+                            </th>
+                         </tr>
+                      </ng-template>
+                      
+                      <ng-template #body let-budget>
+                         <tr>
+                            
+ 
+                            <td>
+                               {{ getCategoryName(budget.category) }}
+                            </td>
+ 
+ 
+                            <td>
+                                {{budget.limitValue}}
+                            </td>
+ 
+                            <td>
+                                {{budget.alertValue}}
+                            </td>
+ 
+                            
+                            <td>
+                               <div class="d-flex gap-2" >
+                                  <app-update-budget [budget]="budget"></app-update-budget>
+ 
+ 
+                                  
+ 
+                                  <p-button (click)="delete($event,budget.id)" severity="danger" [outlined]="true">
+                                     <i class="ri-delete-bin-6-line"></i>
+                                  </p-button>
+ 
+ 
+                               </div>
+                            </td>
+ 
+                         </tr>
+                      </ng-template>
+                      <ng-template #emptymessage>
+                         <tr>
+                            <td colspan="5">No budgets found.</td>
+                         </tr>
+                      </ng-template>
+                   </p-table>
+                </div>
+             </div>
+ 
+ 
+          </div>
+          <app-footer />

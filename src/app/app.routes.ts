@@ -8,6 +8,7 @@ import { EnterMailComponent } from './user/forgotPassword/enter-mail/enter-mail.
 import { ResetPasswordComponent } from './user/forgotPassword/reset-password/reset-password.component';
 import { authGuard } from './shared/auth.guard';
 import { ListOfExpensesComponent } from './user/expenses/list-of-expenses/list-of-expenses.component';
+import { ListOfUserBudgetComponent } from './user/budgets/list-of-user-budget/list-of-user-budget.component';
 
 export const routes: Routes = [
 
@@ -19,5 +20,6 @@ export const routes: Routes = [
     { path: 'recoverPassword', component: EnterMailComponent },
     { path: 'resetPassword', component: ResetPasswordComponent },
     { path: 'listExpenses', component: ListOfExpensesComponent ,canActivate:[authGuard]},
+    { path: 'listBudgets', component: ListOfUserBudgetComponent ,canActivate:[authGuard]},
     
 ];
