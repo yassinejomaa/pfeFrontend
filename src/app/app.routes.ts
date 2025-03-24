@@ -11,8 +11,8 @@ import { ListOfExpensesComponent } from './user/expenses/list-of-expenses/list-o
 import { ListOfUserBudgetComponent } from './user/budgets/list-of-user-budget/list-of-user-budget.component';
 
 export const routes: Routes = [
-
-    { path: 'login', component: LoginComponent }, // Page d'accueil
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'login', component: LoginComponent }, 
     { path: 'register', component: RegisterComponent }, 
     { path: 'mainPage', component: MainPageComponent ,canActivate:[authGuard]},
     { path: 'editProfile', component: EditProfileComponent ,canActivate:[authGuard]},
