@@ -1,8 +1,14 @@
-/* Container for buttons */
+/* Container principal */
+#container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%; /* Assurer que le conteneur prend toute la largeur */
+}
+
+/* Container pour les boutons */
 .buttons-container {
-    display: flex;
-    justify-content: flex-end;  /* Align buttons to the right */
-    gap: 4%;  /* Optional: Space between the buttons */
-    margin-top: 0%;  /* Optional: Adjust margin at the top */
-  }
-  
+  margin-left: auto; /* Pousse le bouton complètement à droite */
+  display: flex;
+  gap: 10px; /* Espacement entre les boutons */
+}

@@ -8,10 +8,7 @@
           <div class="row">
              <div class="col-lg-12">
                 
-                <div class="buttons-container">
-                   <app-add-budget></app-add-budget>
-                   
-                 </div>
+                
                  
  
  
@@ -21,7 +18,11 @@
                    <p-table #dt1 [value]="budgets" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"
                       [loading]="loading" [paginator]="true" [globalFilterFields]="['limitValue', 'categoryName','alertValue']">
                       <ng-template #caption>
-                         <div class="flex" style="display: flex; align-items: center; gap: 10px;">
+                         <div class="flex" style="display: flex; align-items: center; gap: 10px;" id="container">
+                           
+
+
+
                             <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
                             
                             <p-iconfield iconPosition="left" class="ml-auto">
@@ -30,6 +31,11 @@
                               </p-inputicon>
                               <input pInputText type="text" [(ngModel)]="searchValue" (input)="filterTable($event)" placeholder="Search keyword" />
                             </p-iconfield>
+
+                            <div class="buttons-container">
+                              <app-add-budget></app-add-budget>
+                              
+                            </div>
                           </div>
                           
                       </ng-template>

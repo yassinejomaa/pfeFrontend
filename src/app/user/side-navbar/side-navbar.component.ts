@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-side-navbar',
@@ -16,6 +16,7 @@ export class SideNavbarComponent {
   changeMenu = false;
   
   @Output() clicked = new EventEmitter<boolean>(); // Déclare l'événement
+  constructor(private router: Router) {}
 
   menuChange(event: Event) {
     event.stopPropagation();
@@ -26,6 +27,9 @@ export class SideNavbarComponent {
 
   sendEvent() {
     this.clicked.emit(this.changeMenu); // Envoie la valeur correcte au parent
+  }
+  isActive(route: string): boolean {
+    return this.router.url === route;
   }
 
 }
