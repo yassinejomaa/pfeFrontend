@@ -12,10 +12,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
   createUser(formData: any) {
-    return this.http.post(environment.apiBaseUrl +'/IdentityUser/signup', formData)
+    return this.http.post(environment.apiBaseUrl +'/api/IdentityUser/signup', formData)
   }
   signin(formData: any) {
-    return this.http.post(environment.apiBaseUrl + '/IdentityUser/signin', formData)
+    return this.http.post(environment.apiBaseUrl + '/api/IdentityUser/signin', formData)
   }
   
 

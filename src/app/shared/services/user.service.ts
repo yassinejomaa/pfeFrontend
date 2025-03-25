@@ -11,13 +11,13 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   resetPassword(formData: any) {
-      return this.http.post(environment.apiBaseUrl + '/IdentityUser/resetpassword', formData)
+      return this.http.post(environment.apiBaseUrl + '/api/IdentityUser/resetpassword', formData)
     }
     forgotPassword(formData: any) {
-      return this.http.post(environment.apiBaseUrl + '/IdentityUser/forgotpassword', formData)
+      return this.http.post(environment.apiBaseUrl + '/api/IdentityUser/forgotpassword', formData)
     }
     update(formData: any) {
-      return this.http.put(environment.apiBaseUrl + '/IdentityUser/update', formData, {
+      return this.http.put(environment.apiBaseUrl + '/api/IdentityUser/update', formData, {
         headers: { 'Content-Type': 'application/json' },
   
       });
