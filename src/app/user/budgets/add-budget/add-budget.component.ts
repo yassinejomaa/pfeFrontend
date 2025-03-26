@@ -18,6 +18,7 @@ import { categoryMap } from '../../../shared/model/CategoryType';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-add-budget',
   standalone: true,
@@ -29,15 +30,26 @@ import { CommonModule } from '@angular/common';
 })
 export class AddBudgetComponent implements OnInit{
  visible: boolean = false;
+  periods: any[] | undefined;
   categories: any[] | undefined;
+  hide:boolean=true;
+
   value1!: number;
   datetime24h: Date[] | undefined;
   form: FormGroup;
   product!:any;
   loading: boolean = false;
+  selectedPeriod: number = 0;
 
   selectedCategories: string | undefined;
   ngOnInit() {
+    this.periods = [
+      { period: 'Daily', numberOfdate: '1' },
+      { period: 'weakly', numberOfdate: '7' },
+      { period: 'monthly', numberOfdate: '30' },
+      { period: 'customize', numberOfdate: 'customDate' }
+
+    ];
     this.categories = [
       { name: 'Food', code: '0' },
       { name: 'Transport', code: '1' },
@@ -57,6 +69,8 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
       Category: ['', Validators.required],
       limitValue: ['', Validators.required],
       alertValue: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required]
       
     })
   }
@@ -65,29 +79,116 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
         this.visible = true;
     }
     onSubmit() {
+      // Récupérer les dates et les convertir en objets Date
+      const startDate = new Date(this.form.value.startDate);
+      const endDate = new Date(this.form.value.endDate);
+    
+      // Ajouter un jour à la startDate
+      startDate.setDate(startDate.getDate() + 1);
+      endDate.setDate(endDate.getDate() + 1);
+    
+      // Formater les dates en UTC (YYYY-MM-DD)
+      const formattedStartDate = startDate.toISOString().split('T')[0];
+      const formattedEndDate = endDate.toISOString().split('T')[0];
+    
+      // Mettre à jour les valeurs formatées dans le formulaire
       this.form.patchValue({
-        Category: Number(this.form.value.Category) 
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        Category: Number(this.form.value.Category)
       });
-      console.log(this.form.value);
-  
+    
+      // Afficher les valeurs formatées dans la console pour vérification
+      console.log('Form Values:', this.form.value);
+    
+      // Vérifier la validité du formulaire avant d'envoyer les données
       if (this.form.valid) {
         this.budgetService.addBudget(this.form.value).subscribe({
           next: (res: any) => {
             console.log(res);
-            window.location.reload();
-            
+            window.location.reload(); // Recharger la page après l'ajout du budget
           },
           error: (err) => {
-            if (err.status == 400) {
-              this.toastr.error('cannot add', 'add failed');
+            console.error('Error during submit:', err);
+          
+            if (err.status === 400) {
+              // Vérifier si le backend a envoyé un message spécifique
+              if (err.error && err.error.message) {
+                // Afficher le message spécifique du backend
+                this.messageService.add({ 
+                  severity: 'error', 
+                  summary: 'Rejected', 
+                  detail: err.error.message  // Afficher le message retourné par le backend
+                });
+              } else if (err.error && err.error.errors) {
+                // Si le backend retourne des erreurs de validation pour les champs
+                const errors: { [key: string]: string[] } = err.error.errors;
+          
+                // Parcourir chaque clé d'erreur dans `errors`
+                for (const [field, messages] of Object.entries(errors)) {
+                  // Assurer que messages est un tableau de chaînes
+                  if (Array.isArray(messages)) {
+                    messages.forEach(message => {
+                      // Afficher un toast spécifique pour chaque message d'erreur
+                      this.messageService.add({ 
+                        severity: 'error', 
+                        summary: 'Rejected', 
+                        detail: `${field} validation failed: ${message}` // Afficher le message d'erreur du champ
+                      });
+                    });
+                  }
+                }
+              } else {
+                console.log('Unknown error details:', err.error);
+              }
             } else {
-              console.log('error during login');
+              console.log('Error during submit:', err.message || err);
             }
           }
+          
+          
+          
+          
+          
+          
         });
       }
-     console.log(this.form.value)
     }
+    
+  
+    onPeriodChange(event: any) {
+      console.log("Période sélectionnée :", event.value);
+      if(event.value==='customDate'){
+        this.hide=false;
+        console.log(this.form.value.endDate)
+      }
+      else{
+        this.hide=true;
+        this.selectedPeriod = Number(event.value); // Convertir en nombre
+        this.updateDateEnd();
+        console.log(this.form.value.endDate)        
+      }
+  }
+
+  onDateBeginChange(event: any) {
+    this.updateDateEnd(); // Mettre à jour la date de fin
+    
+}
+updateDateEnd() {
+  // Cloner la date de début
+  this.form.value.endDate = new Date(this.form.value.startDate);
+
+  if (this.selectedPeriod === 30) {
+    // Si la période est "monthly", ajouter 1 mois
+    this.form.value.endDate.setMonth(this.form.value.endDate.getMonth() + 1);
+  } else {
+    // Sinon, ajouter les jours en fonction de la période sélectionnée
+    this.form.value.endDate.setDate(this.form.value.endDate.getDate() + this.selectedPeriod);
+  }
+
+  // Afficher la date de fin mise à jour dans la console
+  console.log(this.form.value.endDate);
+}
 
    
 }

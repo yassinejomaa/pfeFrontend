@@ -52,5 +52,10 @@
   .top-right-btn {
     margin-left: 50%;
   }
+  
+  .hideDateOfend{
+    display:none;
+  }
+
  
 

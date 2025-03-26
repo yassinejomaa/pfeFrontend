@@ -62,6 +62,19 @@
                                    <p-columnFilter type="numeric" field="alertValue" display="menu" currency="TND" />
                                 </div>
                              </th>
+                             <th style="min-width:10rem">
+                              <div class="flex items-center">
+                                 Start Date
+                                 <p-columnFilter type="date" field="startDate" display="menu" />
+                              </div>
+                           </th>
+
+                           <th style="min-width:10rem">
+                              <div class="flex items-center">
+                                End Date
+                                 <p-columnFilter type="date" field="endDate" display="menu" />
+                              </div>
+                           </th>
  
                             <th style="width: 3rem">
                                Action
@@ -85,6 +98,14 @@
                             <td>
                                 {{budget.alertValue}}
                             </td>
+
+                            <td>
+                              {{budget.startDate}}
+                          </td>
+
+                          <td>
+                              {{budget.endDate}}
+                          </td>
  
                             
                             <td>

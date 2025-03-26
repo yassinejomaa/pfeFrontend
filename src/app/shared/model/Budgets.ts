@@ -4,6 +4,8 @@ export interface Budget{
     limitValue :Float64Array,
     
     alertValue:Float64Array,
+    startDate:Date ,
+    endDate:Date ,
     UserId:string,
    
     
