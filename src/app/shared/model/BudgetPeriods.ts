@@ -1,6 +1,6 @@
 export interface BudgetPeriods{
     id:number,
-    budgetPeriodType:number,
+    Period:number,
     income:Float32Array,
     savings:Float32Array,
     startDate:Date,
