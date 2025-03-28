@@ -1,4 +1,4 @@
-<!-- <div class="wrapper">
+<div class="wrapper">
    <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
 
    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
@@ -8,21 +8,20 @@
          <div class="row">
             <div class="col-lg-12">
                <p-toast Style="z-index: 50;"/>
-               <p-confirmdialog Style="z-index: 50;"/>
+               <p-confirmPopup Style="z-index: 50;"/>
                <div class="card">
-                  <p-table #dt1 [value]="expenses" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"
-                     [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']">
-                     <ng-template #caption>
+                  <p-table #dt [value]="expenses" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"
+                     [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']"[tableStyle]="{ 'min-width': '75rem' }">
+                     <ng-template pTemplate="caption">
                         <div class="flex" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                           Left side: Clear button and Search input 
                           <div class="flex" style="display: flex; align-items: center; gap: 10px;">
                             <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
-                            <p-iconfield iconPosition="left">
-                              <p-inputicon>
+                            <p-iconField iconPosition="left">
+                              <p-inputIcon>
                                 <i class="pi pi-search"></i>
-                              </p-inputicon>
+                              </p-inputIcon>
                               <input pInputText type="text" [(ngModel)]="searchValue" (input)="filterTable($event)" placeholder="Search keyword" />
-                            </p-iconfield>
+                            </p-iconField>
                           </div>
                       
                           <div class="buttons-container" style="display: flex; align-items: center; gap: 50px;">
@@ -32,7 +31,7 @@
                         </div>
                       </ng-template>
                       
-                     <ng-template #header>
+                     <ng-template pTemplate="header">
                         <tr>
                            <th style="min-width:15rem">
                               <div class="flex items-center">
@@ -66,7 +65,7 @@
                         </tr>
                      </ng-template>
                      
-                     <ng-template #body let-expense>
+                     <ng-template pTemplate="body" let-expense>
                         <tr>
                            <td>
                               {{ expense.name }}
@@ -87,23 +86,19 @@
 
                            
                            <td>
-                              <div class="d-flex gap-2" >
+                              <div class="card expense-actions">
                                  <app-update-expense [expense]="expense"></app-update-expense>
-
-
-                                 
-
-                                  <p-button (click)="delete($event,expense.id)" severity="danger" [outlined]="true">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                 </p-button> 
-
-
-                              </div>
+                                 <p-button (click)="delete($event, expense.id)" severity="danger" [outlined]="true">
+                                   <i class="ri-delete-bin-6-line"></i>
+                                 </p-button>
+                               </div>
+                               
+                               
                            </td>
 
                         </tr>
                      </ng-template>
-                     <ng-template #emptymessage>
+                     <ng-template pTemplate="emptymessage">
                         <tr>
                            <td colspan="5">No expenses found.</td>
                         </tr>
@@ -114,4 +109,3 @@
 
 
          </div>
-         <app-footer />!-->

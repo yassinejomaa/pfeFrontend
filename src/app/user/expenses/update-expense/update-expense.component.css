@@ -1,22 +1,58 @@
+/* Aligner toutes les entrées sur le même niveau */
 .form-group {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    gap: 1rem; /* Espacement entre label et input */
+    margin-bottom: 1rem; /* Espacement entre chaque champ */
 }
 
 .form-group label {
-    width: 120px;
+    width: 150px; /* Taille uniforme pour tous les labels */
+    text-align: right; /* Alignement du texte */
     font-weight: bold;
 }
 
 .form-group input,
-.form-group p-select,
-.form-group p-datepicker,
-.form-group p-inputnumber {
-    flex: 1;
-    width: 100%;
+.form-group p-dropdown,
+.form-group p-calendar,
+.form-group p-inputNumber {
+    flex: 1; /* Pour que tous les inputs aient la même largeur */
+    max-width: 400px; /* Largeur maximale */
 }
-#buttonIa {
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem; /* Espacement entre les boutons */
+}
+.custom-blue-btn {
+    background-color: #1e3d73;
+    color: white;
+    border: 2px solid #1e3d73;
+    padding: 12px 14px; /* Adjust padding for a circular button */
+    border-radius: 50%; /* Makes the button circular */
+    font-size: 20px; /* Adjust icon size */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Set a fixed width and height for a perfect circle */
+    height: 50px; /* Set a fixed width and height for a perfect circle */
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .custom-blue-btn:hover {
+    background-color: #16325c; /* Darker blue on hover */
+    border-color: #16325c; /* Darker border on hover */
+  }
+  
+  .custom-blue-btn i {
+    font-size: 24px; /* Icon size adjustment */
+  }
+  .top-right-btn {
+    margin-left: 95%;
+  }
+  #buttonIa {
     background: none; /* Supprime l'arrière-plan */
     border: none; /* Supprime la bordure */
     padding: 0; /* Supprime le padding */
@@ -28,3 +64,4 @@
     width: 2.5rem;
     height: 2.5rem;
 }
+

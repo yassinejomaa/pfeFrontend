@@ -1,4 +1,4 @@
-<!-- <div class="flex justify-center">
+<div class="flex justify-center">
     <button (click)="showDialog()" class="custom-blue-btn top-right-btn">
         <i class="ri-add-line"></i>
     </button>
@@ -8,55 +8,55 @@
 
     <p-dialog header="Add Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
         <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
-            <span class="p-text-secondary block mb-8">Add an Expense.</span>
+            <span class="p-text-secondary block mb-5">Add an Expense.</span>
 
             <input type="hidden" formControlName="UserId">
 
             <div class="form-group">
                 <label for="name">Name</label>
-                <input pInputText id="name" autocomplete="off" formControlName="Name" />
+                <input pInputText id="name" autocomplete="off" formControlName="Name" style="flex-grow: 0;" />
             </div>
 
             <div class="form-group">
                 <label for="Category">Category</label>
-                <p-select [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
+                <p-dropdown [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
                     [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
                     [appendTo]="'body'">
-                    <ng-template #selectedItem let-selectedOption>
+                    <ng-template pTemplate=selectedItem let-selectedOption>
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                                 [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
                             <div>{{ selectedOption.name }}</div>
                         </div>
                     </ng-template>
-                    <ng-template #item let-item>
+                    <ng-template pTemplate=item let-item>
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
                                 [class]="'flag flag-' + item.code.toLowerCase()" style="width: 18px" />
                             <div>{{ item.name }}</div>
                         </div>
                     </ng-template>
-                </p-select>
+                </p-dropdown>
                 <div style="position: relative; display: inline-block;">
                     <button id="buttonIa" (click)="predictCategory()" [disabled]="loading" type="button">
                         <img src="images/ai.png" id="aiImage">
                     </button>
 
-                    <p-progress-spinner *ngIf="loading" strokeWidth="8" fill="transparent" animationDuration=".5s"
+                    <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="transparent" animationDuration=".5s"
                         [style]="{ width: '50px', height: '50px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }">
-                    </p-progress-spinner>
+                    </p-progressSpinner>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="date">Date</label>
-                <p-datepicker inputId="date" [showTime]="true" [hourFormat]="'24'" formControlName="Date"
+                <p-calendar inputId="date" [showTime]="true" [hourFormat]="'24'" formControlName="Date"
                     [appendTo]="'body'" />
             </div>
 
             <div class="form-group">
                 <label for="withoutgrouping">Amount</label>
-                <p-inputnumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN"
+                <p-inputNumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN"
                     formControlName="Amount" />
             </div>
 
@@ -66,4 +66,4 @@
             </div>
         </form>
     </p-dialog>
-</div> -->
+</div>

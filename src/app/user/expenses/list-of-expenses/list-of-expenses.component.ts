@@ -12,7 +12,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-// import { SelectModule } from 'primeng/select';
+import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
 import { ProgressBar } from 'primeng/progressbar';
@@ -23,9 +23,8 @@ import { categoryMap} from '../../../shared/model/CategoryType';
 import { UpdateExpenseComponent } from '../update-expense/update-expense.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ImportCsvComponent } from '../import-csv/import-csv.component';
-
 import { AuthService } from '../../../shared/services/auth.service';
 
 import { FormsModule } from '@angular/forms'; // Importation de FormsModule
@@ -36,10 +35,10 @@ import { FormsModule } from '@angular/forms'; // Importation de FormsModule
 @Component({
   selector: 'app-list-of-expenses',
   standalone: true,
-  imports: [SideNavbarComponent,TopNavBarComponent,
-    FooterComponent,CommonModule,ButtonModule,TableModule, TagModule, IconFieldModule, 
-    InputTextModule, InputIconModule, MultiSelectModule,UpdateExpenseComponent,ConfirmDialogModule ,
-     ToastModule, ButtonModule,ConfirmDialogModule,ImportCsvComponent,FormsModule],
+  imports: [SideNavbarComponent, TopNavBarComponent,
+    FooterComponent, CommonModule, ButtonModule, TableModule, TagModule, IconFieldModule,
+    InputTextModule, InputIconModule, MultiSelectModule, UpdateExpenseComponent,
+    ToastModule, ButtonModule, ConfirmPopupModule, ImportCsvComponent, FormsModule, DropdownModule, AddExpensesManuallyComponent],
   templateUrl: './list-of-expenses.component.html',
   styleUrls: ['./list-of-expenses.component.css',
     '../../../../../public/css/teamplate/style.css',
@@ -130,23 +129,18 @@ export class ListOfExpensesComponent implements OnInit {
     
 
 
- /* delete(event: Event, id: any) {
+     delete(event: Event, id: any) {
     console.log("hello");
     event.stopPropagation();
     this.confirmationService.confirm({
-      message: 'Do you want to delete this Expense?',
-      header: 'Delete Expense',
+      target: event.target as EventTarget,
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'Cancel',
-      rejectButtonProps: {
-          label: 'Cancel',
-          severity: 'secondary',
-          outlined: true,
-      },
-      acceptButtonProps: {
-          label: 'Delete',
-          severity: 'danger',
-      },
+      acceptButtonStyleClass:"p-button-danger p-button-text",
+      rejectButtonStyleClass:"p-button-text p-button-text",
+      acceptIcon:"none",
+      rejectIcon:"none",
         accept: () => {
             this.expenseService.deleteExpense(id).subscribe({
                 next: () => {
@@ -170,9 +164,9 @@ export class ListOfExpensesComponent implements OnInit {
         reject: () => {
             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
         },
-    });*/
+    });
 }
-
+}
 
 
 

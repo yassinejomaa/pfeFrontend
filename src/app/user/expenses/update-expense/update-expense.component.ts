@@ -5,10 +5,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-/*import { SelectModule } from 'primeng/select';
-import { InputNumber } from 'primeng/inputnumber';
-import { DatePicker } from 'primeng/datepicker';
-import { Fluid } from 'primeng/fluid';*/
+import { DropdownModule } from 'primeng/dropdown';
+import {InputNumberModule } from 'primeng/inputnumber';
+import { Calendar, CalendarModule } from 'primeng/calendar';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ExpenseService } from '../../../shared/services/expense.service';
@@ -23,7 +22,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-update-expense',
   standalone: true,
   imports: [DialogModule, ButtonModule, InputTextModule
-    ,FormsModule, ReactiveFormsModule,ProgressSpinnerModule,CommonModule],
+    ,FormsModule, ReactiveFormsModule,ProgressSpinnerModule,CommonModule,DropdownModule,CalendarModule,InputNumberModule],
   templateUrl: './update-expense.component.html',
   styleUrl: './update-expense.component.css'
 })
