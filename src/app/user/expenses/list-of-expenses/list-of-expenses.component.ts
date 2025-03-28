@@ -12,7 +12,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { SelectModule } from 'primeng/select';
+// import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
 import { ProgressBar } from 'primeng/progressbar';
@@ -36,9 +36,9 @@ import { FormsModule } from '@angular/forms'; // Importation de FormsModule
 @Component({
   selector: 'app-list-of-expenses',
   standalone: true,
-  imports: [AddExpensesManuallyComponent,SideNavbarComponent,TopNavBarComponent,
+  imports: [SideNavbarComponent,TopNavBarComponent,
     FooterComponent,CommonModule,ButtonModule,TableModule, TagModule, IconFieldModule, 
-    InputTextModule, InputIconModule, MultiSelectModule, SelectModule,UpdateExpenseComponent,ConfirmDialog,
+    InputTextModule, InputIconModule, MultiSelectModule,UpdateExpenseComponent,ConfirmDialogModule ,
      ToastModule, ButtonModule,ConfirmDialogModule,ImportCsvComponent,FormsModule],
   templateUrl: './list-of-expenses.component.html',
   styleUrls: ['./list-of-expenses.component.css',
@@ -130,7 +130,7 @@ export class ListOfExpensesComponent implements OnInit {
     
 
 
-  delete(event: Event, id: any) {
+ /* delete(event: Event, id: any) {
     console.log("hello");
     event.stopPropagation();
     this.confirmationService.confirm({
@@ -170,7 +170,7 @@ export class ListOfExpensesComponent implements OnInit {
         reject: () => {
             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
         },
-    });
+    });*/
 }
 
 
@@ -189,4 +189,4 @@ export class ListOfExpensesComponent implements OnInit {
 
 
 
-}
+

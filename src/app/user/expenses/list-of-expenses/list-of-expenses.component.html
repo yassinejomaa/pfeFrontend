@@ -1,4 +1,4 @@
-<div class="wrapper">
+<!-- <div class="wrapper">
    <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
 
    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
@@ -14,7 +14,7 @@
                      [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']">
                      <ng-template #caption>
                         <div class="flex" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                          <!-- Left side: Clear button and Search input -->
+                           Left side: Clear button and Search input 
                           <div class="flex" style="display: flex; align-items: center; gap: 10px;">
                             <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
                             <p-iconfield iconPosition="left">
@@ -25,7 +25,6 @@
                             </p-iconfield>
                           </div>
                       
-                          <!-- Right side: Add Expenses and Import CSV buttons -->
                           <div class="buttons-container" style="display: flex; align-items: center; gap: 50px;">
                             <app-add-expenses-manually></app-add-expenses-manually>
                             <app-import-csv></app-import-csv>
@@ -94,9 +93,9 @@
 
                                  
 
-                                 <p-button (click)="delete($event,expense.id)" severity="danger" [outlined]="true">
+                                  <p-button (click)="delete($event,expense.id)" severity="danger" [outlined]="true">
                                     <i class="ri-delete-bin-6-line"></i>
-                                 </p-button>
+                                 </p-button> 
 
 
                               </div>
@@ -115,4 +114,4 @@
 
 
          </div>
-         <app-footer />
+         <app-footer />!-->

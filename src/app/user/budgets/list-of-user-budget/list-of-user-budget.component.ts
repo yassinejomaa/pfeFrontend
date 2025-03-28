@@ -10,7 +10,6 @@ import { SideNavbarComponent } from '../../side-navbar/side-navbar.component';
 import { TopNavBarComponent } from '../../top-nav-bar/top-nav-bar.component';
 import { FooterComponent } from '../../footer/footer.component';
 
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 
 import { TagModule } from 'primeng/tag';
@@ -18,7 +17,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
 import { Table, TableModule, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { ProgressBar } from 'primeng/progressbar';
@@ -28,7 +26,6 @@ import { categoryMap } from '../../../shared/model/CategoryType';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
 import { AuthService } from '../../../shared/services/auth.service';
 
 import { FormsModule } from '@angular/forms';
@@ -38,6 +35,12 @@ import { AddBudgetComponent } from '../add-budget/add-budget.component';
 import { UpdateBudgetComponent } from '../update-budget/update-budget.component';
 import { BudgetPeriods } from '../../../shared/model/BudgetPeriods';
 import { BudgetPeriodService } from '../../../shared/services/budget-period.service';
+
+import { RippleModule } from 'primeng/ripple';
+
+
+
+
 
 
 
@@ -58,9 +61,9 @@ import { BudgetPeriodService } from '../../../shared/services/budget-period.serv
   standalone: true,
   imports: [SideNavbarComponent, TopNavBarComponent,
     FooterComponent, CommonModule, ButtonModule, TableModule, TagModule, IconFieldModule,
-    InputTextModule, InputIconModule, MultiSelectModule, SelectModule, ConfirmDialog,
-    ToastModule, ButtonModule, ConfirmDialogModule, FormsModule, AddBudgetComponent, UpdateBudgetComponent],
-  templateUrl: './list-of-user-budget.component.html',
+    InputTextModule, InputIconModule, MultiSelectModule,
+    ToastModule, ButtonModule, ConfirmDialogModule, FormsModule, AddBudgetComponent, UpdateBudgetComponent,RippleModule],
+  templateUrl:'./list-of-user-budget.component.html',
   styleUrls: ['./list-of-user-budget.component.css',
     '../../../../../public/css/teamplate/style.css',
     '../../../../../public/css/teamplate/typography.css',
@@ -106,13 +109,13 @@ export class ListOfUserBudgetComponent implements OnInit {
 
   // ngOnInit() {
   //   this.userid = this.authService.getUserId();
-    // this.budgetService.getBudgetsOfUser(this.userid).subscribe(budgets => {
-    //   console.log(budgets)
-    //   this.budgets = budgets.map(budget => ({
-    //     ...budget,
-    //     categoryName: this.getCategoryName(budget.category),
+  //   this.budgetService.getBudgetsOfUser(this.userid).subscribe(budgets => {
+  //     console.log(budgets)
+  //     this.budgets = budgets.map(budget => ({
+  //       ...budget,
+  //       categoryName: this.getCategoryName(budget.category),
 
-    //   }));
+  //     }));
 
   //     console.log(this.budgets);
   //     this.loading = false;

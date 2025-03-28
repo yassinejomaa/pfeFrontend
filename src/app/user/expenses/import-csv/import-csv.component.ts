@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
 
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +13,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-import-csv',
   standalone: true,
-  imports: [FileUpload, ToastModule, ButtonModule,FormsModule],
+  imports: [ ToastModule, ButtonModule,FormsModule],
   templateUrl: './import-csv.component.html',
   styleUrl: './import-csv.component.css'
 })

@@ -12,3 +12,82 @@
   display: flex;
   gap: 10px; /* Espacement entre les boutons */
 }
+/* Amélioration de la table */
+p-table {
+  .p-datatable {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .p-datatable-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    padding: 1rem;
+    text-align: right;
+  }
+
+  .p-datatable-thead tr th {
+    background-color: #007bff;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .p-datatable-tbody tr {
+    transition: background 0.3s ease-in-out;
+  }
+
+  .p-datatable-tbody tr:hover {
+    background-color: #f1f3f5;
+  }
+
+  .p-datatable-tbody td {
+    padding: 10px;
+    text-align: left;
+  }
+}
+
+/* Boutons */
+p-button {
+  margin-right: 5px;
+}
+
+/* Amélioration des icônes */
+.pi {
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+/* Amélioration des boutons d'expansion */
+p-button[pRowToggler] {
+  border: none;
+  background-color: transparent;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Conteneur principal */
+#content-page {
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.container-fluid {
+  padding: 1rem;
+}
+
+/* Amélioration des cartes */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Alignement des boutons en haut de la table */
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

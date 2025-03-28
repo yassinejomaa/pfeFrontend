@@ -1,15 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Budget } from '../../../shared/model/Budgets';
 import { BudgetService } from '../../../shared/services/budget.service';
-import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SelectModule } from 'primeng/select';
-import { InputNumber } from 'primeng/inputnumber';
-import { DatePicker } from 'primeng/datepicker';
-import { Fluid } from 'primeng/fluid';
+// import { InputNumber } from 'primeng/inputnumber';
+// import { DatePicker } from 'primeng/datepicker';
+// import { Fluid } from 'primeng/fluid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ExpenseService } from '../../../shared/services/expense.service';
@@ -17,15 +15,15 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { categoryMap } from '../../../shared/model/CategoryType';
 import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 
 
 
 @Component({
   selector: 'app-update-budget',
   standalone: true,
-  imports: [Dialog, ButtonModule, InputTextModule
-    , FormsModule, SelectModule, InputNumber
-    , DatePicker, Fluid, ReactiveFormsModule, ProgressSpinnerModule, CommonModule],
+  imports: [DialogModule, ButtonModule, InputTextModule
+    , FormsModule, ReactiveFormsModule, ProgressSpinnerModule, CommonModule],
   templateUrl: './update-budget.component.html',
   styleUrl: './update-budget.component.css'
 })
