@@ -171,14 +171,12 @@
     <div class="card flex justify-content-center">
 
 
-        <p-stepper [(activeStep)]="active">
+        <p-stepper style="padding-top: 2%;" [(activeStep)]="active">
             <p-stepperPanel>
                 <!-- Première page (inchangée) -->
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
-                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
-                        <span
-                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
                             <i class="pi pi-money-bill"></i>
                         </span>
                     </button>
@@ -210,10 +208,8 @@
             <!-- Deuxième page avec modifications de style -->
             <p-stepperPanel>
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
-                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
-                        <span
-                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
                             <i class="pi pi-tags"></i>
                         </span>
                     </button>
@@ -339,10 +335,8 @@
  <!-- Troisieme page avec modifications de style -->
  <p-stepperPanel>
     <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
-        <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
-            <span
-                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+        <button class="stepper-header-btn" (click)="onClick.emit()">
+            <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
                 <i class="pi pi-tags"></i>
             </span>
         </button>
@@ -468,10 +462,8 @@
 <!-- Troisieme page avec modifications de style -->
 <p-stepperPanel>
     <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
-        <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
-            <span
-                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+        <button class="stepper-header-btn" (click)="onClick.emit()">
+            <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
                 <i class="pi pi-tags"></i>
             </span>
         </button>
@@ -574,10 +566,8 @@
             <!-- Troisième page (inchangée) -->
             <p-stepperPanel>
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
-                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
-                        <span
-                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
                             <i class="pi pi-id-card"></i>
                         </span>
                     </button>
