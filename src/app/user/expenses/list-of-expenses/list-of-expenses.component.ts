@@ -23,12 +23,12 @@ import { categoryMap} from '../../../shared/model/CategoryType';
 import { UpdateExpenseComponent } from '../update-expense/update-expense.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ImportCsvComponent } from '../import-csv/import-csv.component';
 import { AuthService } from '../../../shared/services/auth.service';
 
 import { FormsModule } from '@angular/forms'; // Importation de FormsModule
 
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms'; // Importation de FormsModule
   imports: [SideNavbarComponent, TopNavBarComponent,
     FooterComponent, CommonModule, ButtonModule, TableModule, TagModule, IconFieldModule,
     InputTextModule, InputIconModule, MultiSelectModule, UpdateExpenseComponent,
-    ToastModule, ButtonModule, ConfirmPopupModule, ImportCsvComponent, FormsModule, DropdownModule, AddExpensesManuallyComponent],
+    ToastModule, ButtonModule, ConfirmDialogModule, ImportCsvComponent, FormsModule, DropdownModule, AddExpensesManuallyComponent],
   templateUrl: './list-of-expenses.component.html',
   styleUrls: ['./list-of-expenses.component.css',
     '../../../../../public/css/teamplate/style.css',
@@ -129,24 +129,21 @@ export class ListOfExpensesComponent implements OnInit {
     
 
 
-     delete(event: Event, id: any) {
-    console.log("hello");
-    event.stopPropagation();
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Do you want to delete this record?',
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptButtonStyleClass:"p-button-danger p-button-text",
-      rejectButtonStyleClass:"p-button-text p-button-text",
-      acceptIcon:"none",
-      rejectIcon:"none",
+    delete(event: Event, id: any) {
+      console.log("hello");
+      event.stopPropagation();
+      this.confirmationService.confirm({
+        message: 'Do you want to delete this record?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass: "p-button-danger p-button-text",
+        rejectButtonStyleClass: "p-button-text",
+        acceptIcon: "none",
+        rejectIcon: "none",
         accept: () => {
             this.expenseService.deleteExpense(id).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Expense deleted' });
-
-                    // Mettre à jour la liste des dépenses au lieu de recharger la page
                     this.expenses = this.expenses.filter(expense => expense.id !== id);
                 },
                 error: (err) => {
@@ -164,8 +161,16 @@ export class ListOfExpensesComponent implements OnInit {
         reject: () => {
             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
         },
-    });
-}
+      });
+  }
+  
+
+
+
+
+
+
+
 }
 
 

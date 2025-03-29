@@ -6,7 +6,6 @@
 <div class="card">
     <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
         <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
-            <span class="p-text-secondary block mb-8">Add an Expense.</span>
 
             <input type="hidden" formControlName="UserId">
             <input type="hidden" formControlName="id">

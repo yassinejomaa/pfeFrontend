@@ -1,4 +1,4 @@
-<div class="flex justify-center">
+<!-- <div class="flex justify-center">
     <button (click)="showDialog()" class="custom-blue-btn top-right-btn">
         <i class="ri-add-line"></i>
     </button>
@@ -14,7 +14,7 @@
 
 
 
-           <!-- <div class="form-group">
+           <div class="form-group">
                 <label for="Category">Category</label>
                 <p-select [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
                     [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
@@ -43,7 +43,7 @@
 
 
 
-            <div class="form-group">
+<!--<div class="form-group">
                 <label for="Category">Category</label>
                 <p-dropdown [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
                     [filter]="true" [showClear]="true" placeholder="Select a Category" [appendTo]="'body'">
@@ -80,9 +80,9 @@
 
             <div class="form-group">
                 <label for="date">Date Begin</label>
-               <!-- <p-datepicker inputId="date" dateFormat="yy-mm-dd" [appendTo]="'body'" formControlName="startDate"
+                <p-datepicker inputId="date" dateFormat="yy-mm-dd" [appendTo]="'body'" formControlName="startDate"
                     (onSelect)="onDateBeginChange($event)">
-                </p-datepicker>-->
+                </p-datepicker>
 
                 
                     
@@ -90,13 +90,13 @@
                         (onSelect)="onDateBeginChange($event)" />
                     
                 
-            </div>
+            </div>-->
 
 
 
 
 
-            <!--<div class="form-group">
+<!--<div class="form-group">
                 <label for="Category">period</label>
                 <p-select [options]="periods" optionLabel="period" optionValue="numberOfdate" [filter]="true"
                     filterBy="name" [showClear]="true" placeholder="Select a period" [appendTo]="'body'"
@@ -116,7 +116,7 @@
                         </div>
                     </ng-template>
                 </p-select>
-            </div>-->
+            </div>
             <div class="form-group">
                 <label for="Category">Period</label>
                 <p-dropdown [options]="periods" optionLabel="period" optionValue="numberOfdate" 
@@ -156,4 +156,164 @@
 
         </form>
     </p-dialog>
-</div>
+</div> -->
+
+
+
+
+
+
+<button (click)="showDialog()" class="custom-blue-btn top-right-btn">
+    <i class="ri-add-line"></i>
+</button>
+
+<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '40%' ,height:'auto'}">
+    <span class="p-text-secondary block mb-5">add your budget.</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="card flex justify-content-center">
+        <p-stepper [(activeStep)]="active">
+            <p-stepperPanel>
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
+                        <span
+                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                            [ngClass]="{
+                            'bg-primary border-primary': index <= active,
+                            'surface-border': index > active
+                        }">
+                            <i class="pi pi-money-bill"></i>
+                        </span>
+
+
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-nextCallback="nextCallback">
+                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Create your budgets</div>
+                        
+                        <div class="field p-fluid d-flex align-items-center">
+                            <i class="pi pi-wallet" style="font-size: 1.2rem; margin-right: 10px;"></i>
+                            <p-inputNumber inputId="expiry" prefix="Your budget is :" suffix=" Dnt" mode="decimal"
+    minFractionDigits="2" maxFractionDigits="2"  placeholder="Enter your budget"
+    [ngStyle]="{'width': '100%', 'color': 'gray'}">
+</p-inputNumber>
+
+
+                        </div>
+                        
+                        <div class="field p-fluid d-flex align-items-center">
+                            <i class="pi pi-calendar" style="font-size: 1.2rem; margin-right: 10px;"></i>
+                            <p-calendar inputId="date" [appendTo]="'body'" placeholder="Select a Start date"
+                             [ngStyle]="{'flex': '1'}" />
+
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="flex pt-4 justify-content-end">
+                        <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                            iconPos="right" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+            <p-stepperPanel>
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
+                        <span
+                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                            [ngClass]="{
+                                'bg-primary border-primary': index <= active,
+                                'surface-border': index > active
+                            }">
+                            <i class="pi pi-tags"></i>
+
+                        </span>
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Enter your budget in different categories </div>
+                        <div class="flex flex-wrap justify-content-center gap-3">
+                            
+
+
+                            
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                    <div class="flex pt-4 justify-content-between">
+                        <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                            icon="pi pi-arrow-left" />
+                        <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                            iconPos="right" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+            <p-stepperPanel>
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
+                        <span
+                            class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                            [ngClass]="{
+                                'bg-primary border-primary': index <= active,
+                                'surface-border': index > active
+                            }">
+                            <i class="pi pi-id-card"></i>
+                        </span>
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-prevCallback="prevCallback">
+                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Account created successfully</div>
+                        <div class="text-center">
+                            <img alt="logo" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" />
+                        </div>
+                    </div>
+                    <div class="flex pt-4 justify-content-start">
+                        <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                            icon="pi pi-arrow-left" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+        </p-stepper>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p-dialog>

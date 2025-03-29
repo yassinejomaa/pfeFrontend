@@ -8,10 +8,24 @@
          <div class="row">
             <div class="col-lg-12">
                <p-toast Style="z-index: 50;"/>
-               <p-confirmPopup Style="z-index: 50;"/>
+               <p-confirmDialog Style="z-index: 50;"></p-confirmDialog>
                <div class="card">
-                  <p-table #dt [value]="expenses" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"
-                     [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'categoryName']"[tableStyle]="{ 'min-width': '75rem' }">
+                  
+
+
+                     <p-table
+                     #dt1
+                     [value]="expenses"
+                     dataKey="id"
+                     [rows]="8"
+                     [rowsPerPageOptions]="[10, 25, 50]"
+                     [loading]="loading"
+                     [paginator]="true"
+                     [globalFilterFields]="['name', 'categoryName']"
+                     >
+
+
+
                      <ng-template pTemplate="caption">
                         <div class="flex" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                           <div class="flex" style="display: flex; align-items: center; gap: 10px;">
@@ -86,15 +100,17 @@
 
                            
                            <td>
-                              <div class="card expense-actions">
-                                 <app-update-expense [expense]="expense"></app-update-expense>
-                                 <p-button (click)="delete($event, expense.id)" severity="danger" [outlined]="true">
-                                   <i class="ri-delete-bin-6-line"></i>
-                                 </p-button>
-                               </div>
-                               
-                               
-                           </td>
+                              <div class="expense-actions" style="display: flex; align-items: center; gap: 10px;">
+                                 
+
+                                <app-update-expense [expense]="expense"></app-update-expense>
+                                <button class="btn" style="background-color: white; color: #d9534f; border: 1px solid #d9534f;" (click)="delete($event, expense.id)">
+                                 <i class="ri-delete-bin-6-line"></i>
+                             </button>
+                             
+                              </div>
+                            </td>
+                            
 
                         </tr>
                      </ng-template>

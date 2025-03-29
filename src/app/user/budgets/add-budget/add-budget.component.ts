@@ -19,12 +19,21 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 
 
+
+
+import { StepperModule } from 'primeng/stepper';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+
+
 @Component({
   selector: 'app-add-budget',
   standalone: true,
   imports: [DialogModule, ButtonModule, InputTextModule,FormsModule,
     DropdownModule,InputNumberModule,CalendarModule, ReactiveFormsModule,
-       ProgressSpinnerModule,CommonModule],
+       ProgressSpinnerModule,CommonModule,StepperModule,
+       ToggleButtonModule,IconFieldModule,InputIconModule],
   templateUrl: './add-budget.component.html',
   styleUrl: './add-budget.component.css'
 })
@@ -34,6 +43,7 @@ export class AddBudgetComponent implements OnInit{
   categories: any[] | undefined;
   hide:boolean=true;
 
+
   value1!: number;
   datetime24h: Date[] | undefined;
   form: FormGroup;
@@ -41,13 +51,49 @@ export class AddBudgetComponent implements OnInit{
   loading: boolean = false;
   selectedPeriod: number = 0;
 
+
+
+
+
+  active: number= 0;
+
+  name: string | undefined ;
+
+    email: string | undefined ;
+
+    password: string | undefined ;
+
+  option1: boolean | undefined = false;
+
+  option2: boolean | undefined = false;
+
+  option3: boolean | undefined = false;
+
+  option4: boolean | undefined = false;
+
+  option5: boolean | undefined = false;
+
+  option6: boolean | undefined = false;
+
+  option7: boolean | undefined = false;
+
+  option8: boolean | undefined = false;
+
+  option9: boolean | undefined = false;
+
+  option10: boolean | undefined = false;
+
+
+
+
+
+
+
   selectedCategories: string | undefined;
   ngOnInit() {
     this.periods = [
-      { period: 'Daily', numberOfdate: '1' },
       { period: 'weakly', numberOfdate: '7' },
-      { period: 'monthly', numberOfdate: '30' },
-      { period: 'customize', numberOfdate: 'customDate' }
+      { period: 'monthly', numberOfdate: '30' }
 
     ];
     this.categories = [

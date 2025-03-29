@@ -1,79 +1,103 @@
-<app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
+<div class="wrapper">
+   <app-side-navbar (clicked)="recevoirMessage($event)" style="z-index: 20;"></app-side-navbar>
 
-<app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
-<div id="content-page" class="content-page">
-   <div class="container-fluid">
-      <div class="row">
-         <div class="col-lg-12">
-<div class="card">
-   <p-toast />
-   <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
-       <ng-template pTemplate="caption">
-           <div class="flex flex-wrap justify-content-end gap-2">
-               <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
-               <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
-           </div>
-       </ng-template>
-       <ng-template pTemplate="header">
-           <tr>
-               <th style="width: 5rem"></th>
-               <th pSortableColumn="Period">Period <p-sortIcon field="period" /></th>
-               <th pSortableColumn="income">income <p-sortIcon field="income" /></th>
-               <th pSortableColumn="savings">savings <p-sortIcon field="savings" /></th>
-               <th pSortableColumn="startDate">startDate <p-sortIcon field="startDate" /></th>
-               <th pSortableColumn="endDate">endDate <p-sortIcon field="endDate" /></th>
-           </tr>
-       </ng-template>
-       <ng-template pTemplate="body" let-budgetPeriod let-expanded="expanded">
-           <tr>
-               <td>
-                   <p-button type="button" pRipple [pRowToggler]="budgetPeriod" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-               </td>
-               <td>{{ budgetPeriod.period }}</td>
-             <td>{{ budgetPeriod.income }}</td>
-               <td>{{ budgetPeriod.savings }}</td>
-               <td>{{ budgetPeriod.startDate }}</td>
-               <td>{{ budgetPeriod.endDate }}</td>
+   <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+   <div id="content-page" class="content-page">
+      <div class="container-fluid">
+         <div class="row">
 
-               
-           </tr>
-       </ng-template>
-       <ng-template pTemplate="rowexpansion" let-budgetPeriod>
-           <tr>
-               <td colspan="7">
-                   <div class="p-3">
-                       <p-table [value]="budgetPeriod.budgets" dataKey="id">
-                           <ng-template pTemplate="header">
-                               <tr>
-                                   <th pSortableColumn="id">category<p-sortIcon field="price" /></th>
-                                   <th pSortableColumn="limitValue">limitValue <p-sortIcon field="customer" /></th>
-                                   <th pSortableColumn="alertValue">alertValue <p-sortIcon field="date" /></th>
-                                   
-                               </tr>
-                           </ng-template>
-                           <ng-template pTemplate="body" let-budget>
-                               <tr>
-                                   <td>{{ budget.category }}</td>
-                                   <td>{{ budget.limitValue }}</td>
-                                   <td>{{ budget.alertValue }}</td>
-                                   
-                               </tr>
-                           </ng-template>
-                           <ng-template pTemplate="emptymessage">
-                               <tr>
-                                   <td colspan="4">There are no budget for this budget Period yet.</td>
-                               </tr>
-                           </ng-template>
-                       </p-table>
-                   </div>
+
+
+            <div class="col-lg-12">
+               <p-toast Style="z-index: 9999;" />
+
+               <div class="card">
+
+                  <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }"
+                     [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
+                     (onRowCollapse)="onRowCollapse($event)">
+                     <ng-template pTemplate="caption">
+                        <div class="flex flex-wrap justify-content-between gap-2">
+                           <!-- Aligné à gauche -->
+                           <div style="flex-grow: 1;">
+                              <app-add-budget></app-add-budget>
+                           </div>
+                        
+                           <!-- Aligné à droite -->
+                           <div class="flex justify-content-end">
+                              <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+                              <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                           </div>
+                        </div>
+                        
+                     </ng-template>
+                     <ng-template pTemplate="header">
+                        <tr>
+                           <th style="width: 5rem"></th>
+                           <th pSortableColumn="Period">Period <p-sortIcon field="period" /></th>
+                           <th pSortableColumn="income">income <p-sortIcon field="income" /></th>
+                           <th pSortableColumn="savings">savings <p-sortIcon field="savings" /></th>
+                           <th pSortableColumn="startDate">startDate <p-sortIcon field="startDate" /></th>
+                           <th pSortableColumn="endDate">endDate <p-sortIcon field="endDate" /></th>
+                        </tr>
+                     </ng-template>
+                     <ng-template pTemplate="body" let-budgetPeriod let-expanded="expanded">
+                        <tr>
+                           <td>
+                              <p-button type="button" pRipple [pRowToggler]="budgetPeriod" [text]="true"
+                                 [rounded]="true" [plain]="true"
+                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                           </td>
+                           <td>{{ budgetPeriod.period === 0 ? 'weakly' : 'monthly' }}</td>
+
+                           <td>{{ budgetPeriod.income }}</td>
+                           <td>{{ budgetPeriod.savings }}</td>
+                           <td>{{ budgetPeriod.startDate | date:'yyyy-MM-dd' }}</td>
+                           <td>{{ budgetPeriod.endDate | date:'yyyy-MM-dd' }}</td>
+
+
+                        </tr>
+                     </ng-template>
+                     <ng-template pTemplate="rowexpansion" let-budgetPeriod>
+                        <tr>
+                           <td colspan="7">
+                              <div class="p-3">
+                                 <p-table [value]="budgetPeriod.budgets" dataKey="id">
+                                    <ng-template pTemplate="header">
+                        <tr>
+                           <th pSortableColumn="id">category<p-sortIcon field="price" /></th>
+                           <th pSortableColumn="limitValue">limitValue <p-sortIcon field="customer" /></th>
+                           <th pSortableColumn="alertValue">alertValue <p-sortIcon field="date" /></th>
+
+                        </tr>
+                     </ng-template>
+                     <ng-template pTemplate="body" let-budget>
+                        <tr>
+                           <td>{{ budget.categoryName }}</td>
+                           <td>{{ budget.limitValue }}</td>
+                           <td>{{ budget.alertValue }}</td>
+
+                        </tr>
+                     </ng-template>
+                     <ng-template pTemplate="emptymessage">
+                        <tr>
+                           <td colspan="4">There are no budget for this budget Period yet.</td>
+                        </tr>
+                     </ng-template>
+                  </p-table>
+               </div>
                </td>
-           </tr>
-       </ng-template>
-   </p-table>
+               </tr>
+               </ng-template>
+               </p-table>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
-         </div></div></div></div>
- 
-                <!-- <p-toast Style="z-index: 50;"/>
+</div>
+
+<!-- <p-toast Style="z-index: 50;"/>
                 <p-confirmdialog Style="z-index: 50;"/>
                 <div class="card">
                    <p-table #dt1 [value]="budgets" dataKey="id" [rows]="8" [rowsPerPageOptions]="[8, 25, 50]"

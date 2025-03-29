@@ -37,6 +37,8 @@ import { BudgetPeriods } from '../../../shared/model/BudgetPeriods';
 import { BudgetPeriodService } from '../../../shared/services/budget-period.service';
 
 import { RippleModule } from 'primeng/ripple';
+import { periodMap } from '../../../shared/model/PeriodType';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 
 
@@ -68,7 +70,7 @@ import { RippleModule } from 'primeng/ripple';
     '../../../../../public/css/teamplate/style.css',
     '../../../../../public/css/teamplate/typography.css',
     '../../../../../public/css/teamplate/responsive.css'],
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService,DateFormatPipe]
 
 
 })
@@ -83,7 +85,16 @@ export class ListOfUserBudgetComponent implements OnInit {
   recevoirMessage(message: boolean) {
     this.changeMenu = message; // Stocke la valeur reçue
   }
+  getCategoryName(category: number | string): string {
+      
+    if (typeof category === "number" && categoryMap.hasOwnProperty(category)) {
+      return categoryMap[category];
+    }
+  
+    console.warn("Category introuvable:", category); // Alerte si la valeur n'existe pas
+    return "Unknown"; 
 
+  }
 
 
 
@@ -204,8 +215,20 @@ export class ListOfUserBudgetComponent implements OnInit {
 
   ngOnInit() {
       this.budgetPeriodService.getBudgetPeriodsList().subscribe(budgetPeriods => {
-        this.budgetPeriods=budgetPeriods
+        this.budgetPeriods=budgetPeriods;
+
+
+
+
+
+        
+        this.budgetPeriods.forEach(period => {
+          period.budgets.forEach(budget => {
+            budget.categoryName = this.getCategoryName(budget.category);
+          });
         });
+      });    
+    
   }
 
   expandAll() {
@@ -226,7 +249,16 @@ export class ListOfUserBudgetComponent implements OnInit {
   onRowCollapse(event: TableRowCollapseEvent) {
       this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
   }
+  getPeriodName(period: number | string): string {
+      
+    if (typeof period === "number" && periodMap.hasOwnProperty(period)) {
+      return periodMap[period];
+    }
+  
+    console.warn("Category introuvable:", period); // Alerte si la valeur n'existe pas
+    return "Unknown"; 
 
+  }
 
 
 

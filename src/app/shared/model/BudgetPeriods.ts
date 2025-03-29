@@ -6,7 +6,8 @@ export interface BudgetPeriods{
     startDate:Date,
     endDate:Date,
     userId:string,
-    budgets:any[]
+    budgets:any[],
+    periodName?: string;
 
 
 }

@@ -91,3 +91,8 @@ p-button[pRowToggler] {
   justify-content: space-between;
   align-items: center;
 }
+
+#content-page{
+
+  margin-top: 2%;
+}
