@@ -32,24 +32,22 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 @Component({
   selector: 'app-add-budget',
   standalone: true,
-  imports: [DialogModule, ButtonModule, InputTextModule,FormsModule,
-    DropdownModule,InputNumberModule,CalendarModule, ReactiveFormsModule,
-       ProgressSpinnerModule,CommonModule,StepperModule,
-       ToggleButtonModule,IconFieldModule,InputIconModule,KnobModule,FloatLabelModule],
+  imports: [DialogModule, ButtonModule, InputTextModule, FormsModule,
+    DropdownModule, InputNumberModule, CalendarModule, ReactiveFormsModule,
+    ProgressSpinnerModule, CommonModule, StepperModule,
+    ToggleButtonModule, IconFieldModule, InputIconModule, KnobModule, FloatLabelModule],
   templateUrl: './add-budget.component.html',
   styleUrl: './add-budget.component.css'
 })
-export class AddBudgetComponent implements OnInit{
- visible: boolean = false;
+export class AddBudgetComponent implements OnInit {
+  visible: boolean = false;
   periods: any[] | undefined;
-  categories: any[] | undefined;
-  hide:boolean=true;
-
+  // categories: any[] | undefined;
+  hide: boolean = true;
 
   value1!: number;
   datetime24h: Date[] | undefined;
-  form: FormGroup;
-  product!:any;
+  product!: any;
   loading: boolean = false;
   selectedPeriod: number = 0;
 
@@ -57,33 +55,9 @@ export class AddBudgetComponent implements OnInit{
 
 
 
-  active: number= 0;
+  active: number = 0;
 
-  name: string | undefined ;
 
-    email: string | undefined ;
-
-    password: string | undefined ;
-
-  option1: boolean | undefined = false;
-
-  option2: boolean | undefined = false;
-
-  option3: boolean | undefined = false;
-
-  option4: boolean | undefined = false;
-
-  option5: boolean | undefined = false;
-
-  option6: boolean | undefined = false;
-
-  option7: boolean | undefined = false;
-
-  option8: boolean | undefined = false;
-
-  option9: boolean | undefined = false;
-
-  option10: boolean | undefined = false;
 
 
 
@@ -98,145 +72,147 @@ export class AddBudgetComponent implements OnInit{
       { period: 'monthly', numberOfdate: '30' }
 
     ];
-    this.categories = [
-      { name: 'Food', code: '0' },
-      { name: 'Transport', code: '1' },
-      { name: 'Entertainment', code: '2' },
-      { name: 'Health', code: '3' },
-      { name: 'Electronics', code: '4' },
-      { name: 'Fashion', code: '5' },
-      { name: 'Housing', code: '6' },
-      { name: 'Others', code: '7' },
+    // this.categories = [
+    //   { name: 'Food', code: '0' },
+    //   { name: 'Transport', code: '1' },
+    //   { name: 'Entertainment', code: '2' },
+    //   { name: 'Health', code: '3' },
+    //   { name: 'Electronics', code: '4' },
+    //   { name: 'Fashion', code: '5' },
+    //   { name: 'Housing', code: '6' },
+    //   { name: 'Others', code: '7' },
 
-    ];
-}
-constructor(public formBuilder: FormBuilder, private toastr: ToastrService
-  ,private authService:AuthService,private budgetService:BudgetService,private messageService: MessageService) {
-    this.form = this.formBuilder.group({
-      UserId: [this.authService.getUserId(), Validators.required],
-      Category: ['', Validators.required],
-      limitValue: ['', Validators.required],
-      alertValue: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required]
-      
-    })
+    // ];
+
+
   }
 
-    showDialog() {
-        this.visible = true;
-    }
-    onSubmit() {
-      // Récupérer les dates et les convertir en objets Date
-      const startDate = new Date(this.form.value.startDate);
-      const endDate = new Date(this.form.value.endDate);
-    
-      // Ajouter un jour à la startDate
-      startDate.setDate(startDate.getDate() + 1);
-      endDate.setDate(endDate.getDate() + 1);
-    
-      // Formater les dates en UTC (YYYY-MM-DD)
-      const formattedStartDate = startDate.toISOString().split('T')[0];
-      const formattedEndDate = endDate.toISOString().split('T')[0];
-    
-      // Mettre à jour les valeurs formatées dans le formulaire
-      this.form.patchValue({
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-        Category: Number(this.form.value.Category)
-      });
-    
-      // Afficher les valeurs formatées dans la console pour vérification
-      console.log('Form Values:', this.form.value);
-    
-      // Vérifier la validité du formulaire avant d'envoyer les données
-      if (this.form.valid) {
-        this.budgetService.addBudget(this.form.value).subscribe({
-          next: (res: any) => {
-            console.log(res);
-            window.location.reload(); // Recharger la page après l'ajout du budget
-          },
-          error: (err) => {
-            console.error('Error during submit:', err);
-          
-            if (err.status === 400) {
-              // Vérifier si le backend a envoyé un message spécifique
-              if (err.error && err.error.message) {
-                // Afficher le message spécifique du backend
-                this.messageService.add({ 
-                  severity: 'error', 
-                  summary: 'Rejected', 
-                  detail: err.error.message  // Afficher le message retourné par le backend
-                });
-              } else if (err.error && err.error.errors) {
-                // Si le backend retourne des erreurs de validation pour les champs
-                const errors: { [key: string]: string[] } = err.error.errors;
-          
-                // Parcourir chaque clé d'erreur dans `errors`
-                for (const [field, messages] of Object.entries(errors)) {
-                  // Assurer que messages est un tableau de chaînes
-                  if (Array.isArray(messages)) {
-                    messages.forEach(message => {
-                      // Afficher un toast spécifique pour chaque message d'erreur
-                      this.messageService.add({ 
-                        severity: 'error', 
-                        summary: 'Rejected', 
-                        detail: `${field} validation failed: ${message}` // Afficher le message d'erreur du champ
-                      });
-                    });
-                  }
-                }
-              } else {
-                console.log('Unknown error details:', err.error);
-              }
-            } else {
-              console.log('Error during submit:', err.message || err);
-            }
-          }
-          
-          
-          
-          
-          
-          
-        });
-      }
-    }
-    
+
+
+
+
+
+
+
+
+ 
   
-    onPeriodChange(event: any) {
-      console.log("Période sélectionnée :", event.value);
-      if(event.value==='customDate'){
-        this.hide=false;
-        console.log(this.form.value.endDate)
-      }
-      else{
-        this.hide=true;
-        this.selectedPeriod = Number(event.value); // Convertir en nombre
-        this.updateDateEnd();
-        console.log(this.form.value.endDate)        
-      }
+  // Total budget
+  totalBudget: number = 0;
+  startDate: Date = new Date();
+  
+  // Budget categories and allocations
+  categories: {[key: string]: {
+    name: string,
+    icon: string,
+    limitValue: number,
+    knobValue: number,
+    alertValue: number
+  }} = {
+    food: { name: 'Food', icon: 'ri-cup-fill', limitValue: 0, knobValue: 0, alertValue: 0 },
+    transport: { name: 'Transport', icon: 'ri-roadster-fill', limitValue: 0, knobValue: 0, alertValue: 0 },
+    entertainment: { name: 'Entertainment', icon: 'ri-football-fill', limitValue: 0, knobValue: 0, alertValue: 0 },
+    health: { name: 'Health', icon: 'ri-hospital-line', limitValue: 0, knobValue: 0, alertValue: 0 },
+    electronics: { name: 'Electronics', icon: 'ri-customer-service-fill', limitValue: 0, knobValue: 0, alertValue: 0 },
+    fashion: { name: 'Fashion', icon: 'ri-handbag-line', limitValue: 0, knobValue: 0, alertValue: 0 },
+    housing: { name: 'Housing', icon: 'ri-home-4-fill', limitValue: 0, knobValue: 0, alertValue: 0 },
+    others: { name: 'Others', icon: 'ri-lightbulb-line', limitValue: 0, knobValue: 0, alertValue: 0 }
+  };
+  
+  // Track the remaining budget
+  get remainingBudget(): number {
+    let used = 0;
+    for (const cat in this.categories) {
+      used += this.categories[cat].limitValue || 0;
+    }
+    return this.totalBudget - used;
   }
-
-  onDateBeginChange(event: any) {
-    this.updateDateEnd(); // Mettre à jour la date de fin
+  
+  // Track the remaining percentage
+  get remainingPercentage(): number {
+    let used = 0;
+    for (const cat in this.categories) {
+      used += this.categories[cat].knobValue || 0;
+    }
+    return 100 - used;
+  }
+  
+  showDialog() {
+    this.visible = true;
+  }
+  
+  // Update knob percentage when limit value changes
+  onLimitValueChange(category: string, value: number) {
+    if (!this.totalBudget) return;
     
-}
-updateDateEnd() {
-  // Cloner la date de début
-  this.form.value.endDate = new Date(this.form.value.startDate);
-
-  if (this.selectedPeriod === 30) {
-    // Si la période est "monthly", ajouter 1 mois
-    this.form.value.endDate.setMonth(this.form.value.endDate.getMonth() + 1);
-  } else {
-    // Sinon, ajouter les jours en fonction de la période sélectionnée
-    this.form.value.endDate.setDate(this.form.value.endDate.getDate() + this.selectedPeriod);
+    const newPercentage = (value / this.totalBudget) * 100;
+    this.categories[category].knobValue = parseFloat(newPercentage.toFixed(2));
+    
+    // Validate that we don't exceed the total budget
+    let totalLimit = 0;
+    for (const cat in this.categories) {
+      totalLimit += this.categories[cat].limitValue || 0;
+    }
+    
+    if (totalLimit > this.totalBudget) {
+      // Adjust limit value to not exceed budget
+      this.categories[category].limitValue = value - (totalLimit - this.totalBudget);
+      this.categories[category].knobValue = (this.categories[category].limitValue / this.totalBudget) * 100;
+    }
+  }
+  
+  // Update limit value when knob percentage changes
+  onKnobValueChange(category: string, value: number) {
+    if (!this.totalBudget) return;
+  
+    // Calculer le total actuel sans inclure la catégorie en cours de modification
+    let usedPercentage = 0;
+    for (const cat in this.categories) {
+      if (cat !== category) {
+        usedPercentage += this.categories[cat].knobValue || 0;
+      }
+    }
+  
+    // Calculer le pourcentage maximum autorisé pour cette catégorie
+    const maxAllowed = 100 - usedPercentage;
+  
+    // Si la nouvelle valeur dépasse le max, on la bloque
+    if (value > maxAllowed) {
+      value = maxAllowed;
+    }
+  
+    // Mise à jour des valeurs
+    const newLimit = (value / 100) * this.totalBudget;
+    this.categories[category].knobValue = parseFloat(value.toFixed(2));
+    this.categories[category].limitValue = parseFloat(newLimit.toFixed(2));
+  }
+  
+  
+  
+  // Set the total budget
+  setTotalBudget(value: any) {
+    this.totalBudget = value;
+    
+    // Recalculate all limit values based on knob percentages
+    for (const cat in this.categories) {
+      if (this.categories[cat].knobValue > 0) {
+        this.categories[cat].limitValue = (this.categories[cat].knobValue / 100) * this.totalBudget;
+      }
+    }
   }
 
-  // Afficher la date de fin mise à jour dans la console
-  console.log(this.form.value.endDate);
-}
 
-   
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
