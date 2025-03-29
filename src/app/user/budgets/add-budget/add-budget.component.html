@@ -167,63 +167,38 @@
     <i class="ri-add-line"></i>
 </button>
 
-<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '40%' ,height:'auto'}">
-    <span class="p-text-secondary block mb-5">add your budget.</span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<p-dialog header="Add budget" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
     <div class="card flex justify-content-center">
+
+
         <p-stepper [(activeStep)]="active">
             <p-stepperPanel>
+                <!-- Première page (inchangée) -->
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
                     <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
                         <span
                             class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{
-                            'bg-primary border-primary': index <= active,
-                            'surface-border': index > active
-                        }">
+                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
                             <i class="pi pi-money-bill"></i>
                         </span>
-
-
                     </button>
                 </ng-template>
                 <ng-template pTemplate="content" let-nextCallback="nextCallback">
+                    <!-- Contenu de la première page -->
                     <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
                         <div class="text-center mt-3 mb-3 text-xl font-semibold">Create your budgets</div>
-                        
                         <div class="field p-fluid d-flex align-items-center">
                             <i class="pi pi-wallet" style="font-size: 1.2rem; margin-right: 10px;"></i>
                             <p-inputNumber inputId="expiry" prefix="Your budget is :" suffix=" Dnt" mode="decimal"
-    minFractionDigits="2" maxFractionDigits="2"  placeholder="Enter your budget"
-    [ngStyle]="{'width': '100%', 'color': 'gray'}">
-</p-inputNumber>
-
-
+                                minFractionDigits="2" maxFractionDigits="2" placeholder="Enter your budget"
+                                [ngStyle]="{'width': '100%', 'color': 'gray'}">
+                            </p-inputNumber>
                         </div>
-                        
                         <div class="field p-fluid d-flex align-items-center">
                             <i class="pi pi-calendar" style="font-size: 1.2rem; margin-right: 10px;"></i>
                             <p-calendar inputId="date" [appendTo]="'body'" placeholder="Select a Start date"
-                             [ngStyle]="{'flex': '1'}" />
-
+                                [ngStyle]="{'flex': '1'}" />
                         </div>
-                        
-                        
                     </div>
                     <div class="flex pt-4 justify-content-end">
                         <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
@@ -231,39 +206,119 @@
                     </div>
                 </ng-template>
             </p-stepperPanel>
+
+            <!-- Deuxième page avec modifications de style -->
             <p-stepperPanel>
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
                     <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
                         <span
                             class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{
-                                'bg-primary border-primary': index <= active,
-                                'surface-border': index > active
-                            }">
+                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
                             <i class="pi pi-tags"></i>
-
                         </span>
                     </button>
                 </ng-template>
                 <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
-                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Enter your budget in different categories </div>
-                        <div class="flex flex-wrap justify-content-center gap-3">
-                            
-
-
-                            
-
-
-
-
-
-
-
-
-
+                    <div class="flex flex-column gap-2 mx-auto"
+                        style="min-height: 16rem; width: 100%; max-width: 100%;">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Enter your budget in different
+                            categories</div>
+                        <div style="display: flex; margin-bottom: 10px;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
                         </div>
+
+                        <!-- Food Row -->
+                        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">
+                                <i class="ri-cup-fill" style="font-size: 1.2rem; color: #ff9800;"></i> Food
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                                     <p-inputNumber inputId="expiry1" mode="decimal"
+                                        minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+                                    <p-inputNumber inputId="expiry2" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Alert"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transport Row -->
+                        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">
+                                <i class="ri-roadster-fill" style="color: #ff9800;"></i> Transport
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                                    <p-inputNumber inputId="expiry3" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Limit"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+
+                                    <p-inputNumber inputId="expiry4" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Alert"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entertainment Row -->
+                        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">
+                                <i class="ri-football-fill" style="color: #ff9800;"></i> Entertainment
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                                    <p-inputNumber inputId="expiry5" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Limit"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+
+                                    <p-inputNumber inputId="expiry6" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Alert"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
+
                     <div class="flex pt-4 justify-content-between">
                         <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
                             icon="pi pi-arrow-left" />
@@ -272,22 +327,264 @@
                     </div>
                 </ng-template>
             </p-stepperPanel>
+
+
+
+
+
+
+
+
+
+ <!-- Troisieme page avec modifications de style -->
+ <p-stepperPanel>
+    <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+        <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
+            <span
+                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+                <i class="pi pi-tags"></i>
+            </span>
+        </button>
+    </ng-template>
+    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+        <div class="flex flex-column gap-2 mx-auto"
+            style="min-height: 16rem; width: 100%; max-width: 100%;">
+            
+            <div style="display: flex; margin-bottom: 10px;">
+                <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
+            </div>
+
+            <!-- Food Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="ri-hospital-line" style="font-size: 1.2rem; color: #ff9800;"></i> Health
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                         <p-inputNumber inputId="expiry1" mode="decimal"
+                            minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+                        <p-inputNumber inputId="expiry2" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="ri-customer-service-fill"  style="color: #ff9800;"></i> Electronics
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber inputId="expiry3" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+
+                        <p-inputNumber inputId="expiry4" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entertainment Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="ri-handbag-line" style="color: #ff9800;"></i> Fashion
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber inputId="expiry5" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+
+                        <p-inputNumber inputId="expiry6" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="flex pt-4 justify-content-between">
+            <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                icon="pi pi-arrow-left" />
+            <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                iconPos="right" />
+        </div>
+    </ng-template>
+</p-stepperPanel>
+
+
+
+
+
+
+
+
+
+
+<!-- Troisieme page avec modifications de style -->
+<p-stepperPanel>
+    <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+        <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
+            <span
+                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
+                <i class="pi pi-tags"></i>
+            </span>
+        </button>
+    </ng-template>
+    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+        <div class="flex flex-column gap-2 mx-auto"
+            style="min-height: 16rem; width: 100%; max-width: 100%;">
+            
+            <div style="display: flex; margin-bottom: 10px;">
+                <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
+            </div>
+
+            <!-- Food Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="ri-home-4-fill" style="font-size: 1.2rem; color: #ff9800;"></i> Housing
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                         <p-inputNumber inputId="expiry1" mode="decimal"
+                            minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+                        <p-inputNumber inputId="expiry2" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="ri-lightbulb-line"  style="color: #ff9800;"></i> Others
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber inputId="expiry3" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70"></p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill " style="color: firebrick;"></i>
+
+                        <p-inputNumber inputId="expiry4" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </div>
+
+        <div class="flex pt-4 justify-content-between">
+            <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                icon="pi pi-arrow-left" />
+            <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                iconPos="right" />
+        </div>
+    </ng-template>
+</p-stepperPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Troisième page (inchangée) -->
             <p-stepperPanel>
                 <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
                     <button class="bg-transparent border-none inline-flex flex-column gap-2" (click)="onClick.emit()">
                         <span
                             class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
-                            [ngClass]="{
-                                'bg-primary border-primary': index <= active,
-                                'surface-border': index > active
-                            }">
+                            [ngClass]="{'bg-primary border-primary': index <= active, 'surface-border': index > active}">
                             <i class="pi pi-id-card"></i>
                         </span>
                     </button>
                 </ng-template>
                 <ng-template pTemplate="content" let-prevCallback="prevCallback">
                     <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
-                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Account created successfully</div>
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Budget added successfully</div>
                         <div class="text-center">
                             <img alt="logo" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" />
                         </div>
@@ -299,21 +596,10 @@
                 </ng-template>
             </p-stepperPanel>
         </p-stepper>
+
+
+
+
+
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </p-dialog>

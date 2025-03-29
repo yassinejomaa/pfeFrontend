@@ -18,6 +18,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 
+import { KnobModule } from 'primeng/knob';
 
 
 
@@ -26,6 +27,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-add-budget',
@@ -33,7 +35,7 @@ import { InputIconModule } from 'primeng/inputicon';
   imports: [DialogModule, ButtonModule, InputTextModule,FormsModule,
     DropdownModule,InputNumberModule,CalendarModule, ReactiveFormsModule,
        ProgressSpinnerModule,CommonModule,StepperModule,
-       ToggleButtonModule,IconFieldModule,InputIconModule],
+       ToggleButtonModule,IconFieldModule,InputIconModule,KnobModule,FloatLabelModule],
   templateUrl: './add-budget.component.html',
   styleUrl: './add-budget.component.css'
 })
