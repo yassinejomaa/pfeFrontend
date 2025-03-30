@@ -165,8 +165,14 @@
 <button (click)="showDialog()" class="custom-blue-btn top-right-btn">
     <i class="ri-add-line"></i>
 </button>
-
+<p-toast 
+    position="top-right" 
+    [breakpoints]="{'640px': {width: '90%', right: '0'}}"
+    styleClass="z-50"
+    [baseZIndex]="50000">
+</p-toast>
 <p-dialog header="Add budget" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
+    
     <div class="card flex justify-content-center">
         <p-stepper style="padding-top: 2%;" [(activeStep)]="active">
             <p-stepperPanel>
@@ -652,7 +658,7 @@
                     <div class="flex pt-4 justify-content-start">
                         <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
                             icon="pi pi-arrow-left" />
-                        <p-button (onClick)="visible = false" label="Complete" icon="pi pi-check"
+                        <p-button (onClick)="submitBudget();visible = false" label="Complete" icon="pi pi-check"
                             iconPos="right" class="ml-auto" />
                     </div>
                 </ng-template>
