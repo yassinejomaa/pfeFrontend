@@ -20,6 +20,7 @@ import { DialogModule } from 'primeng/dialog';
 
 import { KnobModule } from 'primeng/knob';
 
+import { ToastModule } from 'primeng/toast';
 
 
 import { StepperModule } from 'primeng/stepper';
@@ -28,6 +29,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { BudgetPeriodService } from '../../../shared/services/budget-period.service';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-add-budget',
@@ -35,9 +38,10 @@ import { FloatLabelModule } from 'primeng/floatlabel';
   imports: [DialogModule, ButtonModule, InputTextModule, FormsModule,
     DropdownModule, InputNumberModule, CalendarModule, ReactiveFormsModule,
     ProgressSpinnerModule, CommonModule, StepperModule,
-    ToggleButtonModule, IconFieldModule, InputIconModule, KnobModule, FloatLabelModule],
+    ToggleButtonModule, IconFieldModule, InputIconModule, KnobModule, FloatLabelModule,ToastModule],
   templateUrl: './add-budget.component.html',
-  styleUrl: './add-budget.component.css'
+  styleUrl: './add-budget.component.css',
+  providers: [MessageService]
 })
 export class AddBudgetComponent implements OnInit {
   visible: boolean = false;
@@ -87,6 +91,10 @@ export class AddBudgetComponent implements OnInit {
 
   }
 
+  constructor(private authService:AuthService,private budgetPeriodService:BudgetPeriodService,private datePipe:DateFormatPipe,private messageService: MessageService){
+    this.startDate = new Date(); // date actuelle
+    this.endDate = this.calculateEndDate(this.startDate);
+  }
 
 
 
@@ -100,6 +108,7 @@ export class AddBudgetComponent implements OnInit {
   // Total budget
   totalBudget: number = 0;
   startDate: Date = new Date();
+  endDate: Date = new Date();
   
   // Budget categories and allocations
   categories: {[key: string]: {
@@ -199,12 +208,94 @@ export class AddBudgetComponent implements OnInit {
         this.categories[cat].limitValue = (this.categories[cat].knobValue / 100) * this.totalBudget;
       }
     }
+
+
+
+    
   }
 
 
 
 
 
+  private getCategoryId(categoryName: string): number {
+    // Utiliser categoryMap importé pour récupérer l'ID de la catégorie
+    const category = Object.keys(categoryMap).find(key => categoryMap[parseInt(key)].toLowerCase() === categoryName.toLowerCase());
+    return category ? parseInt(category) : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
+  }
+
+  submitBudget() {
+    // Créer le tableau des budgets formaté
+    const formattedStartDate = this.datePipe.transform(this.startDate)!;
+    const formattedEndDate = this.datePipe.transform(this.endDate)!;
+
+    console.log('Budget submitted');
+    const budgets = Object.keys(this.categories).map(key => {
+      const categoryId = this.getCategoryId(key); // Correction ici
+      return {
+        // ID à envoyer, ici 0 si c'est un nouveau budget
+        category: categoryId, // ID de la catégorie
+        limitValue: this.categories[key].limitValue, // Limite de valeur sous forme de Float64Array
+        alertValue: this.categories[key].alertValue, // Valeur d'alerte sous forme de Float64Array
+        UserId: this.authService.getUserId(), // ID de l'utilisateur
+         // ID de la période de budget
+      };
+    });
+
+    // Créer l'objet formData avec toutes les données nécessaires
+    const formData = {
+      id: 0,
+      period: 0, // Période du budget
+      income: this.totalBudget, // Total du budget
+      savings: 0, // Épargne
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      userId: this.authService.getUserId(), // ID de l'utilisateur
+      budgets: budgets // Tableau des budgets formatés
+    };
+console.log(formData)
+
+    
+    this.budgetPeriodService.addBudgetPeriod(formData).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.messageService.add({ severity: 'success', summary: 'success', detail: 'Budget added successfully' });
+        setTimeout(() => {
+          window.location.reload(); // Reload the page after 3 seconds
+        }, 3000);
+        
+        
+      },
+      error: (err) => {
+        if (err.status == 400) {
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'success', detail: 'error' });
+        }
+      }
+    });
+
+    
+
+
+    // Envoyer les données via HTTP POST avec .subscribe()
+    
+  }
+
+  calculateEndDate(startDate: Date): Date {
+    const period = 0; // Par exemple, utiliser la période ici pour décider si on ajoute 7 jours ou 1 mois
+    let endDate: Date;
+
+    if (period === 0) {
+      // Si période 0, ajouter 7 jours à la startDate
+      endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    } else {
+      // Si période 1, ajouter 1 mois à la startDate
+      endDate = new Date(startDate);
+      endDate.setMonth(startDate.getMonth() + 1);
+    }
+
+    return endDate;
+  }
 
 
 
