@@ -1,32 +1,272 @@
-/* Custom button styling */
-.custom-file-btn {
-    background-color: #1e3d73;  /* Custom blue color */
-    color: white;
-    border: 2px solid #1e3d73;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+/* Main Button Style */
+.import-csv-btn {
+  background: linear-gradient(135deg, #4a6cf7 0%, #2541b2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
+}
+
+.import-csv-btn:hover {
+  background: linear-gradient(135deg, #3a5bd9 0%, #1a318f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(74, 108, 247, 0.25);
+}
+
+.import-csv-btn:active {
+  transform: translateY(0);
+}
+
+.import-csv-btn i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Dialog Styles */
+.csv-import-dialog .p-dialog-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 8px 8px 0 0;
+  padding: 1rem 1.5rem;
+}
+
+.csv-import-dialog .p-dialog-content {
+  padding: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+/* File Upload Container */
+.file-upload-container {
+  padding: 2rem;
+  background: white;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 2px dashed #e9ecef;
+  border-radius: 8px;
+  margin: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.empty-state:hover {
+  border-color: #4a6cf7;
+  background: #f8faff;
+}
+
+.empty-state i {
+  color: #adb5bd;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #495057;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state small {
+  color: #6c757d;
+}
+
+.file-requirements {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  color: #495057;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-requirements i {
+  margin-right: 8px;
+  color: #4a6cf7;
+}
+
+/* File Preview */
+.file-preview {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-item i {
+  background: #e6f0ff;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.file-details {
+  flex: 1;
+}
+
+.file-details span {
+  display: block;
+}
+
+.file-details span:first-child {
+  font-weight: 500;
+  color: #212529;
+}
+
+.file-details span:last-child {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* Progress Bar */
+.custom-progress .p-progressbar {
+  height: 6px;
+  border-radius: 3px;
+  background: #e9ecef;
+  margin: 0.5rem 0;
+}
+
+.custom-progress .p-progressbar-value {
+  background: linear-gradient(90deg, #4a6cf7 0%, #6a8eff 100%);
+  border-radius: 3px;
+}
+
+/* Buttons in Uploader */
+.p-fileupload-choose {
+  background: linear-gradient(135deg, #4a6cf7 0%, #2541b2 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+}
+
+.p-fileupload-choose:hover {
+  background: linear-gradient(135deg, #3a5bd9 0%, #1a318f 100%) !important;
+}
+
+.p-fileupload-choose:focus {
+  box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.3) !important;
+}
+/* Modern Button Styles */
+.remove-btn {
+  background: rgba(220, 53, 69, 0.1);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-left: 12px;
+}
+
+.remove-btn:hover {
+  background: rgba(220, 53, 69, 0.2);
+  transform: scale(1.1);
+}
+
+.remove-btn i {
+  font-size: 14px;
+}
+
+.import-btn {
+  background: linear-gradient(135deg, #4a6cf7 0%, #2541b2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(74, 108, 247, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.import-btn:hover {
+  background: linear-gradient(135deg, #3a5bd9 0%, #1a318f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 108, 247, 0.3);
+}
+
+.import-btn:active {
+  transform: translateY(0);
+}
+
+.import-btn:disabled {
+  background: #e9ecef !important;
+  color: #adb5bd !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Ripple Effect */
+.import-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.import-btn:focus:not(:active)::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 1;
   }
-  
-  .custom-file-btn:hover {
-    background-color: #16325c;  /* Darker blue on hover */
-    border-color: #16325c;
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
   }
-  
-  .custom-file-btn:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(30, 61, 115, 0.5);
-  }
-  
-  /* Styling for the label */
-  label {
-    font-size: 16px;
-    margin-right: 10px;
-    color: #333;
-  }
-  
+}
+
+/* Loading Spinner */
+.import-btn .loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
