@@ -1,10 +1,10 @@
-<button class="btn" style="background-color: white; color: #1e3d73; border: 1px solid #1e3d73; " (click)="showDialog()">
+<button class="edit-btn" (click)="showDialog()">
     <i class="ri-edit-2-line"></i>
   </button>
   
 
-<div class="card">
-    <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
+<div >
+    <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '40%' ,height:'auto'}">
         <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
 
             <input type="hidden" formControlName="UserId">
@@ -12,16 +12,16 @@
 
             <div class="form-group">
                 <label for="name">Name</label>
-                <input pInputText id="name" autocomplete="off" formControlName="Name" />
+                <input style="flex-grow: 0;" pInputText id="name" autocomplete="off" formControlName="Name" />
             </div>
 
             <div class="form-group">
                 <label for="Category">Category</label>
-                <p-dropdown [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
+                <p-dropdown Style="flex-grow: 0;" [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
                           [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
                           [appendTo]="'body'">
                     <ng-template #selectedItem let-selectedOption>
-                        <div class="flex items-center gap-2">
+                        <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
                                  [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
                             <div>{{ selectedOption.name }}</div>
@@ -50,7 +50,7 @@
                 <p-inputNumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN" formControlName="Amount"/>
             </div>
 
-            <div class="flex justify-end gap-2 mt-4">
+            <div class="buttons-container flex justify-end gap-2 mt-4 w-full">
                 <p-button label="Cancel" severity="secondary" (click)="visible = false" />
                 <p-button type="submit" label="Save" />
             </div>

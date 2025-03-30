@@ -1,5 +1,56 @@
-<input type="file" style="display:none" #importCSV (change)="fileSelection($event)" />
-<label for="importCSV"></label>
-<button class="custom-file-btn" (click)="importCSV.click();">
+<p-toast position="top-right"></p-toast>
+
+<button class="import-csv-btn" (click)="showModalDialog()">
+  <i class="pi pi-file-import"></i>
   Import CSV
 </button>
+
+<p-dialog header="Import CSV Data" [(visible)]="displayModal" 
+          [style]="{width: '500px'}" [modal]="true" 
+          styleClass="csv-import-dialog"
+          [draggable]="false" [resizable]="false">
+  
+  <div class="file-upload-container">
+    <input type="file" #fileInput style="display: none" 
+           (change)="onFileSelected($event)" accept=".csv" />
+    
+    <div class="dropzone" 
+         (click)="fileInput.click()"
+         (drop)="onFileDrop($event)"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         [class.active]="isDragOver">
+      
+      <div *ngIf="!selectedFile" class="empty-state">
+        <i class="pi pi-cloud-upload"></i>
+        <p>Drag & drop your CSV file here</p>
+        <small>or click to browse your files</small>
+        <p class="file-requirements">
+          <i class="pi pi-info-circle"></i>
+          Supported format: csv
+        </p>
+      </div>
+      
+      <div *ngIf="selectedFile" class="file-preview">
+        <div class="file-item">
+          <i class="pi pi-file-excel"></i>
+          <div class="file-details">
+            <span>{{ selectedFile.name }}</span>
+            <span>{{ formatSize(selectedFile.size) }}</span>
+          </div>
+          <button class="remove-btn" (click)="removeFile($event)" [disabled]="isUploading">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+        <button class="import-btn" (click)="importFile(); $event.stopPropagation()" [disabled]="isUploading">
+          <span *ngIf="!isUploading">
+            <i class="pi pi-cloud-upload"></i> Import Now
+          </span>
+          <span *ngIf="isUploading" class="loading-container">
+            <span class="loading-spinner"></span> Importing...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</p-dialog>

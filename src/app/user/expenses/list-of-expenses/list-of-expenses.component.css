@@ -3,4 +3,28 @@
    align-items: center;
    gap: 8px; /* Adjust spacing as needed */
  }
- 
+ /* Delete Button - matches edit button style */
+.delete-btn {
+  background-color: #d9534f; /* Red color */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(217, 83, 79, 0.15);
+}
+
+.delete-btn:hover {
+  background-color: #c9302c; /* Darker red on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 83, 79, 0.25);
+}
+
+.delete-btn i {
+  font-size: 1.1rem;
+}

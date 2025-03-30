@@ -18,7 +18,7 @@
                      [value]="expenses"
                      dataKey="id"
                      [rows]="8"
-                     [rowsPerPageOptions]="[10, 25, 50]"
+                     [rowsPerPageOptions]="[8, 25, 50]"
                      [loading]="loading"
                      [paginator]="true"
                      [globalFilterFields]="['name', 'categoryName']"
@@ -104,9 +104,9 @@
                                  
 
                                 <app-update-expense [expense]="expense"></app-update-expense>
-                                <button class="btn" style="background-color: white; color: #d9534f; border: 1px solid #d9534f;" (click)="delete($event, expense.id)">
+                                <button class="delete-btn" (click)="delete($event, expense.id)">
                                  <i class="ri-delete-bin-6-line"></i>
-                             </button>
+                               </button>
                              
                               </div>
                             </td>
