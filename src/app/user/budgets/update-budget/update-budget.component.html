@@ -1,9 +1,501 @@
-<!-- <button class="btn" style="background-color: white; color: #1e3d73; border: 1px solid #1e3d73; " (click)="showDialog()">
+<button class="edit-btn" (click)="showDialog()">
     <i class="ri-edit-2-line"></i>
-  </button>
-  
+</button>
+<p-dialog header="Add budget" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
+    <div class="card flex justify-content-center">
+        <p-stepper style="padding-top: 2%;" [(activeStep)]="active">
+            <p-stepperPanel>
+                <!-- First page - Budget total -->
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
+                            <i class="pi pi-money-bill"></i>
+                        </span>
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-nextCallback="nextCallback">
+                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Create your budgets</div>
+                        <div class="field p-fluid d-flex align-items-center">
+                            <i class="pi pi-wallet" style="font-size: 1.2rem; margin-right: 10px;"></i>
+                            <p-inputNumber inputId="budgetTotal" [(ngModel)]="totalBudget" prefix="Your budget is :" suffix=" Dnt" mode="decimal"
+                                minFractionDigits="2" maxFractionDigits="2" placeholder="Enter your budget"
+                                [ngStyle]="{'width': '100%', 'color': 'gray'}" (onInput)="setTotalBudget($event.value)">
+                            </p-inputNumber>
+                        </div>
+                        <div class="field p-fluid d-flex align-items-center">
+                            <i class="pi pi-calendar" style="font-size: 1.2rem; margin-right: 10px;"></i>
+                            <p-calendar inputId="date" [(ngModel)]="startDate" [appendTo]="'body'" placeholder="Select a Start date"
+                                [ngStyle]="{'flex': '1'}" />
+                        </div>
+                    </div>
+                    <div class="flex pt-4 justify-content-end">
+                        <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                            iconPos="right" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
 
-<div class="card">
+            <!-- Second page - Food, Transport -->
+            <p-stepperPanel>
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
+                            <i class="pi pi-tags"></i>
+                        </span>
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+                    <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; width: 100%; max-width: 100%;">
+                        <div class="text-center mt-3 mb-3 text-xl font-semibold">Enter your budget in different categories</div>
+                        
+                        <!-- Budget status -->
+                        
+                        
+                        
+                        <div style="display: flex; margin-bottom: 10px;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
+                        </div>
+
+                        <!-- Food Row -->
+                        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">
+                                <i class="{{ categories['food'].icon }}" style="font-size: 1.2rem; color: #ff9800;"></i> {{ categories['food'].name }}
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                                    <p-inputNumber [(ngModel)]="categories['food'].limitValue"
+                                    (onInput)="onLimitValueChange('food', $event.value ? +$event.value : 0)"
+                                        mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                                        [max]="totalBudget">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <p-knob [(ngModel)]="categories['food'].knobValue" (onChange)="onKnobValueChange('food', $event)" 
+                                    [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['food'].knobValue">
+                                </p-knob>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                                    <p-inputNumber [(ngModel)]="categories['food'].alertValue" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Alert" [max]="categories['food'].limitValue"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transport Row -->
+                        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 1; text-align: left; padding: 10px;">
+                                <i class="{{ categories['transport'].icon }}" style="color: #ff9800;"></i> {{ categories['transport'].name }}
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                                    <p-inputNumber [(ngModel)]="categories['transport'].limitValue" 
+                                        (onInput)="onLimitValueChange('transport', $event.value ? +$event.value : 0)" 
+                                        mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                                        [max]="totalBudget">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <p-knob [(ngModel)]="categories['transport'].knobValue" (onChange)="onKnobValueChange('transport', $event)" 
+                                    [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['transport'].knobValue">
+                                </p-knob>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 10px;">
+                                <div style="display: inline-block; position: relative; width: 100%;">
+                                    <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                                    <p-inputNumber [(ngModel)]="categories['transport'].alertValue" mode="decimal" minFractionDigits="2"
+                                        maxFractionDigits="2" placeholder="Alert" [max]="categories['transport'].limitValue"
+                                        [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 p-2 bg-gray-100 rounded flex items-center justify-center gap-8 text-center ml-6">
+                            <div>Total Budget: {{ totalBudget | number:'1.2-2' }} Dnt</div>
+                            <div>Used: {{ totalBudget - remainingBudget | number:'1.2-2' }} Dnt ({{ 100 - remainingPercentage | number:'1.2-2' }}%)</div>
+                            <div>Remaining: {{ remainingBudget | number:'1.2-2' }} Dnt ({{ remainingPercentage | number:'1.2-2' }}%)</div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="flex pt-4 justify-content-between">
+                        <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                            icon="pi pi-arrow-left" />
+                        <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                            iconPos="right" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+
+
+
+
+
+
+ <!-- Third page - Entertaiment, Health,Electronics -->
+ <p-stepperPanel>
+    <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+        <button class="stepper-header-btn" (click)="onClick.emit()">
+            <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
+                <i class="pi pi-tags"></i>
+            </span>
+        </button>
+    </ng-template>
+    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+        <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; width: 100%; max-width: 100%;">
+            
+            <!-- Budget status -->
+            
+            
+            
+            <div style="display: flex; margin-bottom: 10px;">
+                <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
+            </div>
+
+            <!-- Entertainment Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['entertainment'].icon }}" style="font-size: 1.2rem; color: #ff9800;"></i> {{ categories['entertainment'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['entertainment'].limitValue"
+                        (onInput)="onLimitValueChange('entertainment', $event.value ? +$event.value : 0)"
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['entertainment'].knobValue" (onChange)="onKnobValueChange('entertainment', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['entertainment'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['entertainment'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['entertainment'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['health'].icon }}" style="color: #ff9800;"></i> {{ categories['health'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['health'].limitValue" 
+                            (onInput)="onLimitValueChange('health', $event.value ? +$event.value : 0)" 
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['health'].knobValue" (onChange)="onKnobValueChange('health', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['health'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['health'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['health'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+
+             <!-- Electronics Row -->
+             <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['electronics'].icon }}" style="color: #ff9800;"></i> {{ categories['electronics'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['electronics'].limitValue" 
+                            (onInput)="onLimitValueChange('electronics', $event.value ? +$event.value : 0)" 
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['electronics'].knobValue" (onChange)="onKnobValueChange('electronics', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['electronics'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['electronics'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['electronics'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 p-2 bg-gray-100 rounded flex items-center justify-center gap-8 text-center ml-6">
+                <div>Total Budget: {{ totalBudget | number:'1.2-2' }} Dnt</div>
+                <div>Used: {{ totalBudget - remainingBudget | number:'1.2-2' }} Dnt ({{ 100 - remainingPercentage | number:'1.2-2' }}%)</div>
+                <div>Remaining: {{ remainingBudget | number:'1.2-2' }} Dnt ({{ remainingPercentage | number:'1.2-2' }}%)</div>
+            </div>
+            
+        </div>
+
+        <div class="flex pt-4 justify-content-between">
+            <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                icon="pi pi-arrow-left" />
+            <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                iconPos="right" />
+        </div>
+    </ng-template>
+</p-stepperPanel>
+
+
+
+
+
+
+
+
+<!-- Forth page - Fashion, Housing,Others -->
+<p-stepperPanel>
+    <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+        <button class="stepper-header-btn" (click)="onClick.emit()">
+            <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
+                <i class="pi pi-tags"></i>
+            </span>
+        </button>
+    </ng-template>
+    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback">
+        <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; width: 100%; max-width: 100%;">
+            
+            <!-- Budget status -->
+            
+            
+            
+            <div style="display: flex; margin-bottom: 10px;">
+                <div style="flex: 1; text-align: left; padding: 10px;">Category</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Limit Value</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Knob</div>
+                <div style="flex: 1; text-align: center; padding: 10px;">Alert Value</div>
+            </div>
+
+            <!-- Fashion Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['fashion'].icon }}" style="font-size: 1.2rem; color: #ff9800;"></i> {{ categories['fashion'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['fashion'].limitValue"
+                        (onInput)="onLimitValueChange('fashion', $event.value ? +$event.value : 0)"
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['fashion'].knobValue" (onChange)="onKnobValueChange('fashion', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['fashion'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['fashion'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['fashion'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Housing Row -->
+            <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['housing'].icon }}" style="color: #ff9800;"></i> {{ categories['housing'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['housing'].limitValue" 
+                            (onInput)="onLimitValueChange('housing', $event.value ? +$event.value : 0)" 
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['housing'].knobValue" (onChange)="onKnobValueChange('housing', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['housing'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['housing'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['housing'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+
+             <!-- Others Row -->
+             <div style="display: flex; margin-bottom: 15px; align-items: center;">
+                <div style="flex: 1; text-align: left; padding: 10px;">
+                    <i class="{{ categories['others'].icon }}" style="color: #ff9800;"></i> {{ categories['others'].name }}
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-wallet-2-fill" style="color: #4caf50;"></i>
+                        <p-inputNumber [(ngModel)]="categories['others'].limitValue" 
+                            (onInput)="onLimitValueChange('others', $event.value ? +$event.value : 0)" 
+                            mode="decimal" minFractionDigits="2" maxFractionDigits="2" placeholder="Limit"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}"
+                            [max]="totalBudget">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <p-knob [(ngModel)]="categories['others'].knobValue" (onChange)="onKnobValueChange('others', $event)" 
+                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['others'].knobValue">
+                    </p-knob>
+                </div>
+                <div style="flex: 1; text-align: center; padding: 10px;">
+                    <div style="display: inline-block; position: relative; width: 100%;">
+                        <i class="ri-alarm-warning-fill" style="color: firebrick;"></i>
+                        <p-inputNumber [(ngModel)]="categories['others'].alertValue" mode="decimal" minFractionDigits="2"
+                            maxFractionDigits="2" placeholder="Alert" [max]="categories['others'].limitValue"
+                            [ngStyle]="{'width': '90%', 'min-width': '60px', 'color': 'gray', 'padding-left': '30px'}">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 p-2 bg-gray-100 rounded flex items-center justify-center gap-8 text-center ml-6">
+                <div>Total Budget: {{ totalBudget | number:'1.2-2' }} Dnt</div>
+                <div>Used: {{ totalBudget - remainingBudget | number:'1.2-2' }} Dnt ({{ 100 - remainingPercentage | number:'1.2-2' }}%)</div>
+                <div>Remaining: {{ remainingBudget | number:'1.2-2' }} Dnt ({{ remainingPercentage | number:'1.2-2' }}%)</div>
+            </div>
+            
+        </div>
+
+        <div class="flex pt-4 justify-content-between">
+            <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                icon="pi pi-arrow-left" />
+            <p-button (onClick)="nextCallback.emit()" label="Next" icon="pi pi-arrow-right"
+                iconPos="right" />
+        </div>
+    </ng-template>
+</p-stepperPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Additional stepper panels with the same pattern -->
+            <!-- You would repeat the same pattern for the remaining category pages -->
+
+            <!-- Final confirmation page -->
+            <p-stepperPanel>
+                <ng-template pTemplate="header" let-onClick="onClick" let-index="index">
+                    <button class="stepper-header-btn" (click)="onClick.emit()">
+                        <span class="stepper-icon" [ngClass]="{'active-step': index <= active}">
+                            <i class="pi pi-id-card"></i>
+                        </span>
+                    </button>
+                </ng-template>
+                <ng-template pTemplate="content" let-prevCallback="prevCallback">
+                   
+                    
+                    <div class="flex w-full gap-4 items-start justify-between mx-auto" style="min-height: 16rem;">
+                        <!-- Image alignée au centre vertical du Summary -->
+                        <div class="flex-shrink-0 self-center ml-6"> <!-- self-center pour aligner verticalement -->
+                            <img alt="logo" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" class="w-32" />
+                        </div>
+                        
+                        <!-- Budget Summary -->
+                        <div class="flex-1 p-2 bg-gray-100 rounded">
+                            <h3 class="font-bold">Budget Summary</h3>
+                            <div>Total Budget: {{ totalBudget | number:'1.2-2' }} Dnt</div>
+                            <div>Start Date: {{ startDate | date }}</div>
+                            <hr class="my-2">
+                            <div *ngFor="let cat of categories | keyvalue">
+                                <div *ngIf="cat.value.limitValue > 0">
+                                    <strong>{{ cat.value.name }}:</strong> {{ cat.value.limitValue | number:'1.2-2' }} Dnt ({{ cat.value.knobValue }}%)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="flex pt-4 justify-content-start">
+                        <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
+                            icon="pi pi-arrow-left" />
+                        <p-button (onClick)="visible = false" label="Complete" icon="pi pi-check"
+                            iconPos="right" class="ml-auto" />
+                    </div>
+                </ng-template>
+            </p-stepperPanel>
+        </p-stepper>
+    </div>
+</p-dialog>
+<!-- <div class="card">
     <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
         <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
             <span class="p-text-secondary block mb-8">update the budget.</span>
