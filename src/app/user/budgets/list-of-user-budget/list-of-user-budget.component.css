@@ -1,98 +1,49 @@
-/* Container principal */
-#container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%; /* Assurer que le conteneur prend toute la largeur */
+/* Delete Button - matches edit button style */
+.delete-btn {
+ background-color: #d9534f; /* Red color */
+ color: white;
+ border: none;
+ border-radius: 50%;
+ width: 40px;
+ height: 40px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ cursor: pointer;
+ transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+ box-shadow: 0 2px 10px rgba(217, 83, 79, 0.15);
 }
 
-/* Container pour les boutons */
-.buttons-container {
-  margin-left: auto; /* Pousse le bouton complètement à droite */
-  display: flex;
-  gap: 10px; /* Espacement entre les boutons */
-}
-/* Amélioration de la table */
-p-table {
-  .p-datatable {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .p-datatable-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    padding: 1rem;
-    text-align: right;
-  }
-
-  .p-datatable-thead tr th {
-    background-color: #007bff;
-    color: #fff;
-    text-align: left;
-    padding: 10px;
-  }
-
-  .p-datatable-tbody tr {
-    transition: background 0.3s ease-in-out;
-  }
-
-  .p-datatable-tbody tr:hover {
-    background-color: #f1f3f5;
-  }
-
-  .p-datatable-tbody td {
-    padding: 10px;
-    text-align: left;
-  }
+.delete-btn:hover {
+ background-color: #c9302c; /* Darker red on hover */
+ transform: translateY(-2px);
+ box-shadow: 0 4px 12px rgba(217, 83, 79, 0.25);
 }
 
-/* Boutons */
-p-button {
-  margin-right: 5px;
+.delete-btn i {
+ font-size: 1.1rem;
 }
-
-/* Amélioration des icônes */
-.pi {
-  font-size: 1.2rem;
-  vertical-align: middle;
-}
-
-/* Amélioration des boutons d'expansion */
-p-button[pRowToggler] {
+.edit-btn {
+  background-color:#1e3d73;
+  color: white;
   border: none;
-  background-color: transparent;
-  color: #007bff;
-  cursor: pointer;
-}
-
-/* Conteneur principal */
-#content-page {
-  padding: 2rem;
-  background-color: #f8f9fa;
-}
-
-.container-fluid {
-  padding: 1rem;
-}
-
-/* Amélioration des cartes */
-.card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Alignement des boutons en haut de la table */
-.flex {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(30, 61, 115, 0.15);
 }
 
-#content-page{
+.edit-btn:hover {
+  background-color: #0d2447;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 61, 115, 0.25);
+}
 
-  margin-top: 2%;
+.edit-btn i {
+  font-size: 1.1rem;
 }

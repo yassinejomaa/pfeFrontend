@@ -211,7 +211,8 @@ export class ListOfUserBudgetComponent implements OnInit {
 
   expandedRows = {};
 
-  constructor(private budgetPeriodService: BudgetPeriodService, private messageService: MessageService) {}
+  constructor(private budgetPeriodService: BudgetPeriodService, private messageService: MessageService,
+     private confirmationService: ConfirmationService,  private toastr: ToastrService) {}
 
   ngOnInit() {
       this.budgetPeriodService.getBudgetPeriodsList().subscribe(budgetPeriods => {
@@ -260,6 +261,49 @@ export class ListOfUserBudgetComponent implements OnInit {
 
   }
 
+  deleteBudgetPeriod(event: Event, id: any) {
+    console.log("Deleting budget period");
+    event.stopPropagation();
+    this.confirmationService.confirm({
+        message: 'Do you want to delete this budget period and all its associated budgets?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass: "p-button-danger p-button-text",
+        rejectButtonStyleClass: "p-button-text",
+        acceptIcon: "none",
+        rejectIcon: "none",
+        accept: () => {
+            this.budgetPeriodService.deleteBudgetPeriod(id).subscribe({
+                next: () => {
+                    this.messageService.add({ 
+                        severity: 'info', 
+                        summary: 'Confirmed', 
+                        detail: 'Budget period deleted successfully' 
+                    });
+                    // Filter out the deleted budget period
+                    this.budgetPeriods = this.budgetPeriods.filter(period => period.id !== id);
+                },
+                error: (err: { status: number; }) => {
+                    if (err.status === 400) {
+                        this.toastr.error('Cannot delete budget period', 'Delete failed');
+                    } else if (err.status === 404) {
+                        this.toastr.error('Budget period not found', 'Delete failed');
+                    } else {
+                        console.error('Error during deletion:', err);
+                        this.toastr.error('An unexpected error occurred', 'Delete failed');
+                    }
+                }
+            });
+        },
+        reject: () => {
+            this.messageService.add({ 
+                severity: 'error', 
+                summary: 'Rejected', 
+                detail: 'Deletion cancelled' 
+            });
+        },
+    });
+}
 
 
 

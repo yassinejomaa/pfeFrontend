@@ -2,6 +2,11 @@
    <app-side-navbar (clicked)="recevoirMessage($event)" style="z-index: 20;"></app-side-navbar>
 
    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+   <p-confirmDialog 
+    [style]="{width: '450px'}" 
+    [baseZIndex]="10000" 
+    rejectButtonStyleClass="p-button-text">
+   </p-confirmDialog>
    <div id="content-page" class="content-page">
       <div class="container-fluid">
          <div class="row">
@@ -11,7 +16,7 @@
             <div class="col-lg-12">
                <p-toast Style="z-index: 9999;" />
 
-               <div class="card">
+               <div >
 
                   <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }"
                      [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
@@ -39,6 +44,7 @@
                            <th pSortableColumn="savings">savings <p-sortIcon field="savings" /></th>
                            <th pSortableColumn="startDate">startDate <p-sortIcon field="startDate" /></th>
                            <th pSortableColumn="endDate">endDate <p-sortIcon field="endDate" /></th>
+                           <th>Actions</th>
                         </tr>
                      </ng-template>
                      <ng-template pTemplate="body" let-budgetPeriod let-expanded="expanded">
@@ -54,13 +60,23 @@
                            <td>{{ budgetPeriod.savings }}</td>
                            <td>{{ budgetPeriod.startDate | date:'yyyy-MM-dd' }}</td>
                            <td>{{ budgetPeriod.endDate | date:'yyyy-MM-dd' }}</td>
-
+                           <td>
+                              <div class="d-flex gap-2">
+                                  <!-- Edit Button -->
+                                  <app-update-budget></app-update-budget>
+                                  
+                                  <!-- Delete Button -->
+                                  <button class="delete-btn" (click)="deleteBudgetPeriod($event,budgetPeriod.id)">
+                                      <i class="pi pi-trash"></i>
+                                  </button>
+                              </div>
+                          </td>
 
                         </tr>
                      </ng-template>
                      <ng-template pTemplate="rowexpansion" let-budgetPeriod>
                         <tr>
-                           <td colspan="7">
+                           <td colspan="8">
                               <div class="p-3">
                                  <p-table [value]="budgetPeriod.budgets" dataKey="id">
                                     <ng-template pTemplate="header">
