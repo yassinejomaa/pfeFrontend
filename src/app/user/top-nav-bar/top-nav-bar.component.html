@@ -74,7 +74,7 @@
                                  </div>
                                  <div class="media-body flex-grow-1 ms-4">
                                    <h6 class="mb-0" [class.font-weight-bold]="!notification.isRead">{{notification.message}}</h6>
-                                   <small class="float-right font-size-12">{{notification.createdAt }}</small>
+                                   <small class="float-right font-size-12">{{notification.createdAt  | date:'yyyy-MM-dd' }}</small>
                                    <p class="mb-0">{{getCategoryName(notification.categoryNum)}}</p>
                                  </div>
                                </div>
