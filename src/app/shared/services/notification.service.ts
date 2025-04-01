@@ -12,10 +12,18 @@ export class NotificationService {
   constructor(private toastr: ToastrService) { }
 
   public startConnection = (userId: string) => {
+    // Get the JWT token from wherever you store it
+    const token = localStorage.getItem('token'); // or however you store your token
+    
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.apiBaseUrl}/notificationHub`)
+      .withUrl(`${environment.apiBaseUrl}/notificationHub`, {
+        accessTokenFactory: () => {
+          // Ensure we never return null
+          return token || ''; // Return empty string if token is null
+        }
+      })
       .build();
-
+  
     this.hubConnection
       .start()
       .then(() => {
