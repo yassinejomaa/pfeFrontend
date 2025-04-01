@@ -2,25 +2,23 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
   private hubConnection!: signalR.HubConnection;
+  public notificationReceived = new Subject<any>();
 
   constructor(private toastr: ToastrService) { }
 
   public startConnection = (userId: string) => {
-    // Get the JWT token from wherever you store it
-    const token = localStorage.getItem('token'); // or however you store your token
+    const token = localStorage.getItem('token');
     
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.apiBaseUrl}/notificationHub`, {
-        accessTokenFactory: () => {
-          // Ensure we never return null
-          return token || ''; // Return empty string if token is null
-        }
+        accessTokenFactory: () => token || ''
       })
       .build();
   
@@ -39,8 +37,12 @@ export class NotificationService {
   }
 
   public addNotificationListener = () => {
-    this.hubConnection.on('ReceiveNotification', (message: string) => {
-      this.toastr.warning(message, 'Budget Alert', {
+    this.hubConnection.on('ReceiveNotification', (notification: any) => {
+      // Émettre la notification via le Subject
+      this.notificationReceived.next(notification);
+      
+      // Afficher aussi une toast
+      this.toastr.warning(notification.message, 'New Notification', {
         timeOut: 10000,
         positionClass: 'toast-top-right'
       });
