@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -14,88 +14,108 @@ import { categoryMap } from '../../shared/model/CategoryType';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './top-nav-bar.component.html',
-  styleUrls: ['./top-nav-bar.component.css', '../../../../public/css/teamplate/style.css', '../../../../public/css/teamplate/typography.css',
-    '../../../../public/css/teamplate/responsive.css'],
-      providers: [ConfirmationService, MessageService,DateFormatPipe]
-    
+  styleUrls: ['./top-nav-bar.component.css', '../../../../public/css/teamplate/style.css', 
+            '../../../../public/css/teamplate/typography.css',
+            '../../../../public/css/teamplate/responsive.css'],
+  providers: [ConfirmationService, MessageService, DateFormatPipe]
 })
-export class TopNavBarComponent implements OnInit {
+export class TopNavBarComponent implements OnInit, OnDestroy {
   isDropdownOpen = false;
   isShow: boolean = false;
   isShowMessage: boolean = false;
-  firstName?: String;
+  firstName?: string;
   lastName?: string;
   notifications: any[] = [];
   unreadCount = 0;
   loading = false;
+  currentPage = 1;
+  notificationsPerPage = 4;
+  totalPages = 1;
+  isChangingPage = false;
+  direction: 'forward' | 'backward' = 'forward';
+  private animationTimeout: any;
   
   categoryImages = [
     { src: "images/electronics.png", num: 4 },
     { src: "images/entertainement.png", num: 2 },
     { src: "images/fashion.png", num: 5 },
-    { src: "/images/food.png", num: 0 },
+    { src: "images/food.png", num: 0 },
     { src: "images/health.png", num: 3 },
     { src: "images/housing.png", num: 6 },
     { src: "images/others.png", num: 7 },
     { src: "images/transportation.png", num: 1 }
   ];
 
-  // ... reste du code existant
-
-  getCategoryImage(categoryNum: number): string {
-    const found = this.categoryImages.find(img => img.num === categoryNum);
-    console.log(found);
-    console.log(categoryNum);
-    return found ? found.src : 'assets/images/default-category.png';
-  }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
-    const userDataString = localStorage.getItem("userData");
+    this.loadUserData();
+    this.loadNotifications();
+    
+    this.notificationService.notificationReceived.subscribe(notification => {
+      this.handleNewNotification(notification);
+    });
+  }
 
+  ngOnDestroy() {
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
+  }
+
+  private loadUserData() {
+    const userDataString = localStorage.getItem("userData");
     if (userDataString) {
       try {
         const userData = JSON.parse(userDataString);
         this.firstName = userData?.firstName ?? '';
         this.lastName = userData?.lastName ?? '';
-        console.log(this.firstName);
       } catch (error) {
-        console.error("Erreur lors de la conversion JSON :", error);
+        console.error("JSON parsing error:", error);
       }
-    } else {
-      console.log("Aucune donnée trouvée dans localStorage.");
     }
-    this.loadNotifications();
-    
-    // Écouter les nouvelles notifications SignalR
-    this.notificationService.notificationReceived.subscribe(notification => {
+  }
+
+  private handleNewNotification(notification: any) {
+    if (!this.notifications.some(n => n.id === notification.id)) {
       this.notifications.unshift(notification);
-      this.unreadCount++;
-    });
+      this.totalPages = Math.ceil(this.notifications.length / this.notificationsPerPage);
+      this.currentPage = 1; // Reset to first page
+      if (!notification.isRead) {
+        this.unreadCount++;
+      }
+    }
   }
 
   toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen; // Basculer entre ouvert/fermé
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
-  constructor(private router: Router,private authService: AuthService,private notificationService: NotificationService,private http: HttpClient) {
 
-  }
   onLogout() {
-    this.authService.deleteToken()
+    this.authService.deleteToken();
     localStorage.removeItem('userData');
     this.router.navigateByUrl("/login");
   }
+
   @Input() bodyClass: any = {};
+
   toggleShow(event: Event) {
-    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
+    event.stopPropagation();
     this.isShow = !this.isShow;
     this.isShowMessage = false;
-    this.isDropdownOpen;
   }
+
   toggleShowMessage(event: Event) {
-    event.stopPropagation(); // Empêche la propagation pour éviter de masquer immédiatement
+    event.stopPropagation();
     this.isShowMessage = !this.isShowMessage;
     this.isShow = false;
   }
+
   @HostListener('document:click')
   closeDropdown() {
     this.isShow = false;
@@ -104,24 +124,69 @@ export class TopNavBarComponent implements OnInit {
 
   loadNotifications() {
     this.loading = true;
-    this.http.get<any[]>(`${environment.apiBaseUrl}/api/notifications?unreadOnly=true`).subscribe({
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/notifications`).subscribe({
       next: (data) => {
         this.notifications = data;
         this.unreadCount = data.filter(n => !n.isRead).length;
+        this.totalPages = Math.ceil(this.notifications.length / this.notificationsPerPage);
         this.loading = false;
       },
-      error: () => this.loading = false
+      error: () => {
+        this.loading = false;
+      }
     });
   }
 
+  getPaginatedNotifications(): any[] {
+    const startIndex = (this.currentPage - 1) * this.notificationsPerPage;
+    const endIndex = startIndex + this.notificationsPerPage;
+    return this.notifications.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number, event: Event): void {
+    event.stopPropagation();
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      // Set animation direction
+      this.direction = page > this.currentPage ? 'forward' : 'backward';
+      
+      this.isChangingPage = true;
+      
+      // Clear any existing timeout
+      if (this.animationTimeout) {
+        clearTimeout(this.animationTimeout);
+      }
+      
+      // Wait for animation to complete before changing data
+      this.animationTimeout = setTimeout(() => {
+        this.currentPage = page;
+        this.isChangingPage = false;
+      }, 300); // Match this with your CSS animation duration
+    }
+  }
+
   markAsRead(id: number) {
-    this.http.put(`${environment.apiBaseUrl}/api/notifications/${id}/mark-as-read`, {}).subscribe(() => {
-      const notification = this.notifications.find(n => n.id === id);
-      if (notification) {
+    const notification = this.notifications.find(n => n.id === id);
+    if (!notification || notification.isRead) return;
+
+    this.http.put(`${environment.apiBaseUrl}/api/notifications/${id}/mark-as-read`, {}).subscribe({
+      next: () => {
         notification.isRead = true;
         this.unreadCount--;
-      }
+      },
+      error: (err) => console.error('Error marking as read:', err)
     });
+  }
+
+  getCategoryImage(categoryNum: number): string {
+    const found = this.categoryImages.find(img => img.num === categoryNum);
+    return found ? found.src : 'assets/images/default-category.png';
+  }
+
+  getCategoryName(category: number | string): string {
+    if (typeof category === "number" && categoryMap.hasOwnProperty(category)) {
+      return categoryMap[category];
+    }
+    return "Unknown";
   }
 
   getNotificationIcon(type: string): string {
@@ -130,15 +195,4 @@ export class TopNavBarComponent implements OnInit {
       default: return 'assets/images/default-notification.png';
     }
   }
-getCategoryName(category: number | string): string {
-      
-    if (typeof category === "number" && categoryMap.hasOwnProperty(category)) {
-      return categoryMap[category];
-    }
-  
-    console.warn("Category introuvable:", category); // Alerte si la valeur n'existe pas
-    return "Unknown"; 
-
-  }
-
 }
