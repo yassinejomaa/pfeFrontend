@@ -63,7 +63,7 @@
                            <td>
                               <div class="d-flex gap-2">
                                   <!-- Edit Button -->
-                                  <app-update-budget></app-update-budget>
+                                  <app-update-budget [budgetPeriod]="budgetPeriod"></app-update-budget>
                                   
                                   <!-- Delete Button -->
                                   <button class="delete-btn" (click)="deleteBudgetPeriod($event,budgetPeriod.id)">

@@ -487,7 +487,7 @@
                     <div class="flex pt-4 justify-content-start">
                         <p-button (onClick)="prevCallback.emit()" label="Back" severity="secondary"
                             icon="pi pi-arrow-left" />
-                        <p-button (onClick)="visible = false" label="Complete" icon="pi pi-check"
+                        <p-button (onClick)="updateBudget();visible = false" label="Complete" icon="pi pi-check"
                             iconPos="right" class="ml-auto" />
                     </div>
                 </ng-template>
@@ -495,105 +495,3 @@
         </p-stepper>
     </div>
 </p-dialog>
-<!-- <div class="card">
-    <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '50%' ,height:'auto'}">
-        <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
-            <span class="p-text-secondary block mb-8">update the budget.</span>
-
-            <input type="hidden" formControlName="UserId">
-            <input type="hidden" formControlName="id">
-
-            
-
-            <div class="form-group">
-                <label for="Category">Category</label>
-                <p-select [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
-                          [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
-                          [appendTo]="'body'">
-                    <ng-template #selectedItem let-selectedOption>
-                        <div class="flex items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
-                                 [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
-                            <div>{{ selectedOption.name }}</div>
-                        </div>
-                    </ng-template>
-                </p-select>
-
-                
-            </div>
-
-            
-
-            <div class="form-group">
-                <label for="withoutgrouping">limit Value</label>
-                <p-inputnumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN" formControlName="limitValue"/>
-            </div>
-
-            <div class="form-group">
-                <label for="withoutgrouping">alert Value</label>
-                <p-inputnumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN" formControlName="alertValue"/>
-            </div>
-
-
-
-
-            <div class="form-group">
-                <label for="date">Date Begin</label>
-                <p-datepicker inputId="date" dateFormat="yy-mm-dd"
-                    [appendTo]="'body'" formControlName="startDate" (onSelect)="onDateBeginChange($event)">
-                </p-datepicker>
-            </div>
-
-
-
-
-
-            <div class="form-group">
-                <label for="Category">period</label>
-                <p-select [options]="periods" optionLabel="period" optionValue="numberOfdate" [filter]="true"
-                    filterBy="name" [showClear]="true" placeholder="Select a period" [appendTo]="'body'"
-                    (onChange)="onPeriodChange($event)" formControlName="period">
-                    <ng-template #selectedItem let-selectedOptionDate>
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                                [class]="'flag flag-' + selectedOptionDate.period.toLowerCase()" style="width: 18px" />
-                            <div>{{ selectedOptionDate.period }}</div>
-                        </div>
-                    </ng-template>
-                    <ng-template #item let-item>
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                                [class]="'flag flag-' + item.period.toLowerCase()" style="width: 18px" />
-                            <div>{{ item.period }}</div>
-                        </div>
-                    </ng-template>
-                </p-select>
-            </div>
-
-
-
-
-
-
-            <div class="form-group" id="dateOfend" [class.hideDateOfend]="hide">
-                <label for="date">Date end</label>
-                <p-datepicker inputId="date" dateFormat="yy-mm-dd"
-                    [appendTo]="'body'" formControlName="endDate">
-                </p-datepicker>
-
-            </div>
-
-
-
-
-
-
-
-
-            <div class="flex justify-end gap-2 mt-4">
-                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-                <p-button type="submit" label="Save" />
-            </div>
-        </form>
-    </p-dialog>
-</div> -->

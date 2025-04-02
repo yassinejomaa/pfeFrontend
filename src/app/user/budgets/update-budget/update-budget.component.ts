@@ -5,9 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { InputNumber } from 'primeng/inputnumber';
-// import { DatePicker } from 'primeng/datepicker';
-// import { Fluid } from 'primeng/fluid';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
+
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ExpenseService } from '../../../shared/services/expense.service';
@@ -25,6 +24,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { KnobModule } from 'primeng/knob';
 import { StepperModule } from 'primeng/stepper';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { BudgetPeriods } from '../../../shared/model/BudgetPeriods';
+import { BudgetPeriodService } from '../../../shared/services/budget-period.service';
 
 
 
@@ -38,10 +39,10 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
   templateUrl: './update-budget.component.html',
   styleUrl: './update-budget.component.css'
 })
-export class UpdateBudgetComponent {
+export class UpdateBudgetComponent implements OnInit {
   visible: boolean = false;
   periods: any[] | undefined;
-  // categories: any[] | undefined;
+  @Input() budgetPeriod!: BudgetPeriods;
   hide: boolean = true;
 
   value1!: number;
@@ -50,8 +51,8 @@ export class UpdateBudgetComponent {
   loading: boolean = false;
   selectedPeriod: number = 0;
 
-
-
+  startDate: Date = new Date();
+  endDate: Date = new Date();
 
 
   active: number = 0;
@@ -65,26 +66,45 @@ export class UpdateBudgetComponent {
 
 
   selectedCategories: string | undefined;
+
+  constructor(private authService:AuthService,private budgetPeriodService:BudgetPeriodService,private datePipe:DateFormatPipe,private messageService: MessageService){
+
+    this.startDate = new Date(); // date actuelle
+    this.endDate = this.calculateEndDate(this.startDate);
+
+
+
+  }
   ngOnInit() {
     this.periods = [
       { period: 'weakly', numberOfdate: '7' },
       { period: 'monthly', numberOfdate: '30' }
 
     ];
-    // this.categories = [
-    //   { name: 'Food', code: '0' },
-    //   { name: 'Transport', code: '1' },
-    //   { name: 'Entertainment', code: '2' },
-    //   { name: 'Health', code: '3' },
-    //   { name: 'Electronics', code: '4' },
-    //   { name: 'Fashion', code: '5' },
-    //   { name: 'Housing', code: '6' },
-    //   { name: 'Others', code: '7' },
+    this.totalBudget = this.budgetPeriod.income;
+    this.startDate = new Date(this.budgetPeriod.startDate);
+  
+    // Initialiser les catégories avec les budgets existants
+    if (this.budgetPeriod.budgets && this.budgetPeriod.budgets.length > 0) {
+      this.budgetPeriod.budgets.forEach(budget => {
+        const categoryKey = this.getCategoryKey(budget.category);
+        if (categoryKey && this.categories[categoryKey]) {
+          this.categories[categoryKey].limitValue = budget.limitValue;
+          this.categories[categoryKey].alertValue = budget.alertValue;
+          
+          // Calculer le pourcentage si le budget total est défini
+          if (this.totalBudget > 0) {
+            this.categories[categoryKey].knobValue = (budget.limitValue / this.totalBudget) * 100;
+          }
+        }
+      });
+    }
 
-    // ];
-
-
+    console.log(this.budgetPeriod)
+    
+   
   }
+  
 
 
 
@@ -97,8 +117,7 @@ export class UpdateBudgetComponent {
  
   
   // Total budget
-  totalBudget: number = 0;
-  startDate: Date = new Date();
+  totalBudget: any = 0;
   
   // Budget categories and allocations
   categories: {[key: string]: {
@@ -204,8 +223,102 @@ export class UpdateBudgetComponent {
 
 
 
+  private getCategoryKey(categoryCode: number): string | null {
+    switch(categoryCode) {
+      case 0: return 'food';
+      case 1: return 'transport';
+      case 2: return 'entertainment';
+      case 3: return 'health';
+      case 4: return 'electronics';
+      case 5: return 'fashion';
+      case 6: return 'housing';
+      case 7: return 'others';
+      default: return null;
+    }}
 
 
+    private getCategoryId(categoryName: string): number {
+      // Utiliser categoryMap importé pour récupérer l'ID de la catégorie
+      const category = Object.keys(categoryMap).find(key => categoryMap[parseInt(key)].toLowerCase() === categoryName.toLowerCase());
+      return category ? parseInt(category) : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
+    }
+  
+    
+    updateBudget() {
+      const formattedStartDate = this.datePipe.transform(this.startDate)!;
+      const formattedEndDate = this.datePipe.transform(this.endDate)!;
+    
+      // Créer un mapping des budgets existants par catégorie
+      const existingBudgetsMap = new Map<number, Budget>();
+      if (this.budgetPeriod.budgets) {
+        this.budgetPeriod.budgets.forEach(budget => {
+          existingBudgetsMap.set(budget.category, budget);
+        });
+      }
+    
+      // Générer tous les budgets selon le format attendu par l'API
+      const budgets = Object.keys(this.categories).map(key => {
+        const categoryId = this.getCategoryId(key);
+        const existingBudget = existingBudgetsMap.get(categoryId);
+    
+        return {
+          id: existingBudget ? existingBudget.id : 0,
+          category: categoryId,
+          limitValue: this.categories[key].limitValue || 0,
+          alertValue: this.categories[key].alertValue || 0,
+          budgetPeriodId: this.budgetPeriod.id // Notez le changement de casse ici
+        };
+      });
+    
+      const formData = {
+        id: this.budgetPeriod.id,
+        period: this.budgetPeriod.Period, // Utilisez la période existante
+        income: this.totalBudget,
+        savings: this.budgetPeriod.savings || 0,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        userId: this.authService.getUserId(),
+        budgets: budgets
+      };
+    
+      console.log('Data to send to API:', formData);
+    
+      this.budgetPeriodService.updateBudgetPeriod(this.budgetPeriod.id, formData).subscribe({
+        next: (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Budget updated successfully'
+          });
+          this.visible = false;
+          // Option: emit event or reload data
+        },
+        error: (err) => {
+          console.error('Error updating budget:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error?.message || 'Failed to update budget'
+          });
+        }
+      });
+    }
+  
+    calculateEndDate(startDate: Date): Date {
+      const period = 0; // Par exemple, utiliser la période ici pour décider si on ajoute 7 jours ou 1 mois
+      let endDate: Date;
+  
+      if (period === 0) {
+        // Si période 0, ajouter 7 jours à la startDate
+        endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+      } else {
+        // Si période 1, ajouter 1 mois à la startDate
+        endDate = new Date(startDate);
+        endDate.setMonth(startDate.getMonth() + 1);
+      }
+  
+      return endDate;
+    }
 
 
 
@@ -215,205 +328,4 @@ export class UpdateBudgetComponent {
 
 
 }
-
-  // visible: boolean = false;
-  // categories: any[] | undefined;
-  // periods: any[] | undefined;
-
-  // value1!: number;
-  // datetime24h: Date[] | undefined;
-  // form!: FormGroup;
-  // loading: boolean = false;
-  // selectedPeriod: number = 0;
-  // hide: boolean = true;
-
-  // @Input() budget!: Budget;
-
-  // ngOnInit() {
-  //   this.periods = [
-  //     { period: 'Daily', numberOfdate: '1' },
-  //     { period: 'weakly', numberOfdate: '7' },
-  //     { period: 'monthly', numberOfdate: '30' },
-  //     { period: 'customize', numberOfdate: 'customDate' }
-
-  //   ];
-  //   this.categories = [
-  //     { name: 'Food', code: '0' },
-  //     { name: 'Transport', code: '1' },
-  //     { name: 'Entertainment', code: '2' },
-  //     { name: 'Health', code: '3' },
-  //     { name: 'Electronics', code: '4' },
-  //     { name: 'Fashion', code: '5' },
-  //     { name: 'Housing', code: '6' },
-  //     { name: 'Others', code: '7' },
-
-  //   ];
-  //   this.initForm();
-  // }
-  // constructor(public formBuilder: FormBuilder, private toastr: ToastrService,
-  //   private authService: AuthService, private budgetService: BudgetService,
-  //   private messageService: MessageService) {
-
-  // }
-
-  // initForm() {
-  //   const endDate = new Date(this.budget.endDate);
-  //   const startDate = new Date(this.budget.startDate);
-  //   this.form = this.formBuilder.group({
-  //     id: [this.budget.id, Validators.required],
-  //     UserId: [this.authService.getUserId(), Validators.required],
-  //     limitValue: [this.budget.limitValue, Validators.required],
-  //     alertValue: [this.budget.alertValue, Validators.required],
-  //     Category: [String(this.budget.category), Validators.required],
-  //     startDate: [this.budget.startDate, Validators.required],
-  //     endDate: [this.budget.endDate, Validators.required],
-  //     period: ['', Validators.required]
-  //   });
-
-   
-    
-  //   let nextDay = new Date(startDate);
-  //   nextDay.setDate(startDate.getDate() + 1);
-    
-  //   let nextMonth = new Date(startDate);
-  //   nextMonth.setMonth(startDate.getMonth() + 1);
-    
-  //   let next7Days = new Date(startDate);
-  //   next7Days.setDate(startDate.getDate() + 7);
-    
-  //   if (endDate.getTime() === nextDay.getTime()) {
-  //     this.form.patchValue({ period: '1' });
-  //   } else if (endDate.getTime() === nextMonth.getTime()) {
-  //     console.log("hello");
-  //     this.form.patchValue({ period: '30' });
-  //   } else if (endDate.getTime() === next7Days.getTime()) {
-  //     this.form.patchValue({ period: '7' });
-  //   } else {
-  //     this.form.patchValue({ period: 'customDate' });
-  //     this.hide = false;
-  //   }
-    
-  //   console.log("Valeur initialisée dans le formulaire :", this.form.value);
-  // }
-
-
-  // showDialog() {
-  //   this.visible = true;
-  // }
-  // onSubmit() {
-  //   // Récupérer les dates et les convertir en objets Date
-  //   const startDate = new Date(this.form.value.startDate);
-  //   const endDate = new Date(this.form.value.endDate);
-
-  //   // Ajouter un jour à la startDate
-  //   startDate.setDate(startDate.getDate() + 1);
-  //   endDate.setDate(endDate.getDate() + 1);
-
-  //   // Formater les dates en UTC (YYYY-MM-DD)
-  //   const formattedStartDate = startDate.toISOString().split('T')[0];
-  //   const formattedEndDate = endDate.toISOString().split('T')[0];
-
-  //   // Mettre à jour les valeurs formatées dans le formulaire
-  //   this.form.patchValue({
-  //     startDate: formattedStartDate,
-  //     endDate: formattedEndDate,
-  //     Category: Number(this.form.value.Category)
-  //   });
-
-  //   if (this.form.valid) {
-  //     this.budgetService.updateBudget(this.budget.id, this.form.value).subscribe({
-
-  //       next: (res: any) => {
-  //         console.log(res);
-  //         this.messageService.add({ severity: 'success', summary: 'Rejected', detail: 'update successfully' });
-  //         window.location.reload();
-
-  //       },
-
-
-
-
-  //       error: (err) => {
-  //         console.error('Error during submit:', err);
-
-  //         if (err.status === 400) {
-  //           // Vérifier si le backend a envoyé un message spécifique
-  //           if (err.error && err.error.message) {
-  //             // Afficher le message spécifique du backend
-  //             this.messageService.add({
-  //               severity: 'error',
-  //               summary: 'Rejected',
-  //               detail: err.error.message  // Afficher le message retourné par le backend
-  //             });
-  //           } else if (err.error && err.error.errors) {
-  //             // Si le backend retourne des erreurs de validation pour les champs
-  //             const errors: { [key: string]: string[] } = err.error.errors;
-
-  //             // Parcourir chaque clé d'erreur dans `errors`
-  //             for (const [field, messages] of Object.entries(errors)) {
-  //               // Assurer que messages est un tableau de chaînes
-  //               if (Array.isArray(messages)) {
-  //                 messages.forEach(message => {
-  //                   // Afficher un toast spécifique pour chaque message d'erreur
-  //                   this.messageService.add({
-  //                     severity: 'error',
-  //                     summary: 'Rejected',
-  //                     detail: `${field} validation failed: ${message}` // Afficher le message d'erreur du champ
-  //                   });
-  //                 });
-  //               }
-  //             }
-  //           } else {
-  //             console.log('Unknown error details:', err.error);
-  //           }
-  //         } else {
-  //           console.log('Error during submit:', err.message || err);
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
-
-  // onPeriodChange(event: any) {
-  //   console.log("Période sélectionnée :", event.value);
-  //   if (event.value === 'customDate') {
-  //     this.hide = false;
-  //     console.log(this.form.value.endDate)
-  //   }
-  //   else {
-  //     this.hide = true;
-  //     this.selectedPeriod = Number(event.value); // Convertir en nombre
-  //     this.updateDateEnd();
-  //     console.log(this.form.value.endDate)
-  //   }
-  // }
-
-  // onDateBeginChange(event: any) {
-    
-  //   this.updateDateEnd(); 
-  //   console.log(this.form.value)
-
-  // }
-  // updateDateEnd() {
-  //   if (!this.form.value.startDate) return;
-  
-  //   // Créer une copie indépendante de la date de début
-  //   const startDate = new Date(this.form.value.startDate);
-  //   let endDate = new Date(startDate); // Copie indépendante
-  
-  //   if (this.selectedPeriod === 30) {
-  //     // Ajouter 1 mois
-  //     endDate.setMonth(endDate.getMonth() + 1);
-  //   } else {
-  //     // Ajouter les jours en fonction de la période sélectionnée
-  //     endDate.setDate(endDate.getDate() + this.selectedPeriod);
-  //   }
-  
-  //   // Mettre à jour la valeur du champ endDate dans le formulaire
-  //   this.form.patchValue({ endDate });
-  
-  //   console.log(endDate);
-  // }
-  
-
 
