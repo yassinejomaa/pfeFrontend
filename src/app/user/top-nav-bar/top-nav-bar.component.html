@@ -1,4 +1,5 @@
 <body [ngClass]="bodyClass">
+   <p-toast Style="z-index: 9999;" />
    <div class="iq-top-navbar">
       <div class="iq-navbar-custom">
          <nav class="navbar navbar-expand-lg navbar-light p-0">
@@ -46,76 +47,76 @@
                   </li>
 
                   <li class="nav-item nav-icon" [class.iq-show]="isShow">
-                     <a class="search-toggle iq-waves-effect bg-primary rounded" [class.active]="isShow"
-                        (click)="toggleShow($event)">
+                     <a class="search-toggle iq-waves-effect bg-primary rounded" [class.active]="isShow" (click)="toggleShow($event)">
                        <i class="ri-notification-line" style="color: white;"></i>
                        <span class="bg-danger dots" *ngIf="unreadCount > 0"></span>
                      </a>
                      <div class="iq-sub-dropdown">
-                        <div class="iq-card shadow-none m-0">
-                          <div class="iq-card-body p-0">
-                            <div class="bg-primary p-3">
-                              <h5 class="mb-0 text-white">All Notifications
-                                <small class="badge badge-light float-right pt-1" style="color: black; margin-left: 45%;">{{unreadCount}}</small>
-                              </h5>
-                            </div>
-                            <div *ngIf="loading" class="text-center p-3">
-                              <i class="fa fa-spinner fa-spin"></i> Loading...
-                            </div>
-                            <div class="notification-container">
-                              <div class="notification-page" 
-                              [class.slide-in-next]="isChangingPage && direction === 'forward'"
-                              [class.slide-out-next]="isChangingPage && direction === 'forward'"
-                              [class.slide-in-prev]="isChangingPage && direction === 'backward'"
-                              [class.slide-out-prev]="isChangingPage && direction === 'backward'"
-                              [class.animating]="isChangingPage">
-                                <div *ngIf="!loading" (click)="$event.stopPropagation()">
-                                  <a href="javascript:void(0)" class="iq-sub-card" 
-                                     [class.notification-unread]="!notification.isRead"
-                                     [class.notification-read]="notification.isRead"
-                                     *ngFor="let notification of getPaginatedNotifications()" 
-                                     (click)="markAsRead(notification.id)">
-                                    <div class="media d-flex align-items-center">
-                                      <div class="flex-shrink-0">
-                                        <img class="avatar-40 rounded" [src]="getCategoryImage(notification.categoryNum)" [alt]="getCategoryName(notification.categoryNum)">
-                                      </div>
-                                      <div class="media-body flex-grow-1 ms-4">
-                                        <h6 class="mb-0" [class.font-weight-bold]="!notification.isRead">{{notification.message}}</h6>
-                                        <small class="float-right font-size-12">{{notification.createdAt | date:'yyyy-MM-dd'}}</small>
-                                        <p class="mb-0">{{getCategoryName(notification.categoryNum)}}</p>
-                                      </div>
-                                    </div>
-                                  </a>
-                                  
-                                  <div *ngIf="notifications.length === 0" class="text-center p-3">
-                                    No notifications
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <!-- Pagination controls -->
-                            <div class="d-flex justify-content-between p-2 border-top" 
-                                 *ngIf="notifications.length > notificationsPerPage" 
-                                 (click)="$event.stopPropagation()">
-                              <button class="btn btn-sm btn-primary" 
-                                      [disabled]="currentPage === 1" 
-                                      (click)="changePage(currentPage - 1, $event)">
-                                Previous
-                              </button>
-                              <span class="mx-2 align-self-center">
-                                Page {{currentPage}} of {{totalPages}}
-                              </span>
-                              <button class="btn btn-sm btn-primary" 
-                                      [disabled]="currentPage === totalPages" 
-                                      (click)="changePage(currentPage + 1, $event)">
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                       <div class="iq-card shadow-none m-0">
+                         <div class="iq-card-body p-0">
+                           <div class="bg-primary p-3">
+                             <h5 class="mb-0 text-white">All Notifications
+                               <small class="badge badge-light float-right pt-1" style="color: black; margin-left: 45%;">{{unreadCount}}</small>
+                             </h5>
+                           </div>
+                           <div *ngIf="loading" class="text-center p-3">
+                             <i class="fa fa-spinner fa-spin"></i> Loading...
+                           </div>
+                           <div class="notification-container">
+                             <div class="notification-page"
+                                  [class.slide-in-next]="isChangingPage && direction === 'forward'"
+                                  [class.slide-out-next]="isChangingPage && direction === 'forward'"
+                                  [class.slide-in-prev]="isChangingPage && direction === 'backward'"
+                                  [class.slide-out-prev]="isChangingPage && direction === 'backward'"
+                                  [class.animating]="isChangingPage">
+                               <div *ngIf="!loading" (click)="$event.stopPropagation()">
+                                 <a href="javascript:void(0)" class="iq-sub-card" 
+                                    [class.notification-unread]="!notification.isRead"
+                                    [class.notification-read]="notification.isRead"
+                                    *ngFor="let notification of getPaginatedNotifications()" 
+                                    (click)="markAsRead(notification.id)">
+                                   <div class="media d-flex align-items-center">
+                                     <div class="flex-shrink-0">
+                                       <img class="avatar-40 rounded" [src]="getCategoryImage(notification.categoryNum)" [alt]="getCategoryName(notification.categoryNum)">
+                                     </div>
+                                     <div class="media-body flex-grow-1 ms-4">
+                                       <h6 class="mb-0" [class.font-weight-bold]="!notification.isRead">{{notification.message}}</h6>
+                                       <small class="float-right font-size-12">{{notification.createdAt | date:'yyyy-MM-dd'}}</small>
+                                       <p class="mb-0">{{getCategoryName(notification.categoryNum)}}</p>
+                                     </div>
+                                     <div class="flex-shrink-0 ms-3">
+                                       <!-- Delete Button -->
+                                       <button class="delete-btn" (click)="deleteNotification($event, notification.id)">
+                                          <i class="pi pi-trash"></i>
+                                      </button>
+                                     </div>
+                                   </div>
+                                 </a>
+                   
+                                 <div *ngIf="notifications.length === 0" class="text-center p-3">
+                                   No notifications
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                   
+                           <!-- Pagination controls -->
+                           <div class="d-flex justify-content-between p-2 border-top" *ngIf="notifications.length > notificationsPerPage" (click)="$event.stopPropagation()">
+                             <button class="btn btn-sm btn-primary" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1, $event)">
+                               Previous
+                             </button>
+                             <span class="mx-2 align-self-center">
+                               Page {{currentPage}} of {{totalPages}}
+                             </span>
+                             <button class="btn btn-sm btn-primary" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1, $event)">
+                               Next
+                             </button>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
                    </li>
+                   
                   <li class="nav-item nav-icon dropdown" [class.iq-show]="isShowMessage">
                      <a class="search-toggle iq-waves-effect bg-primary rounded" [class.active]="isShowMessage"
                         (click)="toggleShowMessage($event)">

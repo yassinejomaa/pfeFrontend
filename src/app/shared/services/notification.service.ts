@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class NotificationService {
   private hubConnection!: signalR.HubConnection;
   public notificationReceived = new Subject<any>();
 
-  constructor(private toastr: ToastrService,private authService:AuthService) { }
+  constructor(private toastr: ToastrService,private authService:AuthService,private http: HttpClient) { }
 
   public startConnection = (userId: string) => {
     
@@ -49,5 +50,10 @@ export class NotificationService {
         positionClass: 'toast-top-right'
       });
     });
+  }
+
+
+  deleteNotification(id: number) {
+    return this.http.delete(`${environment.apiBaseUrl}/api/Notifications/${id}`);
   }
 }

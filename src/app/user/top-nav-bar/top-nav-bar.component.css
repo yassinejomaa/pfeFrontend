@@ -108,7 +108,7 @@
 /* Add these styles to your existing CSS */
 .notification-container {
   position: relative;
-  min-height: 450px; /* Adjust based on your content height */
+  min-height: 530px; /* Adjust based on your content height */
   overflow: hidden;
 }
 
@@ -208,4 +208,27 @@
 /* Pulse Animation Enhancement */
 .bg-danger.dots {
   animation: pulse 1.5s infinite, smoothBlur 3s infinite;
+}
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.iq-sub-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.pi-trash {
+  font-size: 1rem;
 }

@@ -8,16 +8,17 @@ import { environment } from '../../../environments/environment';
 import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { categoryMap } from '../../shared/model/CategoryType';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-top-nav-bar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,ToastModule],
   templateUrl: './top-nav-bar.component.html',
   styleUrls: ['./top-nav-bar.component.css', '../../../../public/css/teamplate/style.css', 
             '../../../../public/css/teamplate/typography.css',
             '../../../../public/css/teamplate/responsive.css'],
-  providers: [ConfirmationService, MessageService, DateFormatPipe]
+  providers: [ConfirmationService, MessageService]
 })
 export class TopNavBarComponent implements OnInit, OnDestroy {
   isDropdownOpen = false;
@@ -50,7 +51,11 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private http: HttpClient
+    private http: HttpClient, 
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    
+    
   ) {}
 
   ngOnInit() {
@@ -195,4 +200,38 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
       default: return 'assets/images/default-notification.png';
     }
   }
+
+
+
+
+
+  deleteNotification(event: Event, id: any) {
+  
+          this.notificationService.deleteNotification(id).subscribe({
+              next: () => {
+                  this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Notification deleted' });
+                  this.notifications = this.notifications.filter(notifications => notifications.id !== id);
+              },
+              error: (err) => {
+                  if (err.status === 400) {
+                    this.messageService.add({ severity: 'error', summary: 'Cannot delete', detail: 'Delete failed' });
+                  } else if (err.status === 404) {
+                      this.messageService.add({ severity: 'error', summary: 'Notification not found', detail: 'Delete failed' });
+
+                  } else {
+                      console.error('Error during deletion:', err);
+                      this.messageService.add({ severity: 'error', summary: 'An unexpected error occurred', detail: 'Delete failed' });
+
+                  }
+              }
+          });
+      
+      
+    
+}
+
+
+
+
+
 }
