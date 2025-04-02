@@ -91,10 +91,22 @@ export class AddBudgetComponent implements OnInit {
 
   }
 
-  constructor(private authService:AuthService,private budgetPeriodService:BudgetPeriodService,private datePipe:DateFormatPipe,private messageService: MessageService){
-    this.startDate = new Date(); // date actuelle
-    this.endDate = this.calculateEndDate(this.startDate);
-  }
+ // Dans le constructeur
+constructor(private authService: AuthService, private budgetPeriodService: BudgetPeriodService, 
+  private datePipe: DateFormatPipe, private messageService: MessageService) {
+this.startDate = new Date();
+this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
+}
+
+// Ajouter cette méthode pour mettre à jour la date de fin lorsque la date de début change
+onStartDateChange() {
+this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
+}
+
+// Ajouter cette méthode pour mettre à jour la date de fin lorsque la période change
+onPeriodChange() {
+this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
+}
 
 
 
@@ -225,7 +237,6 @@ export class AddBudgetComponent implements OnInit {
   }
 
   submitBudget() {
-    // Créer le tableau des budgets formaté
     const formattedStartDate = this.datePipe.transform(this.startDate)!;
     const formattedEndDate = this.datePipe.transform(this.endDate)!;
 
@@ -261,8 +272,8 @@ console.log(formData)
         console.log(res);
         this.messageService.add({ severity: 'success', summary: 'success', detail: 'Budget added successfully' });
         setTimeout(() => {
-          window.location.reload(); // Reload the page after 3 seconds
-        }, 3000);
+          window.location.reload();
+        }, 1500);
         
         
       },
@@ -281,22 +292,22 @@ console.log(formData)
     
   }
 
-  calculateEndDate(startDate: Date): Date {
-    const period = 0; // Par exemple, utiliser la période ici pour décider si on ajoute 7 jours ou 1 mois
-    let endDate: Date;
-
-    if (period === 0) {
-      // Si période 0, ajouter 7 jours à la startDate
-      endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    } else {
-      // Si période 1, ajouter 1 mois à la startDate
-      endDate = new Date(startDate);
-      endDate.setMonth(startDate.getMonth() + 1);
+  calculateEndDate(startDate: Date, period: number): Date {
+    const endDate = new Date(startDate);
+    
+    if (period === 0) { // Période hebdomadaire
+      endDate.setDate(endDate.getDate() + 7);
+    } else if (period === 1) { // Période mensuelle
+      endDate.setMonth(endDate.getMonth() + 1);
     }
-
+    
     return endDate;
   }
 
+
+  formatKnobValue(value: number): string {
+    return value.toFixed(2) + '%';
+  }
 
 
 

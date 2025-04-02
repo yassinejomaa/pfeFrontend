@@ -28,7 +28,8 @@ import { DialogModule } from 'primeng/dialog';
      ProgressSpinnerModule,CommonModule
      ],
   templateUrl: './add-expenses-manually.component.html',
-  styleUrl: './add-expenses-manually.component.css'
+  styleUrl: './add-expenses-manually.component.css',
+  providers: [ConfirmationService, MessageService]
 })
 export class AddExpensesManuallyComponent  {
 
@@ -78,8 +79,10 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
       if (this.form.valid) {
         this.expenseService.addExpenseManually(this.form.value).subscribe({
           next: (res: any) => {
-            console.log(res);
-            // window.location.reload();
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Expense added successfully' });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
             
           },
           error: (err) => {

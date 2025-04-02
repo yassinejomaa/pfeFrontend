@@ -212,10 +212,10 @@ export class ListOfUserBudgetComponent implements OnInit {
   expandedRows = {};
 
   constructor(private budgetPeriodService: BudgetPeriodService, private messageService: MessageService,
-     private confirmationService: ConfirmationService,  private toastr: ToastrService) {}
+     private confirmationService: ConfirmationService,  private toastr: ToastrService,private authService:AuthService) {}
 
   ngOnInit() {
-      this.budgetPeriodService.getBudgetPeriodsList().subscribe(budgetPeriods => {
+      this.budgetPeriodService.getBudgetPeriodsOfUser(this.authService.getUserId()).subscribe(budgetPeriods => {
         this.budgetPeriods=budgetPeriods;
 
 

@@ -18,7 +18,8 @@
 
                <div >
 
-                  <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }"
+                  <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [rows]="5"
+                  [rowsPerPageOptions]="[5, 25, 50]" [paginator]="true"
                      [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
                      (onRowCollapse)="onRowCollapse($event)">
                      <ng-template pTemplate="caption">
@@ -56,8 +57,8 @@
                            </td>
                            <td>{{ budgetPeriod.period === 0 ? 'weakly' : 'monthly' }}</td>
 
-                           <td>{{ budgetPeriod.income }}</td>
-                           <td>{{ budgetPeriod.savings }}</td>
+                           <td>{{ budgetPeriod.income | number:'1.2-2'}}</td>
+                           <td>{{ budgetPeriod.savings | number:'1.2-2'}}</td>
                            <td>{{ budgetPeriod.startDate | date:'yyyy-MM-dd' }}</td>
                            <td>{{ budgetPeriod.endDate | date:'yyyy-MM-dd' }}</td>
                            <td>

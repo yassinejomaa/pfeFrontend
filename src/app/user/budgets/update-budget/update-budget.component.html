@@ -27,7 +27,7 @@
                         <div class="field p-fluid d-flex align-items-center">
                             <i class="pi pi-calendar" style="font-size: 1.2rem; margin-right: 10px;"></i>
                             <p-calendar inputId="date" [(ngModel)]="startDate" [appendTo]="'body'"
-                                placeholder="Select a Start date" [ngStyle]="{'flex': '1'}" />
+                                placeholder="Select a Start date" [ngStyle]="{'flex': '1'}"  (onSelect)="onStartDateChange()"/>
                         </div>
                     </div>
                     <div class="flex pt-4 justify-content-end">
@@ -525,7 +525,7 @@
                             <div *ngFor="let cat of categories | keyvalue">
                                 <div *ngIf="cat.value.limitValue > 0">
                                     <strong>{{ cat.value.name }}:</strong> {{ cat.value.limitValue | number:'1.2-2' }}
-                                    Dnt ({{ cat.value.knobValue }}%)
+                                    Dnt ({{ cat.value.knobValue | number:'1.2-2' }}%)
                                 </div>
                             </div>
                         </div>

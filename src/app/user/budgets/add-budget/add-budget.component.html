@@ -197,7 +197,7 @@
                         <div class="field p-fluid d-flex align-items-center">
                             <i class="pi pi-calendar" style="font-size: 1.2rem; margin-right: 10px;"></i>
                             <p-calendar inputId="date" [(ngModel)]="startDate" [appendTo]="'body'" placeholder="Select a Start date"
-                                [ngStyle]="{'flex': '1'}" />
+                                [ngStyle]="{'flex': '1'}" (onSelect)="onStartDateChange()" />
                         </div>
                     </div>
                     <div class="flex pt-4 justify-content-end">
@@ -249,7 +249,7 @@
                             </div>
                             <div style="flex: 1; text-align: center; padding: 10px;">
                                 <p-knob [(ngModel)]="categories['food'].knobValue" (onChange)="onKnobValueChange('food', $event)" 
-                                    [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['food'].knobValue">
+                                    [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['food'].knobValue)" [size]="70" [max]="remainingPercentage + categories['food'].knobValue">
                                 </p-knob>
                             </div>
                             <div style="flex: 1; text-align: center; padding: 10px;">
@@ -281,7 +281,7 @@
                             </div>
                             <div style="flex: 1; text-align: center; padding: 10px;">
                                 <p-knob [(ngModel)]="categories['transport'].knobValue" (onChange)="onKnobValueChange('transport', $event)" 
-                                    [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['transport'].knobValue">
+                                    [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['transport'].knobValue)" [size]="70" [max]="remainingPercentage + categories['transport'].knobValue">
                                 </p-knob>
                             </div>
                             <div style="flex: 1; text-align: center; padding: 10px;">
@@ -358,7 +358,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['entertainment'].knobValue" (onChange)="onKnobValueChange('entertainment', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['entertainment'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['entertainment'].knobValue)" [size]="70" [max]="remainingPercentage + categories['entertainment'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -390,7 +390,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['health'].knobValue" (onChange)="onKnobValueChange('health', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['health'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['health'].knobValue)" [size]="70" [max]="remainingPercentage + categories['health'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -423,7 +423,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['electronics'].knobValue" (onChange)="onKnobValueChange('electronics', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['electronics'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['electronics'].knobValue)" [size]="70" [max]="remainingPercentage + categories['electronics'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -502,7 +502,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['fashion'].knobValue" (onChange)="onKnobValueChange('fashion', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['fashion'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['fashion'].knobValue)" [size]="70" [max]="remainingPercentage + categories['fashion'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -534,7 +534,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['housing'].knobValue" (onChange)="onKnobValueChange('housing', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['housing'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['housing'].knobValue)" [size]="70" [max]="remainingPercentage + categories['housing'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -567,7 +567,7 @@
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
                     <p-knob [(ngModel)]="categories['others'].knobValue" (onChange)="onKnobValueChange('others', $event)" 
-                        [strokeWidth]="4" [valueTemplate]="'{value}%'" [size]="70" [max]="remainingPercentage + categories['others'].knobValue">
+                        [strokeWidth]="4" [valueTemplate]="formatKnobValue(categories['others'].knobValue)" [size]="70" [max]="remainingPercentage + categories['others'].knobValue">
                     </p-knob>
                 </div>
                 <div style="flex: 1; text-align: center; padding: 10px;">
@@ -647,7 +647,7 @@
                             <hr class="my-2">
                             <div *ngFor="let cat of categories | keyvalue">
                                 <div *ngIf="cat.value.limitValue > 0">
-                                    <strong>{{ cat.value.name }}:</strong> {{ cat.value.limitValue | number:'1.2-2' }} Dnt ({{ cat.value.knobValue }}%)
+                                    <strong>{{ cat.value.name }}:</strong> {{ cat.value.limitValue | number:'1.2-2' }}Dnt ({{ cat.value.knobValue | number:'1.2-2' }}%)
                                 </div>
                             </div>
                         </div>

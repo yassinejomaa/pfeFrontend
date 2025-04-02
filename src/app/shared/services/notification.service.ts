@@ -3,6 +3,8 @@ import * as signalR from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
+import { AuthService } from './auth.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +13,14 @@ export class NotificationService {
   private hubConnection!: signalR.HubConnection;
   public notificationReceived = new Subject<any>();
 
-  constructor(private toastr: ToastrService) { }
+  constructor(private toastr: ToastrService,private authService:AuthService) { }
 
   public startConnection = (userId: string) => {
-    const token = localStorage.getItem('token');
+    
     
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.apiBaseUrl}/notificationHub`, {
-        accessTokenFactory: () => token || ''
+        accessTokenFactory: () => this.authService.getToken() || ''
       })
       .build();
   
