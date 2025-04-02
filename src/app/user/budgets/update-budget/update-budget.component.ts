@@ -269,12 +269,13 @@ export class UpdateBudgetComponent implements OnInit {
           budgetPeriodId: this.budgetPeriod.id // Notez le changement de casse ici
         };
       });
+      
     
       const formData = {
         id: this.budgetPeriod.id,
-        period: this.budgetPeriod.Period, // Utilisez la période existante
+        period: 0, // Utilisez la période existante
         income: this.totalBudget,
-        savings: this.budgetPeriod.savings || 0,
+        savings: this.remainingBudget || 0,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         userId: this.authService.getUserId(),
@@ -320,7 +321,9 @@ export class UpdateBudgetComponent implements OnInit {
       return endDate;
     }
 
-
+    formatKnobValue(value: number): string {
+      return value.toFixed(2) + '%';
+    }
 
 
 

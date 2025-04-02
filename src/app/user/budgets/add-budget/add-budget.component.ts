@@ -247,7 +247,7 @@ export class AddBudgetComponent implements OnInit {
       id: 0,
       period: 0, // Période du budget
       income: this.totalBudget, // Total du budget
-      savings: 0, // Épargne
+      savings: this.remainingBudget, // Épargne
       startDate: formattedStartDate,
       endDate: formattedEndDate,
       userId: this.authService.getUserId(), // ID de l'utilisateur
