@@ -6,6 +6,7 @@ export interface Expense{
     date:Date ,
     amount:Float64Array,
     UserId:string,
+    categoryId:number,
    
     
 }

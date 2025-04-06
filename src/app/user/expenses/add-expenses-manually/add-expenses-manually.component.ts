@@ -13,8 +13,9 @@ import { ExpenseService } from '../../../shared/services/expense.service';
 import { categoryMap } from '../../../shared/model/CategoryType';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
+import { CategoryService } from '../../../shared/services/category.service';
 
 
 
@@ -29,7 +30,7 @@ import { DialogModule } from 'primeng/dialog';
      ],
   templateUrl: './add-expenses-manually.component.html',
   styleUrl: './add-expenses-manually.component.css',
-  providers: [ConfirmationService, MessageService]
+  providers: [ConfirmationService, MessageService,DatePipe]
 })
 export class AddExpensesManuallyComponent  {
 
@@ -43,24 +44,26 @@ export class AddExpensesManuallyComponent  {
 
   selectedCategories: string | undefined;
   ngOnInit() {
-    this.categories = [
-      { name: 'Food', code: '0' },
-      { name: 'Transport', code: '1' },
-      { name: 'Entertainment', code: '2' },
-      { name: 'Health', code: '3' },
-      { name: 'Electronics', code: '4' },
-      { name: 'Fashion', code: '5' },
-      { name: 'Housing', code: '6' },
-      { name: 'Others', code: '7' },
-
-    ];
+   
+    this.categoryService.getCategoriesList().subscribe({
+      next: (res: any) => {
+        this.categories=res;
+        console.log(this.categories)
+        
+      },
+      error: (err) => {
+        console.log("can not get");
+      }
+    });
+    
 }
 constructor(public formBuilder: FormBuilder, private toastr: ToastrService
-  ,private authService:AuthService,private expenseService:ExpenseService,private messageService: MessageService) {
+  ,private authService:AuthService,private expenseService:ExpenseService,private messageService: MessageService,private categoryService:CategoryService, private datePipe: DatePipe
+) {
     this.form = this.formBuilder.group({
       UserId: [this.authService.getUserId(), Validators.required],
       Name: ['', Validators.required],
-      Category: ['', Validators.required],
+      CategoryId: ['', Validators.required],
       Date: ['', Validators.required],
       Amount: ['', Validators.required],
       
@@ -71,13 +74,15 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
         this.visible = true;
     }
     onSubmit() {
-      this.form.patchValue({
-        Category: Number(this.form.value.Category) 
-      });
-      console.log(this.form.value);
+      
   
       if (this.form.valid) {
-        this.expenseService.addExpenseManually(this.form.value).subscribe({
+        const formData = { ...this.form.value };
+        
+
+    formData.Date = this.datePipe.transform(formData.Date, 'yyyy-MM-dd');
+    console.log(formData)
+        this.expenseService.addExpenseManually(formData).subscribe({
           next: (res: any) => {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Expense added successfully' });
             setTimeout(() => {
@@ -89,12 +94,13 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
             if (err.status == 400) {
               this.toastr.error('cannot add', 'add failed');
             } else {
-              console.log('error during login');
+              console.log('error during submit');
             }
           }
         });
+        
       }
-     console.log(this.form.value)
+     
     }
 
     predictCategory() {

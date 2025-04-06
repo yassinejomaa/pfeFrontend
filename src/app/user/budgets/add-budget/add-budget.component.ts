@@ -233,7 +233,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
   private getCategoryId(categoryName: string): number {
     // Utiliser categoryMap importé pour récupérer l'ID de la catégorie
     const category = Object.keys(categoryMap).find(key => categoryMap[parseInt(key)].toLowerCase() === categoryName.toLowerCase());
-    return category ? parseInt(category) : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
+    return category ? parseInt(category)+1 : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
   }
 
   submitBudget() {
@@ -245,7 +245,8 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
       const categoryId = this.getCategoryId(key); // Correction ici
       return {
         // ID à envoyer, ici 0 si c'est un nouveau budget
-        category: categoryId, // ID de la catégorie
+        categoryId: categoryId, // ID de la catégorie
+        categoryName:this.categories[key].name,
         limitValue: this.categories[key].limitValue, // Limite de valeur sous forme de Float64Array
         alertValue: this.categories[key].alertValue, // Valeur d'alerte sous forme de Float64Array
         UserId: this.authService.getUserId(), // ID de l'utilisateur
@@ -280,7 +281,8 @@ console.log(formData)
       error: (err) => {
         if (err.status == 400) {
         } else {
-          this.messageService.add({ severity: 'error', summary: 'success', detail: 'error' });
+          this.messageService.add({ severity: 'error', summary: 'error', detail: 'error' });
+          console.log(formData)
         }
       }
     });

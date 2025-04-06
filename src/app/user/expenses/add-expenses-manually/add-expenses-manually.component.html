@@ -18,20 +18,20 @@
 
             <div class="form-group">
                 <label for="Category">Category</label>
-                <p-dropdown [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
+                <p-dropdown [options]="categories" formControlName="CategoryId" optionLabel="name" optionValue="id"
                     [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
                     [appendTo]="'body'">
                     <ng-template pTemplate=selectedItem let-selectedOption>
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                                [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
+                                 style="width: 18px" />
                             <div>{{ selectedOption.name }}</div>
                         </div>
                     </ng-template>
                     <ng-template pTemplate=item let-item>
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                                [class]="'flag flag-' + item.code.toLowerCase()" style="width: 18px" />
+                                 style="width: 18px" />
                             <div>{{ item.name }}</div>
                         </div>
                     </ng-template>

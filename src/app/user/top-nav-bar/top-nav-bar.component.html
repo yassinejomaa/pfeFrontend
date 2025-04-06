@@ -77,12 +77,12 @@
                                     (click)="markAsRead(notification.id)">
                                    <div class="media d-flex align-items-center">
                                      <div class="flex-shrink-0">
-                                       <img class="avatar-40 rounded" [src]="getCategoryImage(notification.categoryNum)" [alt]="getCategoryName(notification.categoryNum)">
+                                       <img class="avatar-40 rounded" [src]="getCategoryImage(notification.categoryId)" [alt]="notification.categoryName">
                                      </div>
                                      <div class="media-body flex-grow-1 ms-4">
                                        <h6 class="mb-0" [class.font-weight-bold]="!notification.isRead">{{notification.message}}</h6>
                                        <small class="float-right font-size-12">{{notification.createdAt | date:'yyyy-MM-dd'}}</small>
-                                       <p class="mb-0">{{getCategoryName(notification.categoryNum)}}</p>
+                                       <p class="mb-0">{{notification.categoryName}}</p>
                                      </div>
                                      <div class="flex-shrink-0 ms-3">
                                        <!-- Delete Button -->

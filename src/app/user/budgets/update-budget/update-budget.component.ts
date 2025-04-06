@@ -83,14 +83,16 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
     ];
     this.totalBudget = this.budgetPeriod.income;
     this.startDate = new Date(this.budgetPeriod.startDate);
-  
     // Initialiser les catégories avec les budgets existants
     if (this.budgetPeriod.budgets && this.budgetPeriod.budgets.length > 0) {
       this.budgetPeriod.budgets.forEach(budget => {
-        const categoryKey = this.getCategoryKey(budget.category);
+        const categoryKey = this.getCategoryKey(budget.categoryId-1);
+        console.log(categoryKey)
+
         if (categoryKey && this.categories[categoryKey]) {
           this.categories[categoryKey].limitValue = budget.limitValue;
           this.categories[categoryKey].alertValue = budget.alertValue;
+          
           
           // Calculer le pourcentage si le budget total est défini
           if (this.totalBudget > 0) {
@@ -100,7 +102,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
       });
     }
 
-    console.log(this.budgetPeriod)
+    console.log(this.categories)
     
    
   }
@@ -247,7 +249,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
     private getCategoryId(categoryName: string): number {
       // Utiliser categoryMap importé pour récupérer l'ID de la catégorie
       const category = Object.keys(categoryMap).find(key => categoryMap[parseInt(key)].toLowerCase() === categoryName.toLowerCase());
-      return category ? parseInt(category) : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
+      return category ? parseInt(category)+1 : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
     }
   
     
@@ -259,7 +261,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
       const existingBudgetsMap = new Map<number, Budget>();
       if (this.budgetPeriod.budgets) {
         this.budgetPeriod.budgets.forEach(budget => {
-          existingBudgetsMap.set(budget.category, budget);
+          existingBudgetsMap.set(budget.categoryId, budget);
         });
       }
     
@@ -267,10 +269,11 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
       const budgets = Object.keys(this.categories).map(key => {
         const categoryId = this.getCategoryId(key);
         const existingBudget = existingBudgetsMap.get(categoryId);
+        console.log
     
         return {
           id: existingBudget ? existingBudget.id : 0,
-          category: categoryId,
+          categoryId: categoryId,
           limitValue: this.categories[key].limitValue || 0,
           alertValue: this.categories[key].alertValue || 0,
           budgetPeriodId: this.budgetPeriod.id // Notez le changement de casse ici

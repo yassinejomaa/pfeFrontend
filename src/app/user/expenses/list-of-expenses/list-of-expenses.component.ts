@@ -85,11 +85,7 @@ export class ListOfExpensesComponent implements OnInit {
       ngOnInit() {
         this.userid =this.authService.getUserId();
         this.expenseService.getExpensesOfUser(this.userid).subscribe(expenses => {
-          this.expenses = expenses.map(expense => ({
-            ...expense,
-            categoryName: this.getCategoryName(expense.category),
-           
-          }));
+          this.expenses = expenses;
           this.expenses.forEach((expense) => (expense.date = new Date(<Date>expense.date)));
 
           console.log(this.expenses); 
@@ -103,16 +99,7 @@ export class ListOfExpensesComponent implements OnInit {
 
       
   
-      getCategoryName(category: number | string): string {
       
-        if (typeof category === "number" && categoryMap.hasOwnProperty(category)) {
-          return categoryMap[category];
-        }
-      
-        console.warn("Category introuvable:", category); // Alerte si la valeur n'existe pas
-        return "Unknown"; 
-
-      }
       
       
       

@@ -17,13 +17,13 @@
 
             <div class="form-group">
                 <label for="Category">Category</label>
-                <p-dropdown Style="flex-grow: 0;" [options]="categories" formControlName="Category" optionLabel="name" optionValue="code"
+                <p-dropdown Style="flex-grow: 0;" [options]="categories" formControlName="CategoryId" optionLabel="name" optionValue="id"
                           [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
                           [appendTo]="'body'">
                     <ng-template #selectedItem let-selectedOption>
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
-                                 [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
+                                 [class]="'flag flag-' + selectedOption.id.toLowerCase()" style="width: 18px" />
                             <div>{{ selectedOption.name }}</div>
                         </div>
                     </ng-template>

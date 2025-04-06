@@ -4,7 +4,8 @@ export interface Budget{
     limitValue :Float64Array,
     alertValue:Float64Array,
     UserId:string,
-    BudgetPeriodId:string
+    BudgetPeriodId:string,
+    CategoryName?:string
    
     
 }

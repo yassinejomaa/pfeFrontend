@@ -37,14 +37,14 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
   private animationTimeout: any;
   
   categoryImages = [
-    { src: "images/electronics.png", num: 4 },
-    { src: "images/entertainement.png", num: 2 },
-    { src: "images/fashion.png", num: 5 },
-    { src: "images/food.png", num: 0 },
-    { src: "images/health.png", num: 3 },
-    { src: "images/housing.png", num: 6 },
-    { src: "images/others.png", num: 7 },
-    { src: "images/transportation.png", num: 1 }
+    { src: "images/electronics.png", num: 5 },
+    { src: "images/entertainement.png", num: 3 },
+    { src: "images/fashion.png", num: 6},
+    { src: "images/food.png", num: 1 },
+    { src: "images/health.png", num: 4 },
+    { src: "images/housing.png", num: 7 },
+    { src: "images/others.png", num: 8 },
+    { src: "images/transportation.png", num: 2 }
   ];
 
   constructor(
@@ -187,12 +187,7 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
     return found ? found.src : 'assets/images/default-category.png';
   }
 
-  getCategoryName(category: number | string): string {
-    if (typeof category === "number" && categoryMap.hasOwnProperty(category)) {
-      return categoryMap[category];
-    }
-    return "Unknown";
-  }
+  
 
   getNotificationIcon(type: string): string {
     switch(type) {
