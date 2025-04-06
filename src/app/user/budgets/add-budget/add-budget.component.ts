@@ -233,7 +233,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
   private getCategoryId(categoryName: string): number {
     // Utiliser categoryMap importé pour récupérer l'ID de la catégorie
     const category = Object.keys(categoryMap).find(key => categoryMap[parseInt(key)].toLowerCase() === categoryName.toLowerCase());
-    return category ? parseInt(category)+1 : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
+    return category ? parseInt(category) : -1; // Retourne l'ID de la catégorie ou -1 si non trouvé
   }
 
   submitBudget() {

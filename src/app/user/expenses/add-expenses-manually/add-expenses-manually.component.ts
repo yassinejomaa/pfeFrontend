@@ -112,12 +112,16 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
           next: (res: any) => {
             console.log("🔥 Catégorie prédite :", res.predicted_category);
     
-            const categoryCode = Object.keys(categoryMap).find(
+            const categoryCode = Number(Object.keys(categoryMap).find(
               key => categoryMap[Number(key)] === res.predicted_category
-            );
-    
+            ));
+            
+            console.log(categoryCode);
+
             if (categoryCode !== undefined) {
-              this.form.patchValue({ Category: categoryCode });
+
+              this.form.patchValue({ CategoryId: categoryCode });
+              console.log(this.form.value)
             } else {
               console.warn("❌ Catégorie non trouvée dans le mapping");
             }

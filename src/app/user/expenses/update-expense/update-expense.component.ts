@@ -99,40 +99,43 @@ export class UpdateExpenseComponent implements OnInit {
       });
     }
   }
-   predictCategory() {
-    console.log("hello")
-        if (this.form.value.Name) {
-          this.loading = true; // ➜ Afficher le spinner avant l'appel API
-          const product = { product: this.form.value.Name };
-          
-          this.expenseService.predictCategoy(product).subscribe({
-            next: (res: any) => {
-              console.log("🔥 Catégorie prédite :", res.predicted_category);
+  predictCategory() {
+    if (this.form.value.Name) {
+      this.loading = true; // ➜ Afficher le spinner avant l'appel API
+      const product = { product: this.form.value.Name };
       
-              const categoryCode = Object.keys(categoryMap).find(
-                key => categoryMap[Number(key)] === res.predicted_category
-              );
-      
-              if (categoryCode !== undefined) {
-                this.form.patchValue({ Category: categoryCode });
-              } else {
-                console.warn("❌ Catégorie non trouvée dans le mapping");
-              }
-            },
-            error: (err) => {
-              console.error("Erreur API :", err);
-              this.toastr.error('Erreur lors de la prédiction', 'Erreur');
-            },
-            complete: () => {
-              this.loading = false; // ➜ Cacher le spinner après la réponse API
-            }
-          });
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'error', detail: 'fill the name of the product' });
+      this.expenseService.predictCategoy(product).subscribe({
+        next: (res: any) => {
+          console.log("🔥 Catégorie prédite :", res.predicted_category);
   
+          const categoryCode = Number(Object.keys(categoryMap).find(
+            key => categoryMap[Number(key)] === res.predicted_category
+          ));
+          
+          console.log(categoryCode);
+
+          if (categoryCode !== undefined) {
+
+            this.form.patchValue({ CategoryId: categoryCode });
+            console.log(this.form.value)
+          } else {
+            console.warn("❌ Catégorie non trouvée dans le mapping");
+          }
+        },
+        error: (err) => {
+          console.error("Erreur API :", err);
+          this.toastr.error('Erreur lors de la prédiction', 'Erreur');
+        },
+        complete: () => {
+          this.loading = false; // ➜ Cacher le spinner après la réponse API
         }
-      }
+      });
+    }
+    else{
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Enter Product Name' });
+
+    }
+  }
       
     
     
