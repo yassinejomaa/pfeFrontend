@@ -24,6 +24,7 @@
     "@microsoft/signalr": "^8.0.7",
     "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "@primeng/themes": "^18.0.2",
+    "ag-charts-angular": "^11.2.1",
     "bootstrap": "^5.3.3",
     "font-awesome": "^4.7.0",
     "install": "^0.13.0",
