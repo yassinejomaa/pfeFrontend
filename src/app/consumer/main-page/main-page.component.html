@@ -72,25 +72,36 @@
                   <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                      <div class="iq-card-header d-flex justify-content-between">
                         <div class="iq-header-title">
-                           <h4 class="card-title">Spendings Stats </h4>
+                           <h4 class="card-title">
+                              Expenses : {{ selectedCategory }} </h4>
                         </div>
                         <div class="iq-card-header-toolbar d-flex align-items-center">
                            <ul class="nav nav-pills">
                               <li class="nav-item">
-                                 <a href="#" class="nav-link active">Personal</a>
+                                 <label for="start">Date début</label>
+                                 <input type="date" [(ngModel)]="startDate" (change)="updateChart()" name="start"
+                                    id="start" required>
                               </li>
                               <li class="nav-item">
-                                 <a href="#" class="nav-link">Business</a>
+                                 <label for="end">Date fin</label>
+                                 <input type="date" [(ngModel)]="endDate" (change)="updateChart()" name="end" id="end"
+                                    required>
                               </li>
                               <li class="nav-item">
-                                 <a href="#" class="nav-link">Credit</a>
+                                 <select [(ngModel)]="selectedCategory" name="category" id="category"
+                                    (change)="updateChart()" required>
+                                    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                                 </select>
                               </li>
                            </ul>
                         </div>
                      </div>
                      <div class="iq-card-body row m-0 align-items-center pb-0">
                         <div class="col-md-8">
-                           <div id="iq-income-chart"></div>
+                           <div id="iq-income-chart">
+
+                              <ag-charts [options]="lineChartOptions"></ag-charts>
+                           </div>
                         </div>
                         <div class="col-md-4">
                            <div class="chart-data-block">
@@ -125,7 +136,8 @@
                <div class="col-lg-4">
                   <div
                      class="iq-card iq-card-block iq-card-stretch iq-card-height banner-image-block-bg position-relative">
-                     <ag-charts [options]="options"></ag-charts>
+                     <ag-charts [options]="donutChartOptions"></ag-charts>
+
                   </div>
                </div>
                <div class="col-lg-8">
@@ -153,36 +165,36 @@
                      </div>
                      <div class="iq-card-body">
                         <div class="table-responsive">
-                           
-                                
 
 
-                           <p-table #dt [value]="expenses" sortMode="multiple" >
+
+
+                           <p-table #dt [value]="recentExpenses" sortMode="multiple">
                               <ng-template pTemplate="header">
-                                  <tr>
-                                      <th pSortableColumn="name">
-                                          name <p-sortIcon field="name" />
-                                      </th>
-                                      <th pSortableColumn="date">
-                                          date <p-sortIcon field="date" />
-                                      </th>
-                                      <th pSortableColumn="categoryName">
+                                 <tr>
+                                    <th pSortableColumn="name">
+                                       name <p-sortIcon field="name" />
+                                    </th>
+                                    <th pSortableColumn="date">
+                                       date <p-sortIcon field="date" />
+                                    </th>
+                                    <th pSortableColumn="categoryName">
                                        categoryName <p-sortIcon field="categoryName" />
-                                      </th>
-                                      <th pSortableColumn="amount">
+                                    </th>
+                                    <th pSortableColumn="amount">
                                        amount <p-sortIcon field="amount" />
-                                      </th>
-                                  </tr>
+                                    </th>
+                                 </tr>
                               </ng-template>
                               <ng-template pTemplate="body" let-expense>
-                                  <tr>
-                                      <td>{{ expense.name }}</td>
-                                      <td>{{ expense.date }}</td>
-                                      <td>{{ expense.categoryName }}</td>
-                                      <td>{{ expense.amount }}</td>
-                                  </tr>
+                                 <tr>
+                                    <td>{{ expense.name }}</td>
+                                    <td>{{ expense.date }}</td>
+                                    <td>{{ expense.categoryName }}</td>
+                                    <td>{{ expense.amount }}</td>
+                                 </tr>
                               </ng-template>
-                          </p-table>
+                           </p-table>
 
 
 
@@ -196,131 +208,37 @@
                <div class="col-lg-4">
                   <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                      <div class="iq-card-body">
-                        
-                        
+
+
                         <div *ngFor="let budget of budgets" class="d-flex align-items-center mt-3">
                            <div class="icon iq-icon-box rounded iq-bg-danger mr-3">
                               <i [class]="getCategoryIconClass(budget.categoryName)"
-                              [ngStyle]="{ color: getIconColor(budget.categoryName) }"></i>
-                           
+                                 [ngStyle]="{ color: getIconColor(budget.categoryName) }"></i>
+
                            </div>
                            <div class="iq-details col-sm-9 p-0">
-                             <div class="d-flex align-items-center justify-content-between">
-                               <span class="title text-dark">{{ budget.categoryName }} Budget</span>
-                               <div class="percentage"><b><span>{{ budget.limitValue }} </span> Dnt</b></div>
-                             </div>
-                             <div class="iq-progress-bar-linear d-inline-block w-100">
-                               <div class="iq-progress-bar">
-                                 <span class="bg-danger" data-percent="67"></span>
-                               </div>
-                             </div>
-                             <div class="d-flex align-items-center justify-content-between">
-                               <span class="">Alert value</span>
-                               <div class="percentage">{{ budget.alertValue }}<span>  Dnt</span></div>
-                             </div>
+                              <div class="d-flex align-items-center justify-content-between">
+                                 <span class="title text-dark">{{ budget.categoryName }} Budget</span>
+                                 <div class="percentage"><b><span>{{ budget.limitValue }} </span> Dnt</b></div>
+                              </div>
+                              <div class="iq-progress-bar-linear d-inline-block w-100">
+                                 <div class="iq-progress-bar">
+                                    <span class="bg-danger"
+                                       [style.width.%]="budget.percentageSpent > 100 ? 100 : budget.percentageSpent"></span>
+                                 </div>
+                              </div>
+                              <div class="d-flex align-items-center justify-content-between">
+                                 <span class="">Pourcentage Spent</span>
+                                 <div class="percentage">{{ budget.percentageSpent | number:'1.2-2' }}<span>%</span>
+                                 </div>
+                              </div>
                            </div>
-                         </div>
-                         
-                        
-                        
-                           
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-4">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-header d-flex justify-content-between">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">User Percentage</h4>
                         </div>
+
+
+
+
                      </div>
-                     <div class="iq-card-body">
-                        <div id="home-perfomer-chart"></div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-4">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-header d-flex justify-content-between">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">Users</h4>
-                        </div>
-                     </div>
-                     <div class="iq-card-body">
-                        <ul class="perfomer-lists m-0 p-0">
-                           <li class="d-flex mb-4 align-items-center">
-                              <div class="user-img img-fluid"><img src="images/page-img/29.png" alt="story-img"
-                                    class="rounded avatar-40"></div>
-                              <div class="media-support-info ml-3">
-                                 <h6>Dribble</h6>
-                                 <p class="mb-0 font-size-12">Graphics Designer</p>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center">
-                                 <span class="text-primary"><b>$10.00</b></span>
-                              </div>
-                           </li>
-                           <li class="d-flex mb-4 align-items-center">
-                              <div class="user-img img-fluid"><img src="images/page-img/30.png" alt="story-img"
-                                    class="rounded avatar-40"></div>
-                              <div class="media-support-info ml-3">
-                                 <h6>Behance</h6>
-                                 <p class="mb-0 font-size-12">Developer</p>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center">
-                                 <span class="text-primary"><b>$25.50</b></span>
-                              </div>
-                           </li>
-                           <li class="d-flex mb-4 align-items-center">
-                              <div class="user-img img-fluid"><img src="images/page-img/31.png" alt="story-img"
-                                    class="rounded avatar-40"></div>
-                              <div class="media-support-info ml-3">
-                                 <h6>Instagram</h6>
-                                 <p class="mb-0 font-size-12">Posts</p>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center">
-                                 <span class="text-primary"><b>$15.00</b></span>
-                              </div>
-                           </li>
-                           <li class="d-flex mb-4 align-items-center">
-                              <div class="user-img img-fluid"><img src="images/page-img/32.png" alt="story-img"
-                                    class="rounded avatar-40"></div>
-                              <div class="media-support-info ml-3">
-                                 <h6>Twitter</h6>
-                                 <p class="mb-0 font-size-12">Latest News</p>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center">
-                                 <span class="text-primary"><b>$5.00</b></span>
-                              </div>
-                           </li>
-                           <li class="d-flex mb-4 align-items-center">
-                              <div class="user-img img-fluid"><img src="images/page-img/33.png" alt="story-img"
-                                    class="rounded avatar-40"></div>
-                              <div class="media-support-info ml-3">
-                                 <h6>Bootstrap</h6>
-                                 <p class="mb-0 font-size-12">Ui/Ux Design</p>
-                              </div>
-                              <div class="iq-card-header-toolbar d-flex align-items-center">
-                                 <span class="text-primary"><b>$5.00</b></span>
-                              </div>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-4">
-                  <div class="iq-card iq-card-block iq-card-stretch" style="position: relative;">
-                     <div class="iq-card-body">
-                        <h6>Graph Profit Margin</h6>
-                        <h2>80%</h2>
-                     </div>
-                     <div id="home-profit-chart"></div>
-                  </div>
-                  <div class="iq-card iq-card-block iq-card-stretch" style="position: relative;">
-                     <div class="iq-card-body">
-                        <h6>Graph Loss Margin</h6>
-                        <h2>25%</h2>
-                     </div>
-                     <div id="home-loss-chart"></div>
                   </div>
                </div>
             </div>

@@ -12,12 +12,23 @@ import { TableModule } from 'primeng/table';
 import { Expense } from '../../shared/model/Expenses';
 import { Table } from 'primeng/table';
 import { CategoryService } from '../../shared/services/category.service';
-
+import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';  // Import du DatePipe
+import { ExpenseService } from '../../shared/services/expense.service';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [SideNavbarComponent, TopNavBarComponent, FooterComponent, CommonModule, AgCharts,TableModule],
+  imports: [
+    SideNavbarComponent,
+    TopNavBarComponent,
+    FooterComponent,
+    CommonModule,
+    AgCharts,
+    TableModule,
+    FormsModule
+  ],
+  providers: [DatePipe],  // Ajout du provider DatePipe
   templateUrl: './main-page.component.html',
   styleUrls: [
     './main-page.component.css',
@@ -29,101 +40,113 @@ import { CategoryService } from '../../shared/services/category.service';
 export class MainPageComponent implements OnInit {
   changeMenu: boolean = false;
   dashboardData!: any;
-  categories!:any;
-  public options: AgChartOptions;
+  categories!: any;
+  
   @ViewChild('dt') dt!: Table;
 
   selectedCategory = 'Food';
-startDate = '2025-04-01';
-endDate = '2025-04-10';
+  startDate = '2025-04-01';
+  endDate = '2025-04-10';
+  allExpenses!:Expense[];
+  recentExpenses!: Expense[];
+  budgets!: any;
+  isSorted: boolean = false;
 
-    expenses!: Expense[];
-    budgets!:any;
+  public donutChartOptions: AgChartOptions;
+  public lineChartOptions: AgChartOptions;
 
-    
-
-    isSorted: boolean = false;
-
-  constructor(private dashboardService: DashboardService, private authService: AuthService,private categorieService:CategoryService) {
-    this.options = {
+  constructor(
+    private dashboardService: DashboardService,
+    private authService: AuthService,
+    private categorieService: CategoryService,
+    private datePipe: DatePipe ,
+    private expensesService:ExpenseService // Injection de DatePipe
+  ) {
+    // Configuration initiale des graphiques
+    this.donutChartOptions = {
       data: [],
       title: {
         text: "Expense Composition",
       },
       series: [
         {
-          type: "donut", // Type de graphique en donut
-          calloutLabelKey: "asset", // Utilisation de la clé pour les labels des segments
-          angleKey: "amount", // Utilisation de la clé pour les angles des segments
-          innerRadiusRatio: 0.9, // Crée l'effet donut
+          type: "donut",
+          calloutLabelKey: "asset",
+          angleKey: "amount",
+          innerRadiusRatio: 0.9,
           innerLabels: [
             {
-              text: "Total Investment", // Label interne
+              text: "Total Investment",
               fontWeight: "bold",
             },
             {
-              text: "this.dashboardData.totalExpenses", // Valeur à afficher au centre
+              text: "this.dashboardData.totalExpenses",
               spacing: 4,
               fontSize: 48,
               color: "green",
             },
           ],
           innerCircle: {
-            fill: "white", // Couleur de l'intérieur du donut
+            fill: "white",
           },
+        },
+      ],
+    };
+
+    this.lineChartOptions = {
+      data: [],
+      title: { text: "Expense Over Time" },
+      series: [
+        {
+          type: "line",
+          xKey: "date",
+          xName: "Date",
+          yKey: "amount",
+          yName: "Amount Spent",
+          interpolation: { type: "smooth" },
         },
       ],
     };
   }
 
   recevoirMessage(message: boolean) {
-    this.changeMenu = message; // Stocke la valeur reçue
+    this.changeMenu = message;
   }
 
   ngOnInit(): void {
-    // Attendre la réponse du service avant de mettre à jour les options
-    this.categorieService.getCategoriesList().subscribe({
+    this.categories = ["Food", "Entertainment", "Transport"];
+
+    this.expensesService.getExpensesOfUser(this.authService.getUserId()).subscribe({
       next:(res:any)=>{
-        this.categories=res;
+        this.allExpenses=res;
       }
     })
+
     this.dashboardService.getData(this.authService.getUserId()).subscribe({
       next: (res: any) => {
-        console.log(res);
-        this.dashboardData = res; // Stocke la réponse dans dashboardData
-        this.expenses=res.recentExpenses;
-        this.budgets=res.budgetPeriod.budgets;
-        console.log(this.budgets)
-        
-        console.log(this.dashboardData.expensesByCategory);
+        this.dashboardData = res;
+        console.log(this.dashboardData)
+        this.recentExpenses = res.recentExpenses;
+        this.budgets = res.budgetPeriod.budgets;
 
-        // Mettre à jour les options du graphique après avoir reçu les données
         if (this.dashboardData && this.dashboardData.expensesByCategory) {
-          console.log("Données avant transformation:", this.dashboardData.expensesByCategory);
-          this.options.data = this.getDataFromResponse(this.dashboardData.expensesByCategory);
-          console.log("Données après transformation:", this.options.data);
-
-          // Si les données sont valides, forcer la mise à jour du graphique
-          if (this.options.data.length > 0) {
-            this.options = { ...this.options }; // Force la mise à jour du graphique
-          }
+          this.donutChartOptions.data = this.getDataFromResponse(this.dashboardData.expensesByCategory);
+          this.donutChartOptions = { ...this.donutChartOptions };
         }
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des données", err);
-        // Gérer les erreurs ici si nécessaire
       }
     });
   }
 
-  // Fonction pour formater les données reçues dans un format compatible avec le graphique
   getDataFromResponse(data: any): any[] {
-    // Assurez-vous que les données ont la structure attendue et que amount est bien un nombre
     return data.map((item: any) => ({
-      asset: item.categoryName,  // Assurez-vous que 'categoryName' est bien une chaîne de caractères
-      amount: parseFloat(item.totalAmount) || 0,  // Conversion en nombre, avec un fallback à 0 si c'est invalide
+      asset: item.categoryName,
+      amount: parseFloat(item.totalAmount) || 0,
     }));
   }
+
   getCategoryIconClass(category: string): string {
     switch (category.toLowerCase()) {
       case 'food':
@@ -146,6 +169,7 @@ endDate = '2025-04-10';
         return 'ri-wallet-3-line';
     }
   }
+
   getIconColor(category: string): string {
     switch (category.toLowerCase()) {
       case 'food':
@@ -168,13 +192,9 @@ endDate = '2025-04-10';
         return 'black';
     }
   }
-    
-
-
-
 
   updateChart() {
-    const filteredData = this.dashboardData.recentExpenses.filter((item:any) => {
+    const filteredData = this.allExpenses.filter((item: any) => {
       const itemDate = new Date(item.date);
       return (
         item.categoryName === this.selectedCategory &&
@@ -182,13 +202,16 @@ endDate = '2025-04-10';
         itemDate <= new Date(this.endDate)
       );
     });
-  
-    this.options = {
+
+    // Formater les dates en yyyy-MM-dd
+    const formattedData = filteredData.map((item: any) => ({
+      date: this.datePipe.transform(item.date, 'yyyy-MM-dd'), // Formatage de la date
+      amount: item.amount,
+    }));
+
+    this.lineChartOptions = {
       title: { text: `${this.selectedCategory} Expenses` },
-      data: filteredData.map((item:any) => ({
-        date: item.date,
-        amount: item.amount,
-      })),
+      data: formattedData,
       series: [
         {
           type: "line",
@@ -200,5 +223,7 @@ endDate = '2025-04-10';
         },
       ],
     };
+
+    console.log("filteredData", formattedData);
   }
 }
