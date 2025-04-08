@@ -52,6 +52,8 @@ export class MainPageComponent implements OnInit {
   budgets!: any;
   isSorted: boolean = false;
   TotalExpenseByCategoryInPeriod=0;
+  TotalExpenseByAllCategoryInPeriod=0;
+  percentageSpent: number = 0;
 
   public donutChartOptions: AgChartOptions;
   public lineChartOptions: AgChartOptions;
@@ -198,28 +200,50 @@ export class MainPageComponent implements OnInit {
   }
 
   updateChart() {
-    this.TotalExpenseByCategoryInPeriod=0;
+    this.TotalExpenseByCategoryInPeriod = 0;
+    this.TotalExpenseByAllCategoryInPeriod = 0;
+  
+    // Filtrer les données par catégorie et période
     const filteredData = this.allExpenses.filter((item: any) => {
       const itemDate = new Date(item.date);
-      
-
+      // Vérifie si l'élément est dans la période sélectionnée
+      const isInPeriod = itemDate >= new Date(this.startDate) && itemDate <= new Date(this.endDate);
+  
+      // Si l'élément est dans la période, ajoute à TotalExpenseByCategoryInPeriod pour la catégorie sélectionnée
+      if (isInPeriod) {
+        if (item.categoryName === this.selectedCategory) {
+          this.TotalExpenseByCategoryInPeriod += item.amount; // Pour la catégorie sélectionnée
+        }
+  
+        // Ajoute à TotalExpenseByAllCategoryInPeriod pour toutes les catégories
+        this.TotalExpenseByAllCategoryInPeriod += item.amount;
+      }
+  
+      // Retourne vrai uniquement pour les éléments dans la période et la catégorie sélectionnée
       return (
         item.categoryName === this.selectedCategory &&
-        itemDate >= new Date(this.startDate) &&
-        itemDate <= new Date(this.endDate)
+        isInPeriod
       );
     });
-    filteredData.forEach((item: any) => {
-      this.TotalExpenseByCategoryInPeriod += item.amount;
-    });
-    // Formater les dates en yyyy-MM-dd
+  
+    // Calcul du pourcentage
+    this.percentageSpent = 0;
+    if (this.TotalExpenseByAllCategoryInPeriod > 0) {
+      this.percentageSpent = (this.TotalExpenseByCategoryInPeriod / this.TotalExpenseByAllCategoryInPeriod) * 100;
+    }
+  
+    // Affichage du pourcentage dans la console (ou à l'écran)
+    console.log("Total Expense for selected category:", this.TotalExpenseByCategoryInPeriod);
+    console.log("Total Expense for all categories:", this.TotalExpenseByAllCategoryInPeriod);
+    console.log("Percentage spent on selected category:", this.percentageSpent);
+  
+    // Formater les dates pour l'affichage dans le graphique
     const formattedData = filteredData.map((item: any) => ({
       date: this.datePipe.transform(item.date, 'yyyy-MM-dd'), // Formatage de la date
       amount: item.amount,
-
-    }
-  ));
-
+    }));
+  
+    // Configuration du graphique
     this.lineChartOptions = {
       title: { text: `${this.selectedCategory} Expenses` },
       data: formattedData,
@@ -234,8 +258,11 @@ export class MainPageComponent implements OnInit {
         },
       ],
     };
-
+  
+    // Afficher dans la console les données filtrées
     console.log("filteredData", formattedData);
-    
+    console.log("Percentage spent on selected category:", this.percentageSpent);
   }
+  
+  
 }
