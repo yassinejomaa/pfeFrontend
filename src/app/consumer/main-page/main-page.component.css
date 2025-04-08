@@ -51,3 +51,25 @@
       padding-top: 1rem;
     }
   }
+  /* Pagination styling */
+.pagination .page-item.active .page-link {
+  background-color: #1e3d73; /* Your danger color or any color you prefer */
+  border-color: #1e3d73;
+}
+
+.pagination .page-item.active .page-link span {
+  color: white !important;
+}
+
+.pagination .page-link {
+  color: #6c757d; /* Default text color */
+  cursor: pointer;
+}
+
+.pagination .page-link:hover {
+  color: #1e3d73; /* Hover color matching your theme */
+}
+
+.pagination {
+  margin-top: 20px;
+}

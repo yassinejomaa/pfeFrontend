@@ -41,6 +41,9 @@ export class MainPageComponent implements OnInit {
   changeMenu: boolean = false;
   dashboardData!: any;
   categories!: any;
+  currentPage: number = 1;
+  itemsPerPage: number = 4; // Adjust as needed
+  paginatedBudgets: any[] = [];
   
   @ViewChild('dt') dt!: Table;
 
@@ -133,7 +136,8 @@ export class MainPageComponent implements OnInit {
         this.recentExpenses = res.recentExpenses;
         this.budgets = res.budgetPeriod.budgets;
         this.allExpenses=res.dailyExpensesSum;
-
+        this.updateChart(); // Mettre à jour le graphique avec les données récupérées
+        this.paginateBudgets();
 
         if (this.dashboardData && this.dashboardData.expensesByCategory) {
           this.donutChartOptions.data = this.getDataFromResponse(this.dashboardData.expensesByCategory);
@@ -268,11 +272,24 @@ export class MainPageComponent implements OnInit {
         },
       ],
     };
-  
+
     // Afficher dans la console les données filtrées
     console.log("filteredData", formattedData);
     console.log("Percentage spent on selected category:", this.percentageSpent);
   }
-  
+  paginateBudgets() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedBudgets = this.budgets.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.paginateBudgets();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.budgets.length / this.itemsPerPage);
+  }
   
 }

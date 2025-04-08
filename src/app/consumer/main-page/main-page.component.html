@@ -27,7 +27,7 @@
                   <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                      <div class="iq-card-body iq-box-relative">
                         <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-danger">
-                           <i class="iq-arrow-left ri-wallet-3-line"></i>
+                           <i class="iq-arrow-left ri-wallet-3-fill"></i>
                         </div>
                         <p class="text-secondary">Total Budgets</p>
                         <div class="d-flex align-items-center justify-content-between">
@@ -42,7 +42,7 @@
                   <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                      <div class="iq-card-body iq-box-relative">
                         <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-success">
-                           <i class="fa-solid fa-money-bill-trend-up"></i>
+                           <i class="ri-wallet-3-line"></i>
                         </div>
                         <p class="text-secondary">Budget left</p>
                         <div class="d-flex align-items-center justify-content-between">
@@ -109,7 +109,7 @@
                               <div class="chart-summary p-4 bg-light rounded">
                                  <div class="text-center mb-4">
                                     <h5 class="mb-1"><b>Total Expenses</b></h5>
-                                    <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod}} Dt</b></h2>
+                                    <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod}} TND</b></h2>
                                  </div>
 
                                  <div class="d-flex justify-content-between align-items-center mb-3">
@@ -122,7 +122,7 @@
 
                                  <div class="progress mb-4" style="height: 8px;">
                                     <div class="progress-bar bg-primary"
-                                       [style.wiTNDh.%]="percentageSpent | number: '1.2-2'"></div>
+                                       [style.width.%]="percentageSpent | number: '1.2-2'"></div>
 
                                  </div>
                                  <p class="small text-muted ml-6">Selected Period</p>
@@ -220,11 +220,11 @@
                      <div class="iq-card-body">
 
 
-                        <div *ngFor="let budget of budgets" class="d-flex align-items-center mt-3">
+                        <!-- Budget List -->
+                        <div *ngFor="let budget of paginatedBudgets" class="d-flex align-items-center mt-3">
                            <div class="icon iq-icon-box rounded iq-bg-danger mr-3">
                               <i [class]="getCategoryIconClass(budget.categoryName)"
                                  [ngStyle]="{ color: getIconColor(budget.categoryName) }"></i>
-
                            </div>
                            <div class="iq-details col-sm-9 p-0">
                               <div class="d-flex align-items-center justify-content-between">
@@ -244,6 +244,31 @@
                               </div>
                            </div>
                         </div>
+
+                        <!-- Pagination Controls -->
+                        <!-- Pagination Controls -->
+                        <nav *ngIf="totalPages > 1" aria-label="Budget pagination" class="mt-4">
+                           <ul class="pagination justify-content-center">
+                              <li class="page-item" [class.disabled]="currentPage === 1">
+                                 <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                 </a>
+                              </li>
+
+                              <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item"
+                                 [class.active]="currentPage === i + 1">
+                                 <a class="page-link" (click)="onPageChange(i + 1)">
+                                    <span [class.text-white]="currentPage === i + 1">{{ i + 1 }}</span>
+                                 </a>
+                              </li>
+
+                              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                 <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                 </a>
+                              </li>
+                           </ul>
+                        </nav>
 
 
 
