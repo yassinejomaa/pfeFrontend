@@ -109,7 +109,7 @@
                               <div class="chart-summary p-4 bg-light rounded">
                                  <div class="text-center mb-4">
                                     <h5 class="mb-1"><b>Total Expenses</b></h5>
-                                    <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod}} DNT</b></h2>
+                                    <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod}} Dt</b></h2>
                                  </div>
 
                                  <div class="d-flex justify-content-between align-items-center mb-3">
@@ -122,7 +122,7 @@
 
                                  <div class="progress mb-4" style="height: 8px;">
                                     <div class="progress-bar bg-primary"
-                                       [style.width.%]="percentageSpent | number: '1.2-2'"></div>
+                                       [style.wiTNDh.%]="percentageSpent | number: '1.2-2'"></div>
 
                                  </div>
                                  <p class="small text-muted ml-6">Selected Period</p>
@@ -179,7 +179,7 @@
 
 
 
-                           <p-table #dt [value]="recentExpenses" sortMode="multiple">
+                           <p-table #TND [value]="recentExpenses" sortMode="multiple">
                               <ng-template pTemplate="header">
                                  <tr>
                                     <th pSortableColumn="name">
@@ -229,7 +229,7 @@
                            <div class="iq-details col-sm-9 p-0">
                               <div class="d-flex align-items-center justify-content-between">
                                  <span class="title text-dark">{{ budget.categoryName }} Budget</span>
-                                 <div class="percentage"><b><span>{{ budget.limitValue }} </span> Dnt</b></div>
+                                 <div class="percentage"><b><span>{{ budget.limitValue }} </span> TND</b></div>
                               </div>
                               <div class="iq-progress-bar-linear d-inline-block w-100">
                                  <div class="iq-progress-bar">

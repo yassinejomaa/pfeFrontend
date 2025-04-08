@@ -189,7 +189,7 @@
                         <div class="text-center mt-3 mb-3 text-xl font-semibold">Create your budgets</div>
                         <div class="field p-fluid d-flex align-items-center">
                             <i class="pi pi-wallet" style="font-size: 1.2rem; margin-right: 10px;"></i>
-                            <p-inputNumber inputId="budgetTotal" [(ngModel)]="totalBudget" prefix="Your budget is :" suffix=" Dnt" mode="decimal"
+                            <p-inputNumber inputId="budgetTotal" [(ngModel)]="totalBudget" prefix="Your budget is :" suffix=" TND" mode="decimal"
                                 minFractionDigits="2" maxFractionDigits="2" placeholder="Enter your budget"
                                 [ngStyle]="{'width': '100%', 'color': 'gray'}" (onInput)="setTotalBudget($event.value)">
                             </p-inputNumber>
