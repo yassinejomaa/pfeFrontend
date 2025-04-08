@@ -244,6 +244,8 @@ export class MainPageComponent implements OnInit {
     }));
   
     // Configuration du graphique
+    
+
     this.lineChartOptions = {
       title: { text: `${this.selectedCategory} Expenses` },
       data: formattedData,
@@ -254,7 +256,15 @@ export class MainPageComponent implements OnInit {
           xName: "Date",
           yKey: "amount",
           yName: "Amount Spent",
-          interpolation: { type: "smooth" },
+          interpolation: { type: "smooth" }, 
+          stroke: '#1e3d73', 
+          strokeWidth: 3,
+          marker: {
+            enabled: true,
+            fill: '#1e3d73',
+            stroke: '#ffffff', 
+            size: 10,
+          }
         },
       ],
     };
