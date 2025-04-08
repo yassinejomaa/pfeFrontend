@@ -51,6 +51,7 @@ export class MainPageComponent implements OnInit {
   recentExpenses!: Expense[];
   budgets!: any;
   isSorted: boolean = false;
+  TotalExpenseByCategoryInPeriod=0;
 
   public donutChartOptions: AgChartOptions;
   public lineChartOptions: AgChartOptions;
@@ -60,7 +61,6 @@ export class MainPageComponent implements OnInit {
     private authService: AuthService,
     private categorieService: CategoryService,
     private datePipe: DatePipe ,
-    private expensesService:ExpenseService // Injection de DatePipe
   ) {
     // Configuration initiale des graphiques
     this.donutChartOptions = {
@@ -114,13 +114,15 @@ export class MainPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categories = ["Food", "Entertainment", "Transport"];
 
-    this.expensesService.getExpensesOfUser(this.authService.getUserId()).subscribe({
-      next:(res:any)=>{
-        this.allExpenses=res;
+    this.categorieService.getCategoriesList().subscribe({
+      next: (res: any) => {
+        this.categories = res.map((cat: any) => cat.name);
       }
-    })
+    });
+    
+
+    
 
     this.dashboardService.getData(this.authService.getUserId()).subscribe({
       next: (res: any) => {
@@ -128,6 +130,8 @@ export class MainPageComponent implements OnInit {
         console.log(this.dashboardData)
         this.recentExpenses = res.recentExpenses;
         this.budgets = res.budgetPeriod.budgets;
+        this.allExpenses=res.dailyExpensesSum;
+
 
         if (this.dashboardData && this.dashboardData.expensesByCategory) {
           this.donutChartOptions.data = this.getDataFromResponse(this.dashboardData.expensesByCategory);
@@ -194,20 +198,27 @@ export class MainPageComponent implements OnInit {
   }
 
   updateChart() {
+    this.TotalExpenseByCategoryInPeriod=0;
     const filteredData = this.allExpenses.filter((item: any) => {
       const itemDate = new Date(item.date);
+      
+
       return (
         item.categoryName === this.selectedCategory &&
         itemDate >= new Date(this.startDate) &&
         itemDate <= new Date(this.endDate)
       );
     });
-
+    filteredData.forEach((item: any) => {
+      this.TotalExpenseByCategoryInPeriod += item.amount;
+    });
     // Formater les dates en yyyy-MM-dd
     const formattedData = filteredData.map((item: any) => ({
       date: this.datePipe.transform(item.date, 'yyyy-MM-dd'), // Formatage de la date
       amount: item.amount,
-    }));
+
+    }
+  ));
 
     this.lineChartOptions = {
       title: { text: `${this.selectedCategory} Expenses` },
@@ -225,5 +236,6 @@ export class MainPageComponent implements OnInit {
     };
 
     console.log("filteredData", formattedData);
+    
   }
 }
