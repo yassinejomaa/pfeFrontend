@@ -96,16 +96,22 @@
 
                         </tr>
                      </ng-template>
-                     <ng-template pTemplate="emptymessage">
-                        <tr>
-                           <td colspan="4">There are no budget for this budget Period yet.</td>
-                        </tr>
-                     </ng-template>
+                     
                   </p-table>
                </div>
                </td>
                </tr>
                </ng-template>
+
+               <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                     <i class="ri-wallet-3-line ri-3x"></i>
+
+                      <h4>No budgets recorded yet</h4>
+                    </td>
+                  </tr>
+                </ng-template>
                </p-table>
             </div>
          </div>
