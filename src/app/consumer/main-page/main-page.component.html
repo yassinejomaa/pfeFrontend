@@ -1,287 +1,277 @@
 <body [ngClass]="{'sidebar-main': changeMenu}" class="line-height">
-
-   <div class="wrapper">
-      <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
-
-      <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
-      <!-- Page Content  -->
-      <div id="content-page" class="content-page">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-sm-6 col-md-6 col-lg-3">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-body iq-box-relative">
-                        <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-primary">
-                           <i class="iq-arrow-left ri-money-dollar-box-line"></i>
-                        </div>
-                        <p class="text-secondary">Total Expenses</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                           <h4><b>{{this.dashboardData.totalExpenses}}</b></h4>
-                           <div id="iq-chart-box1"></div>
-                           <span class="text-primary"><b> +14% <i class="ri-arrow-up-fill"></i></b></span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-6 col-lg-3">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-body iq-box-relative">
-                        <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-danger">
-                           <i class="iq-arrow-left ri-wallet-3-fill"></i>
-                        </div>
-                        <p class="text-secondary">Total Budgets</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                           <h4><b>{{this.dashboardData.totalBudget}}</b></h4>
-                           <div id="iq-chart-box2"></div>
-                           <span class="text-danger"><b> -6% <i class="ri-arrow-down-fill"></i></b></span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-6 col-lg-3">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-body iq-box-relative">
-                        <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-success">
-                           <i class="ri-wallet-3-line"></i>
-                        </div>
-                        <p class="text-secondary">Budget left</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                           <h4><b>{{this.dashboardData.budgetLeft}}</b></h4>
-                           <div id="iq-chart-box3"></div>
-                           <span class="text-success"><b> +0.36% <i class="ri-arrow-up-fill"></i></b></span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-6 col-lg-3">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-body iq-box-relative">
-                        <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-warning">
-                           <i class="ri-pie-chart-2-line"></i>
-                        </div>
-                        <p class="text-secondary">Total Profit</p>
-                        <div class="d-flex align-items-center justify-content-between">
-                           <h4><b>60</b></h4>
-                           <div id="iq-chart-box4"></div>
-                           <span class="text-warning"><b> +0.45% <i class="ri-arrow-up-fill"></i></b></span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-8">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-header d-flex justify-content-between align-items-center">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">
-                              Expenses: <span class="text-primary">{{ selectedCategory }}</span>
-                           </h4>
-                        </div>
-                        <div class="iq-card-header-toolbar d-flex align-items-center">
-                           <div class="filter-container d-flex flex-wrap align-items-center gap-2 ">
-                              <div class="form-group mb-0">
-                                 <label for="start" class="mb-0 small text-muted">Start Date</label>
-                                 <input type="date" [(ngModel)]="startDate" (change)="updateChart()" name="start"
-                                    id="start" class="form-control form-control-sm" required>
-                              </div>
-                              <div class="form-group mb-0">
-                                 <label for="end" class="mb-0 small text-muted">End Date</label>
-                                 <input type="date" [(ngModel)]="endDate" (change)="updateChart()" name="end" id="end"
-                                    class="form-control form-control-sm" required>
-                              </div>
-                              <div class="form-group mb-0">
-                                 <label for="category" class="mb-0 small text-muted">Category</label>
-                                 <select [(ngModel)]="selectedCategory" name="category" id="category"
-                                    (change)="updateChart()" class="form-control form-control-sm" required>
-                                    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-                                 </select>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="iq-card-body">
-                        <div class="row align-items-center">
-                           <div class="col-md-8">
-                              <div class="chart-container" style="height: 300px;">
-                                 <ag-charts [options]="lineChartOptions"></ag-charts>
-                              </div>
-                           </div>
-                           <div class="col-md-4">
-                              <div class="chart-summary p-4 bg-light rounded">
-                                 <div class="text-center mb-4">
-                                    <h5 class="mb-1"><b>Total Expenses</b></h5>
-                                    <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod}} TND</b></h2>
-                                 </div>
-
-                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                       <span class="indicator bg-primary mr-2"></span>
-                                       <span>Spent % by category</span>
-                                    </div>
-                                    <span class="badge badge-primary">{{ percentageSpent | number: '1.2-2' }}%</span>
-                                 </div>
-
-                                 <div class="progress mb-4" style="height: 8px;">
-                                    <div class="progress-bar bg-primary"
-                                       [style.width.%]="percentageSpent | number: '1.2-2'"></div>
-
-                                 </div>
-                                 <p class="small text-muted ml-6">Selected Period</p>
-                                 <div class="stats-grid">
-
-                                    <div class="stat-item text-center">
-                                       <h6 class="mb-0">Start</h6>
-                                       <p class="text-muted mb-0 small">{{startDate | date:'shortDate'}}</p>
-                                    </div>
-                                    <div class="stat-item text-center">
-                                       <h6 class="mb-0">End</h6>
-                                       <p class="text-muted mb-0 small">{{endDate | date:'shortDate'}}</p>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-4">
-                  <div
-                     class="iq-card iq-card-block iq-card-stretch iq-card-height banner-image-block-bg position-relative">
-                     <ag-charts [options]="donutChartOptions"></ag-charts>
-
-                  </div>
-               </div>
-               <div class="col-lg-8">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-header d-flex justify-content-between">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">Last Expenses</h4>
-                        </div>
-                        <div class="iq-card-header-toolbar d-flex align-items-center">
-                           <div class="dropdown">
-                              <span class="dropdown-toggle text-primary" id="dropdownMenuButton5"
-                                 data-toggle="dropdown">
-                                 <i class="ri-more-fill"></i>
-                              </span>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton5">
-                                 <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
-                                 <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
-                                 <a class="dropdown-item" href="#"><i class="ri-pencil-fill mr-2"></i>Edit</a>
-                                 <a class="dropdown-item" href="#"><i class="ri-printer-fill mr-2"></i>Print</a>
-                                 <a class="dropdown-item" href="#"><i
-                                       class="ri-file-download-fill mr-2"></i>Download</a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="iq-card-body">
-                        <div class="table-responsive">
-
-
-
-
-                           <p-table #TND [value]="recentExpenses" sortMode="multiple">
-                              <ng-template pTemplate="header">
-                                 <tr>
-                                    <th pSortableColumn="name">
-                                       name <p-sortIcon field="name" />
-                                    </th>
-                                    <th pSortableColumn="date">
-                                       date <p-sortIcon field="date" />
-                                    </th>
-                                    <th pSortableColumn="categoryName">
-                                       categoryName <p-sortIcon field="categoryName" />
-                                    </th>
-                                    <th pSortableColumn="amount">
-                                       amount <p-sortIcon field="amount" />
-                                    </th>
-                                 </tr>
-                              </ng-template>
-                              <ng-template pTemplate="body" let-expense>
-                                 <tr>
-                                    <td>{{ expense.name }}</td>
-                                    <td>{{ expense.date }}</td>
-                                    <td>{{ expense.categoryName }}</td>
-                                    <td>{{ expense.amount }}</td>
-                                 </tr>
-                              </ng-template>
-                           </p-table>
-
-
-
-
-
-
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-4">
-                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                     <div class="iq-card-body">
-
-
-                        <!-- Budget List -->
-                        <div *ngFor="let budget of paginatedBudgets" class="d-flex align-items-center mt-3">
-                           <div class="icon iq-icon-box rounded iq-bg-danger mr-3">
-                              <i [class]="getCategoryIconClass(budget.categoryName)"
-                                 [ngStyle]="{ color: getIconColor(budget.categoryName) }"></i>
-                           </div>
-                           <div class="iq-details col-sm-9 p-0">
-                              <div class="d-flex align-items-center justify-content-between">
-                                 <span class="title text-dark">{{ budget.categoryName }} Budget</span>
-                                 <div class="percentage"><b><span>{{ budget.limitValue }} </span> TND</b></div>
-                              </div>
-                              <div class="iq-progress-bar-linear d-inline-block w-100">
-                                 <div class="iq-progress-bar">
-                                    <span class="bg-danger"
-                                       [style.width.%]="budget.percentageSpent > 100 ? 100 : budget.percentageSpent"></span>
-                                 </div>
-                              </div>
-                              <div class="d-flex align-items-center justify-content-between">
-                                 <span class="">Pourcentage Spent</span>
-                                 <div class="percentage">{{ budget.percentageSpent | number:'1.2-2' }}<span>%</span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-
-                        <!-- Pagination Controls -->
-                        <!-- Pagination Controls -->
-                        <nav *ngIf="totalPages > 1" aria-label="Budget pagination" class="mt-4">
-                           <ul class="pagination justify-content-center">
-                              <li class="page-item" [class.disabled]="currentPage === 1">
-                                 <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                 </a>
-                              </li>
-
-                              <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item"
-                                 [class.active]="currentPage === i + 1">
-                                 <a class="page-link" (click)="onPageChange(i + 1)">
-                                    <span [class.text-white]="currentPage === i + 1">{{ i + 1 }}</span>
-                                 </a>
-                              </li>
-
-                              <li class="page-item" [class.disabled]="currentPage === totalPages">
-                                 <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                 </a>
-                              </li>
-                           </ul>
-                        </nav>
-
-
-
-
-                     </div>
-                  </div>
-               </div>
+  <div  class="wrapper">
+    <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
+    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+    
+    <!-- Page Content -->
+    <div id="content-page" class="content-page">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Summary Cards -->
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-body iq-box-relative">
+                <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-primary">
+                  <i class="iq-arrow-left ri-money-dollar-box-line"></i>
+                </div>
+                <p class="text-secondary">Total Expenses</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <h4><b>{{dashboardData?.totalExpenses || 0}}</b></h4>
+                  <div id="iq-chart-box1"></div>
+                  <span class="text-primary"><b> +14% <i class="ri-arrow-up-fill"></i></b></span>
+                </div>
+              </div>
             </div>
-         </div>
+          </div>
+          
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-body iq-box-relative">
+                <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-danger">
+                  <i class="iq-arrow-left ri-wallet-3-fill"></i>
+                </div>
+                <p class="text-secondary">Total Budgets</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <h4><b>{{dashboardData?.totalBudget || 0}}</b></h4>
+                  <div id="iq-chart-box2"></div>
+                  <span class="text-danger"><b> -6% <i class="ri-arrow-down-fill"></i></b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-body iq-box-relative">
+                <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-success">
+                  <i class="ri-wallet-3-line"></i>
+                </div>
+                <p class="text-secondary">Budget left</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <h4><b>{{dashboardData?.budgetLeft || 0}}</b></h4>
+                  <div id="iq-chart-box3"></div>
+                  <span class="text-success"><b> +0.36% <i class="ri-arrow-up-fill"></i></b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-body iq-box-relative">
+                <div class="iq-box-absolute icon iq-icon-box rounded-circle iq-bg-warning">
+                  <i class="ri-pie-chart-2-line"></i>
+                </div>
+                <p class="text-secondary">Total Profit</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <h4><b>60</b></h4>
+                  <div id="iq-chart-box4"></div>
+                  <span class="text-warning"><b> +0.45% <i class="ri-arrow-up-fill"></i></b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Expense Chart -->
+          <div class="col-lg-8">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-header d-flex justify-content-between align-items-center">
+                <div class="iq-header-title">
+                  <h4 class="card-title">
+                    Expenses: <span class="text-primary">{{ selectedCategory }}</span>
+                  </h4>
+                </div>
+                <div class="iq-card-header-toolbar d-flex align-items-center">
+                  <div class="filter-container d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                      <label for="start" class="mb-0 small text-muted">Start Date</label>
+                      <input type="date" [(ngModel)]="startDate" (change)="updateChart()" name="start"
+                        id="start" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="form-group mb-0">
+                      <label for="end" class="mb-0 small text-muted">End Date</label>
+                      <input type="date" [(ngModel)]="endDate" (change)="updateChart()" name="end" id="end"
+                        class="form-control form-control-sm" required>
+                    </div>
+                    <div class="form-group mb-0">
+                      <label for="category" class="mb-0 small text-muted">Category</label>
+                      <select [(ngModel)]="selectedCategory" name="category" id="category"
+                        (change)="updateChart()" class="form-control form-control-sm" required>
+                        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="iq-card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <div class="chart-container" style="height: 300px;">
+                      <ag-charts [options]="lineChartOptions"></ag-charts>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="chart-summary p-4 bg-light rounded">
+                      <div class="text-center mb-4">
+                        <h5 class="mb-1"><b>Total Expenses</b></h5>
+                        <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod || 0}} TND</b></h2>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                          <span class="indicator bg-primary mr-2"></span>
+                          <span>Spent % by category</span>
+                        </div>
+                        <span class="badge badge-primary">{{ percentageSpent | number: '1.2-2' }}%</span>
+                      </div>
+                      <div class="progress mb-4" style="height: 8px;">
+                        <div class="progress-bar bg-primary"
+                          [style.width.%]="percentageSpent | number: '1.2-2'"></div>
+                      </div>
+                      <p class="small text-muted">Selected Period</p>
+                      <div class="stats-grid">
+                        <div class="stat-item text-center">
+                          <h6 class="mb-0">Start</h6>
+                          <p class="text-muted mb-0 small">{{startDate | date:'shortDate'}}</p>
+                        </div>
+                        <div class="stat-item text-center">
+                          <h6 class="mb-0">End</h6>
+                          <p class="text-muted mb-0 small">{{endDate | date:'shortDate'}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Donut Chart -->
+          <div class="col-lg-4">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height banner-image-block-bg position-relative">
+              <ag-charts [options]="donutChartOptions"></ag-charts>
+            </div>
+          </div>
+          
+          <!-- Recent Expenses -->
+          <div class="col-lg-8">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-header d-flex justify-content-between">
+                <div class="iq-header-title">
+                  <h4 class="card-title">Last Expenses</h4>
+                </div>
+                <div class="iq-card-header-toolbar d-flex align-items-center">
+                  <div class="dropdown">
+                    <span class="dropdown-toggle text-primary" id="dropdownMenuButton5" data-toggle="dropdown">
+                      <i class="ri-more-fill"></i>
+                    </span>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton5">
+                      <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
+                      <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
+                      <a class="dropdown-item" href="#"><i class="ri-pencil-fill mr-2"></i>Edit</a>
+                      <a class="dropdown-item" href="#"><i class="ri-printer-fill mr-2"></i>Print</a>
+                      <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="iq-card-body">
+                <div class="table-responsive">
+                  <p-table #TND [value]="recentExpenses || []" sortMode="multiple">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th pSortableColumn="name">name <p-sortIcon field="name" /></th>
+                        <th pSortableColumn="date">date <p-sortIcon field="date" /></th>
+                        <th pSortableColumn="categoryName">categoryName <p-sortIcon field="categoryName" /></th>
+                        <th pSortableColumn="amount">amount <p-sortIcon field="amount" /></th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-expense>
+                      <tr>
+                        <td>{{ expense.name || '-' }}</td>
+                        <td>{{ expense.date || '-' }}</td>
+                        <td>{{ expense.categoryName || '-' }}</td>
+                        <td>{{ expense.amount || 0 }}</td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                      <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">
+                          <i class="ri-wallet-line ri-2x"></i>
+                          <p>No expenses recorded yet</p>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Budget List -->
+          <div class="col-lg-4">
+            <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+              <div class="iq-card-body">
+                <div *ngIf="(budgets?.length || 0) > 0; else noBudgets">
+                  <div *ngFor="let budget of paginatedBudgets" class="d-flex align-items-center mt-3">
+                    <div class="icon iq-icon-box rounded iq-bg-danger mr-3">
+                      <i [class]="getCategoryIconClass(budget.categoryName)"
+                        [ngStyle]="{ color: getIconColor(budget.categoryName) }"></i>
+                    </div>
+                    <div class="iq-details col-sm-9 p-0">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span class="title text-dark">{{ budget.categoryName }} Budget</span>
+                        <div class="percentage"><b><span>{{ budget.limitValue || 0 }} </span> TND</b></div>
+                      </div>
+                      <div class="iq-progress-bar-linear d-inline-block w-100">
+                        <div class="iq-progress-bar">
+                          <span class="bg-danger"
+                            [style.width.%]="(budget.percentageSpent > 100 ? 100 : budget.percentageSpent) || 0"></span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span class="">Percentage Spent</span>
+                        <div class="percentage">{{ (budget.percentageSpent | number:'1.2-2') || 0 }}<span>%</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <nav *ngIf="totalPages > 1" aria-label="Budget pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                      <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item"
+                        [class.active]="currentPage === i + 1">
+                        <a class="page-link" (click)="onPageChange(i + 1)">
+                          <span [class.text-white]="currentPage === i + 1">{{ i + 1 }}</span>
+                        </a>
+                      </li>
+                      <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+                
+                <ng-template #noBudgets>
+                  <div class="text-center py-4 text-muted mt-4">
+                    <i class="ri-money-dollar-circle-line ri-2x"></i>
+                    <p>No budgets set up yet</p>
+                    <a [routerLink]="['/listBudgets']" class="btn btn-sm btn-primary" style="color: white;">
+                      Create your first budget
+                    </a>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-   </div>
-   <!-- Wrapper END -->
-   <app-footer />
-
-
+    </div>
+  </div>
+  <app-footer />
 </body>

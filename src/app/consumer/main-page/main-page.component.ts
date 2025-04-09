@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SideNavbarComponent } from '../../user/side-navbar/side-navbar.component';
 import { TopNavBarComponent } from '../../user/top-nav-bar/top-nav-bar.component';
 import { FooterComponent } from '../../user/footer/footer.component';
@@ -26,7 +26,8 @@ import { ExpenseService } from '../../shared/services/expense.service';
     CommonModule,
     AgCharts,
     TableModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
   ],
   providers: [DatePipe],  // Ajout du provider DatePipe
   templateUrl: './main-page.component.html',
