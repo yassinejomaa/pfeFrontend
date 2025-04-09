@@ -200,12 +200,13 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
 
 
 
-  deleteNotification(event: Event, id: any) {
+  deleteNotification(event: Event, id: any,isRead:any) {
   
           this.notificationService.deleteNotification(id).subscribe({
               next: () => {
                   this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Notification deleted' });
                   this.notifications = this.notifications.filter(notifications => notifications.id !== id);
+                  if(isRead==false)this.unreadCount--;
               },
               error: (err) => {
                   if (err.status === 400) {
