@@ -87,7 +87,7 @@ constructor(public formBuilder: FormBuilder, private toastr: ToastrService
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Expense added successfully' });
             setTimeout(() => {
               window.location.reload();
-            }, 1500);
+            }, 500);
             
           },
           error: (err) => {

@@ -45,19 +45,21 @@ export class MainPageComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 4; // Adjust as needed
   paginatedBudgets: any[] = [];
+  totalExpensePerDate:any[]=[];
   
   @ViewChild('dt') dt!: Table;
 
   selectedCategory = 'Food';
-  startDate = '2025-04-01';
-  endDate = '2025-04-10';
+  startDate: string;
+  endDate: string;
   allExpenses!:Expense[];
   recentExpenses!: Expense[];
   budgets!: any;
   isSorted: boolean = false;
-  TotalExpenseByCategoryInPeriod=0;
+  TotalExpenseIndateRange=0;
   TotalExpenseByAllCategoryInPeriod=0;
   percentageSpent: number = 0;
+  isHide:boolean=false;
 
   public donutChartOptions: AgChartOptions;
   public lineChartOptions: AgChartOptions;
@@ -68,6 +70,14 @@ export class MainPageComponent implements OnInit {
     private categorieService: CategoryService,
     private datePipe: DatePipe ,
   ) {
+
+    const currentDate = new Date();
+    this.startDate = currentDate.toISOString().split('T')[0]; // Exemple: '2025-04-01'
+    
+    // Calculer la date de fin (1 mois après la date actuelle)
+    const endDate = new Date(currentDate);
+    endDate.setMonth(currentDate.getMonth() + 1); // Ajoute 1 mois à la date actuelle
+    this.endDate = endDate.toISOString().split('T')[0]; 
     // Configuration initiale des graphiques
     this.donutChartOptions = {
       data: [],
@@ -124,8 +134,11 @@ export class MainPageComponent implements OnInit {
     this.categorieService.getCategoriesList().subscribe({
       next: (res: any) => {
         this.categories = res.map((cat: any) => cat.name);
+        this.categories = ['All', ...this.categories];
+        this.selectedCategory = 'All';
       }
     });
+    this.isHide = true;
     
 
     
@@ -133,6 +146,8 @@ export class MainPageComponent implements OnInit {
     this.dashboardService.getData(this.authService.getUserId()).subscribe({
       next: (res: any) => {
         this.dashboardData = res;
+        this.totalExpensePerDate=res.expensesByDate;
+        console.log("expense per date",this.totalExpensePerDate)
         console.log(this.dashboardData)
         this.recentExpenses = res.recentExpenses;
         this.budgets = res.budgetPeriod.budgets;
@@ -205,8 +220,87 @@ export class MainPageComponent implements OnInit {
   }
 
   updateChart() {
-    this.TotalExpenseByCategoryInPeriod = 0;
+    this.TotalExpenseIndateRange = 0;
     this.TotalExpenseByAllCategoryInPeriod = 0;
+
+    
+    if (this.selectedCategory == 'All') {
+      this.isHide=true;
+      const filteredDataForAllPeriods = this.totalExpensePerDate.filter((item: any) => {
+        const itemDate = new Date(item.date);
+        const isInPeriod = itemDate >= new Date(this.startDate) && itemDate <= new Date(this.endDate);
+    
+        return isInPeriod;
+      });
+    
+      const formattedData = filteredDataForAllPeriods.map((item: any) => ({
+        date: this.datePipe.transform(item.date, 'yyyy-MM-dd'),
+        amount: item.totalExpensesForDate,
+        valueForEachCategory: item.categories // Assure-toi que 'categories' existe et est bien un tableau
+      }));
+
+
+      
+     
+      formattedData.map((item: any) => {
+        this.TotalExpenseIndateRange += item.amount;
+      });
+      
+      
+
+    
+      this.lineChartOptions = {
+        title: { text: `All Expenses` },
+        data: formattedData,
+        series: [
+          {
+            type: 'line',
+            xKey: 'date',
+            xName: 'Date',
+            yKey: 'amount',
+            yName: 'Amount Spent',
+            interpolation: { type: 'smooth' },
+            stroke: '#1e3d73',
+            strokeWidth: 3,
+            marker: {
+              enabled: true,
+              fill: '#1e3d73',
+              stroke: '#ffffff',
+              size: 10
+            },
+            tooltip: {
+              renderer: ({ datum }) => {
+                let tooltipTitle = "";
+                
+                if (datum.valueForEachCategory && Array.isArray(datum.valueForEachCategory)) {
+                  // Commencer directement avec les catégories sans titre préliminaire
+                  datum.valueForEachCategory.forEach((item: any, index: number) => {
+                    // Ajouter un retour à la ligne uniquement entre les items (pas avant le premier)
+                    if (index > 0) tooltipTitle += "\n";
+                    tooltipTitle += `${item.categoryName}: ${item.totalAmount}`;
+                  });
+                } else {
+                  tooltipTitle = "No category details available";
+                }
+                
+                return {
+                  title: tooltipTitle,
+                  content: '' // Content vide
+                };
+              }
+            }
+          }
+        ]
+      };
+      return;
+    }
+    
+    
+    this.isHide=false;
+    
+    
+  
+
   
     // Filtrer les données par catégorie et période
     const filteredData = this.allExpenses.filter((item: any) => {
@@ -214,10 +308,10 @@ export class MainPageComponent implements OnInit {
       // Vérifie si l'élément est dans la période sélectionnée
       const isInPeriod = itemDate >= new Date(this.startDate) && itemDate <= new Date(this.endDate);
   
-      // Si l'élément est dans la période, ajoute à TotalExpenseByCategoryInPeriod pour la catégorie sélectionnée
+      // Si l'élément est dans la période, ajoute à TotalExpenseIndateRange pour la catégorie sélectionnée
       if (isInPeriod) {
         if (item.categoryName === this.selectedCategory) {
-          this.TotalExpenseByCategoryInPeriod += item.amount; // Pour la catégorie sélectionnée
+          this.TotalExpenseIndateRange += item.amount; // Pour la catégorie sélectionnée
         }
   
         // Ajoute à TotalExpenseByAllCategoryInPeriod pour toutes les catégories
@@ -234,11 +328,11 @@ export class MainPageComponent implements OnInit {
     // Calcul du pourcentage
     this.percentageSpent = 0;
     if (this.TotalExpenseByAllCategoryInPeriod > 0) {
-      this.percentageSpent = (this.TotalExpenseByCategoryInPeriod / this.TotalExpenseByAllCategoryInPeriod) * 100;
+      this.percentageSpent = (this.TotalExpenseIndateRange / this.TotalExpenseByAllCategoryInPeriod) * 100;
     }
   
     // Affichage du pourcentage dans la console (ou à l'écran)
-    console.log("Total Expense for selected category:", this.TotalExpenseByCategoryInPeriod);
+    console.log("Total Expense for selected category:", this.TotalExpenseIndateRange);
     console.log("Total Expense for all categories:", this.TotalExpenseByAllCategoryInPeriod);
     console.log("Percentage spent on selected category:", this.percentageSpent);
   

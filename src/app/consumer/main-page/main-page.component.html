@@ -114,15 +114,18 @@
                     <div class="chart-summary p-4 bg-light rounded">
                       <div class="text-center mb-4">
                         <h5 class="mb-1"><b>Total Expenses</b></h5>
-                        <h2 class="text-primary"><b>{{TotalExpenseByCategoryInPeriod || 0}} TND</b></h2>
+                        <h2 class="text-primary"><b>{{TotalExpenseIndateRange || 0}} TND</b></h2>
                       </div>
-                      <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div [ngClass]="isHide ? 'hide' : 'd-flex justify-content-between align-items-center mb-3'">
                         <div class="d-flex align-items-center">
                           <span class="indicator bg-primary mr-2"></span>
                           <span>Spent % by category</span>
                         </div>
                         <span class="badge badge-primary">{{ percentageSpent | number: '1.2-2' }}%</span>
                       </div>
+                      
+                      
+                      
                       <div class="progress mb-4" style="height: 8px;">
                         <div class="progress-bar bg-primary" [style.width.%]="percentageSpent | number: '1.2-2'"></div>
                       </div>

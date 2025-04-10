@@ -297,11 +297,11 @@ console.log(formData)
   calculateEndDate(startDate: Date, period: number): Date {
     const endDate = new Date(startDate);
     
-    if (period === 0) { // Période hebdomadaire
-      endDate.setDate(endDate.getDate() + 7);
-    } else if (period === 1) { // Période mensuelle
+    // if (period === 0) { // Période hebdomadaire
+    //   endDate.setDate(endDate.getDate() + 7);
+    // } else if (period === 1) { // Période mensuelle
       endDate.setMonth(endDate.getMonth() + 1);
-    }
+    // }
     
     return endDate;
   }
