@@ -257,7 +257,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
     // Créer l'objet formData avec toutes les données nécessaires
     const formData = {
       id: 0,
-      period: 0, // Période du budget
+      period: 1, // Période du budget
       income: this.totalBudget, // Total du budget
       savings: this.remainingBudget, // Épargne
       startDate: formattedStartDate,
@@ -280,9 +280,10 @@ console.log(formData)
       },
       error: (err) => {
         if (err.status == 400) {
+          this.messageService.add({ severity: 'error', summary: 'error', detail: err.error });
         } else {
           this.messageService.add({ severity: 'error', summary: 'error', detail: 'error' });
-          console.log(formData)
+         
         }
       }
     });
