@@ -77,3 +77,18 @@
 .hide{
   display:none;
 }
+
+
+.chart-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+ag-charts {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}

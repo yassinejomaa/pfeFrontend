@@ -127,7 +127,7 @@
                       
                       
                       <div class="progress mb-4" style="height: 8px;">
-                        <div class="progress-bar bg-primary" [style.width.%]="percentageSpent | number: '1.2-2'"></div>
+                        <div class="progress-bar bg-primary" [style.width.%]="isHide ?0:percentageSpent | number: '1.2-2'"></div>
                       </div>
                       <p class="small text-muted">Selected Period</p>
                       <div class="stats-grid">
