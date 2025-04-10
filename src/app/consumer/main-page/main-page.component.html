@@ -1,8 +1,8 @@
 <body [ngClass]="{'sidebar-main': changeMenu}" class="line-height">
-  <div  class="wrapper">
+  <div class="wrapper">
     <app-side-navbar (clicked)="recevoirMessage($event)"></app-side-navbar>
     <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
-    
+
     <!-- Page Content -->
     <div id="content-page" class="content-page">
       <div class="container-fluid">
@@ -23,7 +23,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-sm-6 col-md-6 col-lg-3">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
               <div class="iq-card-body iq-box-relative">
@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-sm-6 col-md-6 col-lg-3">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
               <div class="iq-card-body iq-box-relative">
@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-sm-6 col-md-6 col-lg-3">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
               <div class="iq-card-body iq-box-relative">
@@ -71,7 +71,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Expense Chart -->
           <div class="col-lg-8">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
@@ -85,8 +85,8 @@
                   <div class="filter-container d-flex flex-wrap align-items-center gap-2">
                     <div class="form-group mb-0">
                       <label for="start" class="mb-0 small text-muted">Start Date</label>
-                      <input type="date" [(ngModel)]="startDate" (change)="updateChart()" name="start"
-                        id="start" class="form-control form-control-sm" required>
+                      <input type="date" [(ngModel)]="startDate" (change)="updateChart()" name="start" id="start"
+                        class="form-control form-control-sm" required>
                     </div>
                     <div class="form-group mb-0">
                       <label for="end" class="mb-0 small text-muted">End Date</label>
@@ -95,8 +95,8 @@
                     </div>
                     <div class="form-group mb-0">
                       <label for="category" class="mb-0 small text-muted">Category</label>
-                      <select [(ngModel)]="selectedCategory" name="category" id="category"
-                        (change)="updateChart()" class="form-control form-control-sm" required>
+                      <select [(ngModel)]="selectedCategory" name="category" id="category" (change)="updateChart()"
+                        class="form-control form-control-sm" required>
                         <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
                       </select>
                     </div>
@@ -124,8 +124,7 @@
                         <span class="badge badge-primary">{{ percentageSpent | number: '1.2-2' }}%</span>
                       </div>
                       <div class="progress mb-4" style="height: 8px;">
-                        <div class="progress-bar bg-primary"
-                          [style.width.%]="percentageSpent | number: '1.2-2'"></div>
+                        <div class="progress-bar bg-primary" [style.width.%]="percentageSpent | number: '1.2-2'"></div>
                       </div>
                       <p class="small text-muted">Selected Period</p>
                       <div class="stats-grid">
@@ -144,14 +143,14 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Donut Chart -->
           <div class="col-lg-4">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height banner-image-block-bg position-relative">
               <ag-charts [options]="donutChartOptions"></ag-charts>
             </div>
           </div>
-          
+
           <!-- Recent Expenses -->
           <div class="col-lg-8">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
@@ -206,7 +205,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Budget List -->
           <div class="col-lg-4">
             <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
@@ -230,11 +229,14 @@
                       </div>
                       <div class="d-flex align-items-center justify-content-between">
                         <span class="">Percentage Spent</span>
-                        <div class="percentage">{{ (budget.percentageSpent | number:'1.2-2') || 0 }}<span>%</span></div>
+                        <div class="percentage">
+                          {{ (budget.percentageSpent > 100 ? 100 : budget.percentageSpent) | number:'1.2-2'
+                          }}<span>%</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
+
                   <nav *ngIf="totalPages > 1" aria-label="Budget pagination" class="mt-4">
                     <ul class="pagination justify-content-center">
                       <li class="page-item" [class.disabled]="currentPage === 1">
@@ -256,7 +258,7 @@
                     </ul>
                   </nav>
                 </div>
-                
+
                 <ng-template #noBudgets>
                   <div class="text-center py-4 text-muted mt-4">
                     <i class="ri-money-dollar-circle-line ri-2x"></i>
