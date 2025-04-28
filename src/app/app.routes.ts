@@ -9,6 +9,7 @@ import { ResetPasswordComponent } from './user/forgotPassword/reset-password/res
 import { authGuard } from './shared/auth.guard';
 import { ListOfExpensesComponent } from './user/expenses/list-of-expenses/list-of-expenses.component';
 import { ListOfUserBudgetComponent } from './user/budgets/list-of-user-budget/list-of-user-budget.component';
+import { RecommendationComponent } from './user/recommendation/recommendation.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,5 +22,6 @@ export const routes: Routes = [
     { path: 'resetPassword', component: ResetPasswordComponent },
     { path: 'listExpenses', component: ListOfExpensesComponent ,canActivate:[authGuard]},
     { path: 'listBudgets', component: ListOfUserBudgetComponent ,canActivate:[authGuard]},
+    { path: 'recommendation', component: RecommendationComponent ,canActivate:[authGuard]},
     
 ];

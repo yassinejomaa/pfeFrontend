@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Expense } from '../model/Expenses';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,17 @@ importCsv(formData :any){
 predictCategoy(product :any){
   return this.http.post(environment.flaskApi + '/predict', product)
 
+}
+
+recommendation(expenses: string[]): Observable<any> {
+  const payload = {
+    expenses: expenses
+  };
+
+  // Spécifier explicitement responseType: 'text'
+  return this.http.post(environment.flaskApi + '/generate_advice', payload, {
+    responseType: 'text'
+  });
 }
 
 

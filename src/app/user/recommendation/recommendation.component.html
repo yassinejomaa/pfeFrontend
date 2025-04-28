@@ -1,0 +1,43 @@
+<div class="wrapper">
+    <app-side-navbar (clicked)="recevoirMessage($event)" style="z-index: 20;"></app-side-navbar>
+
+    <app-top-nav-bar [bodyClass]="{'sidebar-main': changeMenu}" />
+
+    <div id="content-page" class="content-page">
+        <div class="container-fluid">
+            <div class="card">
+                <!-- Liste des dépenses -->
+                <p-pickList [source]="sourceExpenses" [target]="targetExpenses" sourceHeader="Available"
+                            targetHeader="Selected" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }"
+                            [targetStyle]="{ height: '30rem' }" filterBy="name" sourceFilterPlaceholder="Search by name"
+                            targetFilterPlaceholder="Search by name" breakpoint="1400px">
+                    <ng-template let-expense pTemplate="item">
+                        <div class="flex flex-wrap p-2 align-items-center gap-3">
+                            <img class="w-4rem shadow-2 flex-shrink-0 border-round" 
+                                 [src]="getCategoryImage(expense.categoryId)" [alt]="expense.name" />
+                            <div class="flex-1 flex flex-column gap-2">
+                                <span class="font-bold">{{ expense.name }}</span>
+                                <div class="flex align-items-center gap-2">
+                                    <i class="pi pi-tag text-sm"></i>
+                                    <span>{{ expense.categoryName }}</span>
+                                </div>
+                            </div>
+                            <span class="font-bold text-900">{{ expense.amount + ' TND' }}</span>
+                        </div>
+                    </ng-template>
+                </p-pickList>
+
+                <!-- Affichage de la barre de progression pendant le chargement -->
+                <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{ 'width': '100%' }"></p-progressBar>
+
+                <!-- Bouton pour obtenir des recommandations -->
+                <button (click)="getRecommendations()">Get Recommendation</button>
+                
+                <!-- Affichage du texte des recommandations après la réponse -->
+                <div *ngIf="!loading && recommendations">
+                    <div [innerHTML]="recommendations"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+/* Styling the recommendation button */
+.recommendation-button {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .recommendation-button:hover {
+    background-color: #0056b3; /* Darker blue */
+  }
+  
+  /* Container for the recommendations list */
+  .recommendations-container {
+    margin-bottom: 20px;
+  }
+  
+  .recommendations-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  /* Styling the progress bar container */
+  .progress-container {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  /* You can add custom styles to the progress bar */
+  .p-progress-bar {
+    height: 10px;
+    background-color: #4caf50;
+  }
+  
