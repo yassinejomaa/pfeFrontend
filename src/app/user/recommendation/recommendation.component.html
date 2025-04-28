@@ -8,13 +8,13 @@
             <div class="card">
                 <!-- Liste des dépenses -->
                 <p-pickList [source]="sourceExpenses" [target]="targetExpenses" sourceHeader="Available"
-                            targetHeader="Selected" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }"
-                            [targetStyle]="{ height: '30rem' }" filterBy="name" sourceFilterPlaceholder="Search by name"
-                            targetFilterPlaceholder="Search by name" breakpoint="1400px">
+                    targetHeader="Selected" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }"
+                    [targetStyle]="{ height: '30rem' }" filterBy="name" sourceFilterPlaceholder="Search by name"
+                    targetFilterPlaceholder="Search by name" breakpoint="1400px">
                     <ng-template let-expense pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
-                            <img class="w-4rem shadow-2 flex-shrink-0 border-round" 
-                                 [src]="getCategoryImage(expense.categoryId)" [alt]="expense.name" />
+                            <img class="w-4rem shadow-2 flex-shrink-0 border-round"
+                                [src]="getCategoryImage(expense.categoryId)" [alt]="expense.name" />
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ expense.name }}</span>
                                 <div class="flex align-items-center gap-2">
@@ -31,10 +31,16 @@
                 <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{ 'width': '100%' }"></p-progressBar>
 
                 <!-- Bouton pour obtenir des recommandations -->
-                <button (click)="getRecommendations()">Get Recommendation</button>
-                
+                <div class="recommendation-container" *ngIf="targetExpenses.length > 0">
+                    <button pButton (click)="getRecommendations()" class="recommendation-button"
+                        label="Get Recommendations">
+                        <i class="fa fa-lightbulb-o"></i> <!-- Example of Font Awesome icon -->
+                    </button>
+
+                </div>
+
                 <!-- Affichage du texte des recommandations après la réponse -->
-                <div *ngIf="!loading && recommendations">
+                <div *ngIf="!loading && recommendations" class="recommendation-results">
                     <div [innerHTML]="recommendations"></div>
                 </div>
             </div>

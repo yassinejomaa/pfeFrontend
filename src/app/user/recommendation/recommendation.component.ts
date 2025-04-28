@@ -8,6 +8,8 @@ import { Expense } from '../../shared/model/Expenses';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ButtonModule } from 'primeng/button';
+
 
 @Component({
   selector: 'app-recommendation',
@@ -18,7 +20,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     TopNavBarComponent, 
     PickListModule,
     DragDropModule,
-    ProgressBarModule
+    ProgressBarModule,
+    ButtonModule
   ],
   templateUrl: './recommendation.component.html',
   styleUrls: [
