@@ -7,12 +7,15 @@ import { FirstKeyPipe } from '../../shared/pipes/first-key.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../shared/services/user.service';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FontAwesomeModule, ReactiveFormsModule,CommonModule,FirstKeyPipe,RouterLink],
+  imports: [FontAwesomeModule, ReactiveFormsModule,CommonModule,FirstKeyPipe,RouterLink,NgxDropzoneModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css',
     '../../../../public/css/teamplate/style.css',
@@ -21,13 +24,15 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class RegisterComponent implements OnInit{
   form: FormGroup; 
+  myFiles: [] = [];
+
   ngOnInit(): void {
     if(this.service.isLoggedIn()){
       this.router.navigateByUrl("/mainPage");
   
     }
   }
-  constructor(private formBuilder: FormBuilder,private service:AuthService,private toastr:ToastrService,private router:Router) {
+  constructor(private formBuilder: FormBuilder,private service:AuthService,private toastr:ToastrService,private router:Router,private userService:UserService) {
     this.form = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -38,6 +43,7 @@ export class RegisterComponent implements OnInit{
         Validators.minLength(6),
         Validators.pattern(/(?=.*[^a-zA-Z0-9])/)
       ]],
+      avatar:'',
       re_pass: ['']
     }, { validators: this.passwordMatchValidator });
   }
@@ -63,9 +69,65 @@ export class RegisterComponent implements OnInit{
   faEmail = faEnvelope;
   faPhone = faPhone;
   faLock = faLock;
-  onSubmit() {
-    this.isSubmitted = true;
+  uploadFiles = async () => {
+    if (!this.files[0]) {
+      alert("No file selected!");
+      return;
+    }
   
+    try {
+      for (const file of this.files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'projetWeb');
+        formData.append('cloud_name', 'dimj6qkuf');
+        console.log(formData);
+        
+        const response = await this.userService.uploadFile(formData).toPromise();
+        console.log(response.url)
+        this.form.get('avatar')!.setValue(response.url);
+         
+        console.log(this.form.get('avatar'));
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+  uploadFile = async () => {
+    if (!this.files[0]) {
+      alert('No file selected!');
+      return;
+    }
+  
+    const file = this.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'projetWeb');
+    formData.append('cloud_name', 'dimj6qkuf');
+  
+    try {
+      // Await the response from the asynchronous uploadFile service method
+      const response = await this.userService.uploadFile(formData).toPromise();
+      console.log("hello");
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  onRemove(event: any) {
+    // Supprimez le fichier de la liste des fichiers
+    this.files.splice(this.files.indexOf(event), 1);
+  
+    // Réinitialisez l'aperçu de l'image
+    this.imagePreview = null;
+  }
+  
+    
+  
+  
+  async onSubmit() {
+    this.isSubmitted = true;
+    await this.uploadFiles();
+  console.log(this.form.value)
     
     if (this.form.get('password')?.value !== this.form.get('re_pass')?.value) {
       this.toastr.error("Passwords do not match", "Validation Error");
@@ -116,5 +178,59 @@ export class RegisterComponent implements OnInit{
     const control = this.form.get(controlName);
     return control?.invalid && (this.isSubmitted || control.touched) ? true : false;
   }
-  
+
+  serverOptions = () => {
+    console.log('server pond');
+    allowMultiple: false
+    return {
+      process: (file: string | Blob, load: (arg0: any) => void, abort: () => void) => {
+        const data = new FormData();
+        data.append('file', file);
+        data.append('upload_preset', 'projetWeb');
+        data.append('cloud_name', 'dimj6qkuf');
+        data.append('public_id', file);
+        this.userService.uploadFile(data)
+          .subscribe(
+            (data) => {
+              console.log(data);
+              if (this.form.get('avatar')) {
+                this.form.get('avatar')!.setValue(data.url);
+              }
+              
+              load(data);
+              console.log(data.url)
+            },
+            (error) => {
+              console.error('Error uploading file:', error);
+              error('Upload failed');
+              abort();
+            }
+          );
+      }
+    };
+  };
+  files: File[] = []
+  imagePreview: string | ArrayBuffer | null = null;
+  onSelect(event: any) {
+    // Réinitialisez les fichiers
+    this.files = [];
+    this.files.push(...event.addedFiles);
+
+    // Si au moins un fichier est chargé
+    if (this.files.length > 0) {
+        const file = this.files[0]; // Utilisez le premier fichier
+
+        // Créez un FileReader
+        const fileReader = new FileReader();
+
+        // Lorsque le fichier est chargé, mettez à jour imagePreview
+        fileReader.onload = () => {
+            this.imagePreview = fileReader.result;
+            console.log(this.imagePreview)
+        };
+
+        // Lisez le fichier en tant que DataURL
+        fileReader.readAsDataURL(file);
+    }
+}
 }

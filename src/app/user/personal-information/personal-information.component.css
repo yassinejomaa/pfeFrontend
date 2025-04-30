@@ -5,3 +5,14 @@
     margin: 0.3rem !important;
     margin-top:0.1rem !important;
   }
+  .custom-dropzone ngx-dropzone-image-preview img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f5f5f5; /* Couleur de fond */
+    padding: 5%; /* Espace autour de l'image */
+}

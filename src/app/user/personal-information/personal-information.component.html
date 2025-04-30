@@ -10,11 +10,33 @@
             <div class="form-group row align-items-center">
                <div class="col-md-12">
                   <div class="profile-img-edit">
-                     <img class="profile-pic" src="images/user/11.png" alt="profile-pic">
-                     <div class="p-image">
-                        <i class="ri-pencil-line upload-button"></i>
-                        <input class="file-upload" type="file" accept="image/*" />
-                     </div>
+                     
+
+
+                     <label for="image">Image:</label>
+                <div>
+
+
+                  <div class="custom-dropzone mb-3" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                     <ngx-dropzone-label>
+                         <div>
+                             <h2>Click or drag image to this area to upload</h2>
+                         </div>
+                     </ngx-dropzone-label>
+                     <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                         [file]="f" [removable]="true" (removed)="onRemove(f)">
+                         <div class="image-container"></div>
+                     </ngx-dropzone-image-preview>
+                 </div>
+
+
+
+
+
+
+                </div>
+
+
                   </div>
                </div>
             </div>
