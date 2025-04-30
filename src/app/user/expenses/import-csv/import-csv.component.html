@@ -1,9 +1,9 @@
 <p-toast position="top-right"></p-toast>
 
-<button class="import-csv-btn" (click)="showModalDialog()">
+<button class="circular-icon-btn" (click)="showModalDialog()" title="Importer un fichier CSV">
   <i class="pi pi-file-import"></i>
-  Import CSV
 </button>
+
 
 <p-dialog header="Import CSV Data" [(visible)]="displayModal" 
           [style]="{width: '500px'}" [modal]="true" 

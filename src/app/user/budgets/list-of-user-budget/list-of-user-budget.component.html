@@ -18,21 +18,14 @@
 
                <div >
 
-                  <p-table [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [rows]="5"
+                  <p-table #dt1 [value]="budgetPeriods" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [rows]="5"
                   [rowsPerPageOptions]="[5, 25, 50]" [paginator]="true"
-                     [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)"
-                     (onRowCollapse)="onRowCollapse($event)">
+                     [expandedRowKeys]="expandedRows">
                      <ng-template pTemplate="caption">
                         <div class="flex flex-wrap justify-content-between gap-2">
                            <!-- Aligné à gauche -->
                            <div style="flex-grow: 1;">
                               <app-add-budget></app-add-budget>
-                           </div>
-                        
-                           <!-- Aligné à droite -->
-                           <div class="flex justify-content-end">
-                              <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
-                              <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
                            </div>
                         </div>
                         

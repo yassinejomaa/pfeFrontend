@@ -104,25 +104,6 @@ export class ListOfUserBudgetComponent implements OnInit {
       });    
     
   }
-
-  expandAll() {
-    this.expandedRows = this.budgetPeriods.reduce<{ [key: number]: boolean }>((acc, p) => {
-      acc[p.id] = true;
-      return acc;
-    }, {});
-  }
-
-  collapseAll() {
-      this.expandedRows = {};
-  }
-
-  onRowExpand(event: TableRowExpandEvent) {
-      this.messageService.add({ severity: 'info', summary: 'budget Expanded', detail: event.data.name, life: 3000 });
-  }
-
-  onRowCollapse(event: TableRowCollapseEvent) {
-      this.messageService.add({ severity: 'success', summary: 'budget Collapsed', detail: event.data.name, life: 3000 });
-  }
  
 
   deleteBudgetPeriod(event: Event, id: any) {

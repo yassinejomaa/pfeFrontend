@@ -162,9 +162,14 @@
 
 
 
-<button (click)="showDialog()" class="custom-blue-btn top-right-btn">
-    <i class="ri-add-line"></i>
-</button>
+<div style="display: flex; justify-content: flex-end;">
+    <button (click)="showDialog()" class="custom-blue-btn">
+      <i class="ri-add-line"></i>
+      Add budget
+    </button>
+  </div>
+  
+  
 <p-toast 
     position="top-right" 
     [breakpoints]="{'640px': {width: '90%', right: '0'}}"
