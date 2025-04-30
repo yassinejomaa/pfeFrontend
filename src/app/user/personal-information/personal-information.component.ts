@@ -5,14 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../shared/services/user.service';
-import { HttpHeaders } from '@angular/common/http';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @Component({
   selector: 'app-personal-information',
   standalone: true,
-
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
-
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, NgxDropzoneModule],
   templateUrl: './personal-information.component.html',
   styleUrls: [
     './personal-information.component.css',
@@ -26,15 +24,17 @@ export class PersonalInformationComponent implements OnInit {
   lastName: string = '';
   PhoneNumber: string = '';
   Email: string = '';
-  form!: FormGroup; // ✅ Enlever "?" et utiliser "!" pour garantir l'initialisation
+  form!: FormGroup;
   isSubmitted = false;
+  files: File[] = [];
+  imagePreview: string | ArrayBuffer | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private service: UserService,
     private router: Router,
     private toastr: ToastrService,
-    private authService:AuthService
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -42,7 +42,8 @@ export class PersonalInformationComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       lastName: ['', Validators.required],
       firstName: ['', Validators.required],
-      phoneNumber: ['', Validators.required]
+      phoneNumber: ['', Validators.required],
+      avatar: ['']
     });
   
     const userDataString = localStorage.getItem("userData");
@@ -58,9 +59,14 @@ export class PersonalInformationComponent implements OnInit {
             email: userData.email || '',
             firstName: userData.firstName || '',
             lastName: userData.lastName || '',
-            phoneNumber: userData.phoneNumber || ''
+            phoneNumber: userData.phoneNumber || '',
+            avatar: userData.avatar || ''
           });
   
+          // Load existing avatar if available
+          if (userData.avatar) {
+            this.showAvatar(userData.avatar);
+          }
         } else {
           console.log("Aucune donnée utilisateur trouvée.");
         }
@@ -72,36 +78,125 @@ export class PersonalInformationComponent implements OnInit {
     }
   }
   
+  // Load existing avatar image
+  showAvatar(imageUrl: string) {
+    if (!imageUrl) return;
+    
+    // Reset files array
+    this.files = [];
+    
+    // Set the preview directly from URL
+    this.imagePreview = imageUrl;
+    
+    // Optional: Convert URL to File object for consistency with upload flow
+    fetch(imageUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+        const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+        this.files.push(file);
+      })
+      .catch(error => {
+        console.error("Erreur lors du chargement de l'image:", error);
+      });
+  }
 
-  onSubmit() {
+  async onSubmit() {
     this.isSubmitted = true;
-    console.log("Valeurs du formulaire :", this.form.value);
-
+    
     if (this.form.valid) {
+      // Upload image first if there's a new one
+      if (this.files.length > 0 && this.imagePreview !== this.form.get('avatar')?.value) {
+        try {
+          await this.uploadFile();
+        } catch (error) {
+          console.error("Erreur lors de l'upload de l'image:", error);
+          this.toastr.error("Erreur lors de l'upload de l'image", 'Erreur');
+          return;
+        }
+      }
+      
       console.log("Données envoyées :", JSON.stringify(this.form.value));
 
       this.service.update(this.form.value).subscribe({
         next: (res: any) => {
           console.log("Réponse du serveur :", res);
           localStorage.setItem('userData', JSON.stringify(this.form.value));
-          this.toastr.success('User updated successfully', 'Success');
           setTimeout(() => {
             window.location.reload();
-          }, 1000); // 1000 ms = 1 seconde
-
-
+          }, 500);
         },
         error: (err) => {
           console.error("Erreur lors de la mise à jour :", err);
+          this.toastr.error('error', 'Erreur');
         }
       });
     } else {
       console.error("Le formulaire est invalide !");
+      this.toastr.error('Veuillez corriger les erreurs du formulaire', 'Erreur');
     }
   }
+
   hasDisplayableError(controlName: string): boolean {
     const control = this.form.get(controlName);
     return control?.invalid && (this.isSubmitted || control.touched) ? true : false;
   }
 
+  onSelect(event: any) {
+    // Reset files array and add new files
+    this.files = [];
+    this.files.push(...event.addedFiles);
+
+    // Preview the first file if available
+    if (this.files.length > 0) {
+      const file = this.files[0];
+      const fileReader = new FileReader();
+      
+      fileReader.onload = () => {
+        this.imagePreview = fileReader.result;
+      };
+      
+      fileReader.readAsDataURL(file);
+    }
+  }
+
+  onRemove(event: any) {
+    // Remove file from files array
+    this.files.splice(this.files.indexOf(event), 1);
+    
+    // Reset image preview
+    this.imagePreview = null;
+    
+    // Reset form avatar value
+    this.form.get('avatar')?.setValue('');
+  }
+
+  uploadFile = async () => {
+    if (!this.files[0]) {
+      return;
+    }
+
+    const file = this.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'projetWeb');
+    formData.append('cloud_name', 'dimj6qkuf');
+
+    try {
+      // Use the service method to upload the file
+      const response = await this.service.uploadFile(formData).toPromise();
+      console.log('Upload response:', response);
+      
+      // Set the avatar URL in the form
+      if (response && response.url) {
+        this.form.get('avatar')?.setValue(response.url);
+        return response;
+      } else {
+        throw new Error('Invalid response from Cloudinary');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error;
+    }
+  };
 }

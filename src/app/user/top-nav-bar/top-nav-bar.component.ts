@@ -26,6 +26,8 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
   isShowMessage: boolean = false;
   firstName?: string;
   lastName?: string;
+  avatar?: string;
+
   notifications: any[] = [];
   unreadCount = 0;
   loading = false;
@@ -80,6 +82,7 @@ export class TopNavBarComponent implements OnInit, OnDestroy {
         const userData = JSON.parse(userDataString);
         this.firstName = userData?.firstName ?? '';
         this.lastName = userData?.lastName ?? '';
+        this.avatar = userData?.avatar ?? '';
       } catch (error) {
         console.error("JSON parsing error:", error);
       }

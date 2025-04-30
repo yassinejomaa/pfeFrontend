@@ -194,7 +194,8 @@
             <ul class="navbar-list">
                <li [ngClass]="{'iq-show': isDropdownOpen}" class="line-height">
                   <a (click)="toggleDropdown()" class="search-toggle iq-waves-effect d-flex align-items-center">
-                     <img src="images/user/1.png" class="img-fluid rounded mr-3" alt="user">
+                     <img [src]="avatar ? avatar : 'images/user/1.png'" alt="avatar" class="mr-2" style="border-radius: 50%;" />
+
                      <div class="caption">
                         <p class="mb-0 ms-2">Welcome,</p>
                         <h6 class="mb-0 ms-2 line-height">{{firstName}} {{lastName}}</h6>

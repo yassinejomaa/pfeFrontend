@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -22,5 +23,13 @@ export class UserService {
   
       });
     }
+    uploadFile(data: FormData): Observable<any> {
+      return this.http.post<any>('https://api.cloudinary.com/v1_1/dimj6qkuf/image/upload', data);
+    }
+    uploadImage(vals: any): Observable<any> {
+      let data = vals;
+      return this.http.post("https://api.cloudinary.com/v1_1/dimj6qkuf/image/upload", data)
+    }
+    
     
 }
