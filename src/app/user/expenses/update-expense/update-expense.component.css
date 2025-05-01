@@ -1,68 +1,3 @@
-.form-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem; /* Espacement entre label et input */
-  margin-bottom: 1rem; /* Espacement entre chaque champ */
-}
-
-.form-group label {
-  width: 150px; /* Taille uniforme pour tous les labels */
-  text-align: right; /* Alignement du texte */
-  font-weight: bold;
-}
-
-.form-group input,
-.form-group p-select,
-.form-group p-datepicker,
-.form-group p-inputnumber {
-  flex: 1; /* Pour que tous les inputs aient la même largeur */
-  max-width: 400px; /* Largeur maximale */
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem; /* Espacement entre les boutons */
-}
-.custom-blue-btn {
-    background-color: #1e3d73;
-    color: white;
-    border: 2px solid #1e3d73;
-    padding: 12px 14px; /* Adjust padding for a circular button */
-    border-radius: 50%; /* Makes the button circular */
-    font-size: 20px; /* Adjust icon size */
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px; /* Set a fixed width and height for a perfect circle */
-    height: 50px; /* Set a fixed width and height for a perfect circle */
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  
-  .custom-blue-btn:hover {
-    background-color: #16325c; /* Darker blue on hover */
-    border-color: #16325c; /* Darker border on hover */
-  }
-  
-  .custom-blue-btn i {
-    font-size: 24px; /* Icon size adjustment */
-  }
-  .top-right-btn {
-    margin-left: 95%;
-  }
-  #buttonIa {
-    background: none; /* Supprime l'arrière-plan */
-    border: none; /* Supprime la bordure */
-    padding: 0; /* Supprime le padding */
-    outline: none; /* Supprime l'effet de focus */
-}
-
-#buttonIa img {
-    display: block;
-    width: 2.5rem;
-    height: 2.5rem;
-}
 /* Edit Button */
 .edit-btn {
   background-color:#1e3d73;
@@ -88,22 +23,412 @@
 .edit-btn i {
   font-size: 1.1rem;
 }
-/* Make the dropdown trigger/button larger */
+/* ========== FORM STRUCTURE ========== */
+.form-group label {
+  font-weight: 500;
+  color: #34495e; /* This is your current label color */
+  font-size: 0.95rem;
+  margin-left: 0.25rem;
+}
+
+.form-group input,
+.form-group select,
+::ng-deep .p-dropdown .p-dropdown-label,
+::ng-deep .p-calendar .p-inputtext {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: #2c3e50; /* Add this to make input text color consistent */
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+/* Make placeholders consistent */
+.form-group input::placeholder,
+::ng-deep .p-dropdown .p-dropdown-label.p-placeholder,
+::ng-deep .p-calendar .p-inputtext::placeholder {
+  color: #bdc3c7 !important; /* Make all placeholders the same color */
+  font-size: 1rem !important; /* Make all placeholders the same size */
+}
+
+/* Specific fix for PrimeNG dropdown placeholder */
+::ng-deep .p-dropdown .p-dropdown-label.p-placeholder {
+  color: #bdc3c7 !important;
+}
+/* ========== ADD EXPENSE BUTTON ========== */
+.custom-blue-btn {
+  background-color: #1e3d73;
+  color: white;
+  border: 2px solid #1e3d73;
+  padding: 12px 14px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease;
+}
+
+.custom-blue-btn:hover {
+  background-color: #16325c;
+  border-color: #16325c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 61, 115, 0.3);
+}
+
+.custom-blue-btn i {
+  font-size: 24px;
+}
+
+/* ========== MODAL BACKDROP ========== */
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 110%;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========== MODAL BOX ========== */
+.custom-modal {
+  background: white;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ========== HEADER ========== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #e74c3c;
+}
+
+/* ========== FORM STRUCTURE ========== */
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 0.95rem;
+  margin-left: 0.25rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  background-color: white;
+}
+
+.form-group input::placeholder {
+  color: #bdc3c7;
+}
+
+/* ========== CATEGORY DROPDOWN WITH AI BUTTON ========== */
+.category-dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-dropdown-container .p-dropdown {
+  flex: 1;
+}
+
+/* AI Button Styles */
+.ai-button-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.ai-image-button {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ai-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+
+.ai-icon-button:hover {
+  background: #e8f4fd;
+  border-color: #3498db;
+  color: #3498db;
+}
+
+.ai-icon-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Progress Spinner Styles */
+::ng-deep .ai-button-wrapper .p-progress-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .ai-button-wrapper .p-progress-spinner-circle {
+  stroke: #3498db;
+  stroke-width: 4px;
+}
+
+/* ========== PRIMENG DROPDOWN STYLES ========== */
 ::ng-deep .p-dropdown {
-  min-width: 220px; /* Adjust width as needed */
-  height: 3rem;    /* Adjust height as needed */
+  width: 330px !important;
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  background-color: #f9f9f9 !important;
+  transition: all 0.3s ease !important;
 }
 
-.buttons-container {
-  display: flex !important;
-  justify-content: flex-end !important;
+::ng-deep .p-dropdown:not(.p-disabled):hover {
+  border-color: #e0e0e0 !important;
+}
+
+::ng-deep .p-dropdown:not(.p-disabled).p-focus {
+  border-color: #3498db !important;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2) !important;
+  background-color: white !important;
+}
+
+::ng-deep .p-dropdown .p-dropdown-label {
+  padding: 12px 16px !important;
+  font-size: 1rem !important;
+  color: inherit !important;
+}
+
+::ng-deep .p-dropdown .p-dropdown-trigger {
+  width: 2.5rem !important;
+  color: #7f8c8d !important;
+}
+
+::ng-deep .p-dropdown-panel {
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.95rem !important;
+}
+
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+  background: #e8f4fd !important;
+  color: inherit !important;
+}
+
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: white !important;
+}
+
+/* ========== AMOUNT INPUT ========== */
+.amount-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.amount-input-wrapper input {
+  padding-left: 36px !important;
+}
+
+/* ========== ACTION BUTTONS ========== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #7f8c8d;
+  border: 1px solid #e0e0e0;
+}
+
+.cancel-btn:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.save-btn {
+  background: #1e3d73;
+  color: white;
+  border: 1px solid #1e3d73;
+}
+
+.save-btn:hover {
+  background: #1e3d76;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.save-btn:active {
+  animation: pulse 0.3s ease;
+}
+
+/* ========== PRIMENG CALENDAR STYLING ========== */
+::ng-deep .p-calendar {
+  width: 100%;
+  max-width: 100%;
+}
+
+::ng-deep .p-calendar .p-inputtext {
+  border-radius: 10px !important;
+  background-color: #f9f9f9 !important;
+  border: 1px solid #e0e0e0 !important;
+  padding: 12px 16px !important;
   width: 100% !important;
-  margin-left: auto !important; /* Pushes container to right */
-  padding-right: 0 !important; /* Removes any right padding */
+  transition: all 0.3s ease !important;
+  font-size: 0.9rem !important;
 }
 
-/* Ensure p-buttons don't have conflicting styles */
-::ng-deep .buttons-container .p-button {
-  margin-left: 0 !important;
-  flex-shrink: 0 !important; /* Prevents shrinking */
+::ng-deep .p-datepicker {
+  font-size: 0.75rem !important;
+  padding: 0.5rem !important;
+  width: 220px !important;
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header {
+  padding: 0.25rem !important;
+}
+
+::ng-deep .p-datepicker-calendar td,
+::ng-deep .p-datepicker-calendar th {
+  padding: 0.25rem !important;
+}
+
+::ng-deep .p-datepicker-calendar td span {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  font-size: 0.75rem !important;
+}
+
+::ng-deep .p-datepicker .p-timepicker {
+  font-size: 0.75rem !important;
+  padding: 0.25rem !important;
+}
+
+::ng-deep .p-calendar .p-datepicker-trigger {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  font-size: 0.75rem !important;
 }

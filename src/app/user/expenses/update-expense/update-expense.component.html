@@ -1,59 +1,90 @@
+<!-- Edit Button -->
 <button class="edit-btn" (click)="showDialog()">
     <i class="ri-edit-2-line"></i>
   </button>
   
-
-<div >
-    <p-dialog header="Update Expense" [modal]="true" [(visible)]="visible" [style]="{ width: '40%' ,height:'auto'}">
-        <form [formGroup]="form" id="login-form" (ngSubmit)="onSubmit()">
-
-            <input type="hidden" formControlName="UserId">
-            <input type="hidden" formControlName="id">
-
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input style="flex-grow: 0;" pInputText id="name" autocomplete="off" formControlName="Name" />
-            </div>
-
-            <div class="form-group">
-                <label for="Category">Category</label>
-                <p-dropdown Style="flex-grow: 0;" [options]="categories" formControlName="CategoryId" optionLabel="name" optionValue="id"
-                          [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category"
-                          [appendTo]="'body'">
-                    <ng-template #selectedItem let-selectedOption>
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" 
-                                 [class]="'flag flag-' + selectedOption.id.toLowerCase()" style="width: 18px" />
-                            <div>{{ selectedOption.name }}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown>
-
-                <div style="position: relative; display: inline-block;">
-                    <button id="buttonIa" (click)="predictCategory()" [disabled]="loading" type="button">
-                        <img src="images/ai.png" id="aiImage">
-                    </button>
-
-                    <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="transparent" animationDuration=".5s"
-                        [style]="{ width: '50px', height: '50px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }">
-                    </p-progressSpinner>
+  <!-- Update Modal -->
+  <div class="custom-modal-backdrop" *ngIf="visible">
+    <div class="custom-modal">
+      <div class="modal-header">
+        <h3>Update Expense</h3>
+        <button class="close-btn" (click)="visible = false">&times;</button>
+      </div>
+  
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="expense-form">
+        <input type="hidden" formControlName="UserId" />
+        <input type="hidden" formControlName="id" />
+  
+        <!-- Name -->
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" formControlName="Name" placeholder="Enter expense name" />
+        </div>
+  
+        <!-- Category -->
+        <div class="form-group">
+          <label for="Category">Category</label>
+          <div class="category-dropdown-container">
+            <p-dropdown [options]="categories" formControlName="CategoryId"
+                        optionLabel="name" optionValue="id"
+                        [filter]="true" filterBy="name" [showClear]="true"
+                        placeholder="Select a Category" [appendTo]="'body'">
+              <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" style="width: 18px" />
+                  <div>{{ selectedOption.name }}</div>
                 </div>
+              </ng-template>
+              <ng-template pTemplate="item" let-item>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" style="width: 18px" />
+                  <div>{{ item.name }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+  
+            <div class="ai-button-wrapper">
+              <button id="buttonIa" (click)="predictCategory()" [disabled]="loading" type="button" class="ai-image-button">
+                <img src="images/ai.png" class="ai-image" alt="AI">
+              </button>
+              <p-progressSpinner *ngIf="loading"
+                                 strokeWidth="4"
+                                 animationDuration=".5s"
+                                 class="ai-spinner"></p-progressSpinner>
             </div>
-
-            <div class="form-group">
-                <label for="date">Date</label>
-                <p-calendar inputId="date" [showTime]="true" [hourFormat]="'24'" formControlName="Date" [appendTo]="'body'" />
-            </div>
-
-            <div class="form-group">
-                <label for="withoutgrouping">Amount</label>
-                <p-inputNumber inputId="currency-tn" mode="currency" currency="TND" locale="fr-TN" formControlName="Amount"/>
-            </div>
-
-            <div class="buttons-container flex justify-end gap-2 mt-4 w-full">
-                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-                <p-button type="submit" label="Save" />
-            </div>
-        </form>
-    </p-dialog>
-</div>
+          </div>
+        </div>
+  
+        <!-- Date -->
+        <div class="form-group">
+          <label for="date">Date</label>
+          <p-calendar formControlName="Date"
+                      [showTime]="true"
+                      hourFormat="24"
+                      inputId="expenseDate"
+                      placeholder="Select date and time"
+                      dateFormat="yy-mm-dd"
+                      [monthNavigator]="true"
+                      [yearNavigator]="true"
+                      yearRange="2020:2030"
+                      panelStyleClass="p-datepicker"></p-calendar>
+        </div>
+  
+        <!-- Amount -->
+        <div class="form-group">
+          <label>Amount</label>
+          <div class="amount-input-wrapper">
+            <span class="currency-symbol">$</span>
+            <input type="text" formControlName="Amount" placeholder="0.00" />
+          </div>
+        </div>
+  
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="visible = false">Cancel</button>
+          <button type="submit" class="save-btn">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
