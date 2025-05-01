@@ -199,4 +199,11 @@ export class PersonalInformationComponent implements OnInit {
       throw error;
     }
   };
+  onRemoveExisting() {
+    this.form.get('avatar')?.setValue('');
+    this.imagePreview = null;
+    this.files = [];
+  }
+
+  
 }

@@ -1,83 +1,89 @@
 <div class="tab-pane fade active show" role="tabpanel">
    <div class="iq-card">
-      <div class="iq-card-header d-flex justify-content-between">
-         <div class="iq-header-title">
-            <h4 class="card-title">Personal Information</h4>
+     <div class="iq-card-header d-flex justify-content-between">
+       <div class="iq-header-title">
+         <h4 class="card-title">Personal Information</h4>
+       </div>
+     </div>
+     <div class="iq-card-body">
+       <form [formGroup]="form" (ngSubmit)="onSubmit()">
+         <!-- Zone d'upload d'image centrée -->
+         <div class="form-group row">
+           <div class="col-md-12 d-flex flex-column align-items-center mb-4">
+             <div class="profile-img-edit w-100 text-center">
+               <label for="image">Profile Image:</label>
+               <div class="d-flex justify-content-center">
+                 <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)"
+                   style="border: 2px dashed #ccc; border-radius: 8px; padding: 20px; background: #f8f9fa; width: auto; max-width: 100%; min-height: 150px;">
+                   
+                   <ngx-dropzone-label *ngIf="!imagePreview">
+                     <div class="text-center">
+                       <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #6c757d;"></i>
+                       <h5 class="mt-2">Click or drag image to upload</h5>
+                       <p class="text-muted small">Supports JPG, PNG, GIF</p>
+                     </div>
+                   </ngx-dropzone-label>
+                   
+                   <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let file of files"
+                     [file]="file" [removable]="true" (removed)="onRemove(file)">
+                     <div class="image-container" style="max-width: 100%; max-height: 300px;">
+                       <img [src]="imagePreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                     </div>
+                   </ngx-dropzone-image-preview>
+                   
+                   <!-- Affiche l'image existante si elle existe -->
+                   <div *ngIf="!files.length && form.get('avatar')?.value" class="existing-image">
+                     <div class="image-container" style="max-width: 100%; max-height: 300px;">
+                       <img [src]="form.get('avatar')?.value" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 50%;">
+                       <button type="button" class="btn btn-sm btn-danger remove-btn" (click)="onRemoveExisting()">
+                         <i class="fas fa-times"></i>
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
          </div>
-      </div>
-      <div class="iq-card-body">
-         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="form-group row align-items-center">
-               <div class="col-md-12">
-                  <div class="profile-img-edit">
-                     
-
-
-                     <label for="image">Image:</label>
-                <div>
-
-
-                  <div class="custom-dropzone mb-3" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
-                     <ngx-dropzone-label>
-                         <div>
-                             <h2>Click or drag image to this area to upload</h2>
-                         </div>
-                     </ngx-dropzone-label>
-                     <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                         [file]="f" [removable]="true" (removed)="onRemove(f)">
-                         <div class="image-container"></div>
-                     </ngx-dropzone-image-preview>
-                 </div>
-
-
-
-
-
-
-                </div>
-
-
-                  </div>
-               </div>
-            </div>
-            <div class=" row align-items-center">
-               <div class="form-group col-sm-6">
-                  <label for="fname">First Name:</label>
-                  <input type="text" class="form-control" id="fname" [value]="firstName" formControlName="firstName">
-                  <div class="error-feedback" *ngIf="hasDisplayableError('firstName')">
-                     Please enter your First Name
-                 </div>
-               </div>
-               <div class="form-group col-sm-6">
-                  <label for="lname">Last Name:</label>
-                  <input type="text" class="form-control" id="lname" [value]="lastName" formControlName="lastName">
-                  <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
-                     Please enter your Last Name
-                 </div>
-               </div>
-               <div class="form-group col-sm-6">
-                  <label for="uname">Email:</label>
-                  <input type="text" class="form-control" id="uname" [value]="Email" formControlName="email" readonly>
-                  
-               </div>
-               <div class="form-group col-sm-6">
-                  <label for="cname">Phone number:</label>
-                  <input type="text" class="form-control" id="cname" [value]="PhoneNumber" formControlName="phoneNumber">
-                  <div class="error-feedback" *ngIf="hasDisplayableError('PhoneNumber')">
-                     Please enter your phoneNumber
-                 </div>
-               </div>
-            </div>
-            <div class="d-flex justify-content-end gap-2 align-items-center w-100" style="margin-top: 2%;">
-               <button type="submit" class="btn btn-primary">Submit</button>
-               <button type="reset" class="btn btn-danger">Cancel</button>
+ 
+         <!-- Champs du formulaire -->
+         <div class="row mt-6">
+           <div class="form-group col-md-6">
+             <label for="firstName">First Name:</label>
+             <input type="text" class="form-control" id="firstName" formControlName="firstName">
+             <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('firstName')">
+               Please enter your First Name
+             </div>
            </div>
            
+           <div class="form-group col-md-6">
+             <label for="lastName">Last Name:</label>
+             <input type="text" class="form-control" id="lastName" formControlName="lastName">
+             <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('lastName')">
+               Please enter your Last Name
+             </div>
+           </div>
            
+           <div class="form-group col-md-6">
+             <label for="email">Email:</label>
+             <input type="text" class="form-control bg-light" id="email" formControlName="email" readonly>
+           </div>
            
-           
-           
-         </form>
-      </div>
+           <div class="form-group col-md-6">
+             <label for="phoneNumber">Phone number:</label>
+             <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+             <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('phoneNumber')">
+               Please enter your phone number
+             </div>
+           </div>
+         </div>
+ 
+         <!-- Boutons de soumission -->
+         <div class="d-flex justify-content-end gap-3 mt-4">
+           <button type="reset" class="btn btn-outline-danger px-4">Cancel</button>
+           <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+         </div>
+       </form>
+     </div>
    </div>
-</div>
+ </div>
