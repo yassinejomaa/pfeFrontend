@@ -32,7 +32,7 @@
                            <!-- Left side: Search + Circular Clear Button -->
                            <div class="search-controls">
                               <!-- Circular Clear Button -->
-                              <button pButton type="button" icon="pi pi-filter-slash" class="circular-icon-btn" (click)="clear(dt1)"></button>
+                              <button pButton type="button" icon="pi pi-filter-slash" class="circular-icon-btn" (click)="clear(dt1)" title="Clear keyword"></button>
                            
                               <!-- Styled Search Input with Icon -->
                               <div class="search-input-wrapper">
@@ -45,7 +45,7 @@
                           <!-- Right side: Group all buttons together -->
                           <div class="buttons-container" style="display: flex; align-items: center; gap: 12px;">
                            <a href="/csv/expense-template.csv" download>
-                            <button class="custom-blue-btn top-right-btn"><i class="ri-download-line"></i></button>
+                            <button class="custom-blue-btn top-right-btn" title="Download CSV template"><i class="ri-download-line"></i></button>
                            </a>
                            <app-import-csv></app-import-csv>
                            <app-add-expenses-manually></app-add-expenses-manually>

@@ -24,7 +24,10 @@
          <div id="sidebar-scrollbar">
             <nav class="iq-sidebar-menu">
                <ul id="iq-sidebar-toggle" class="iq-menu">
-                  
+                  <li [class.active]="isActive('/mainPage')">
+                     <a [routerLink]="['/mainPage']" class="iq-waves-effect" data-toggle="collapse" aria-expanded="true"><span class="ripple rippleEffect"></span><i class="iq-arrow-left ri-dashboard-3-line"></i> 
+                        <span>Dashboard</span></a>
+                  </li>
                   <li [class.active]="isActive('/listBudgets')">
                      <a [routerLink]="['/listBudgets']" class="iq-waves-effect" data-toggle="collapse" aria-expanded="true"><span class="ripple rippleEffect"></span> <i class="iq-arrow-left ri-wallet-3-line"></i>
                         <span>Manage Budgets</span></a>
