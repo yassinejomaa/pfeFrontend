@@ -14,183 +14,268 @@
                     <div class="col-md-5 bg-white sign-in-page-data" style="z-index: 0;">
                         <div class="sign-in-from">
                             <h1 class="mb-0 text-center" style="color: black;">Sign Up</h1>
-                            <p class="text-center text-dark">Enter your email address and password to access admin
-                                panel.</p>
-                            <form class="mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
-                                <!-- First Name -->
-                                <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control mb-2" id="firstName"
-                                            placeholder="Your First Name" formControlName="firstName" />
-                                    </div>
-                                    <div class="error-feedback" *ngIf="hasDisplayableError('firstName')">
-                                        Please enter your First Name
-                                    </div>
-                                </div>
+                            <p class="text-center text-dark" *ngIf="step === 1">Enter your personal details</p>
+                            <p class="text-center text-dark" *ngIf="step === 2">Enter additional information (optionel)
+                            </p>
 
-                                <!-- Last Name -->
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control mb-2" id="lastName"
-                                            placeholder="Your Last Name" formControlName="lastName" />
-                                    </div>
-                                    <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
-                                        Please enter your Last Name
-                                    </div>
-                                </div>
-
-
-                                <div class="card flex justify-content-center">
-                                <label for="image">Image:</label>
-                                <div>
-
-
-                                    <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
-                                        (change)="onSelect($event)">
-                                        <ngx-dropzone-label>
-                                            <div>
-                                                <h2>
-                                                    Click or drag image to this area to upload
-                                                </h2>
+                            <form class="mt-4" [formGroup]="form" (ngSubmit)="step === 2 ? onSubmit() : nextStep()">
+                                <!-- Step 1 Fields -->
+                                <div *ngIf="step === 1">
+                                    <!-- First Name -->
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
                                             </div>
-                                        </ngx-dropzone-label>
-                                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
-                                            *ngFor="let f of files" [file]="f" [removable]="true"
-                                            (removed)="onRemove(f)">
-                                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                                        </ngx-dropzone-image-preview>
+                                            <input type="text" class="form-control mb-2" id="firstName"
+                                                placeholder="Your First Name" formControlName="firstName" />
+                                        </div>
+                                        <div class="error-feedback" *ngIf="hasDisplayableError('firstName')">
+                                            Please enter your First Name
+                                        </div>
                                     </div>
 
+                                    <!-- Last Name -->
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faUser" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control mb-2" id="lastName"
+                                                placeholder="Your Last Name" formControlName="lastName" />
+                                        </div>
+                                        <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
+                                            Please enter your Last Name
+                                        </div>
+                                    </div>
 
+                                    <!-- Image Upload -->
+                                    <div class="form-group">
+                                        <label for="image">Image:</label>
+                                        <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
+                                            (change)="onSelect($event)">
+                                            <ngx-dropzone-label>
+                                                <div>
+                                                    <h2>
+                                                        Click or drag image to this area to upload
+                                                    </h2>
+                                                </div>
+                                            </ngx-dropzone-label>
+                                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                                                *ngFor="let f of files" [file]="f" [removable]="true"
+                                                (removed)="onRemove(f)">
+                                                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                            </ngx-dropzone-image-preview>
+                                        </div>
+                                    </div>
 
+                                    <!-- Phone Number -->
+                                    <div class="form-group">
+                                        <label for="phoneNumber">Phone Number</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faPhone" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control mb-2" id="phoneNumber"
+                                                placeholder="Your Phone number" formControlName="phoneNumber" />
+                                        </div>
+                                        <div class="error-feedback" *ngIf="hasDisplayableError('phoneNumber')">
+                                            Please enter your phone number
+                                        </div>
+                                    </div>
 
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faEmail" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control mb-2" id="email"
+                                                placeholder="Enter email" formControlName="email" />
+                                        </div>
+                                        <div class="error-feedback" *ngIf="hasDisplayableError('email')">
+                                            Please enter your email
+                                        </div>
+                                    </div>
 
+                                    <!-- Password -->
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faLock" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
+                                            </div>
+                                            <input type="password" class="form-control mb-2" id="password"
+                                                placeholder="Enter password" formControlName="password" />
+                                        </div>
+                                        <ng-container
+                                            *ngIf="(form.get('password')?.touched || isSubmitted) && form.get('password')?.errors"
+                                            [ngSwitch]="form.get('password')?.errors | firstKey">
+                                            <div class="error-feedback" *ngSwitchCase="'required'">
+                                                Please enter your password.
+                                            </div>
+                                            <div class="error-feedback" *ngSwitchCase="'minlength'">
+                                                At least 6 characters required.
+                                            </div>
+                                            <div class="error-feedback" *ngSwitchCase="'pattern'">
+                                                One or more special character(s) required.
+                                            </div>
+                                        </ng-container>
+                                    </div>
 
+                                    <!-- Confirm Password -->
+                                    <div class="form-group">
+                                        <label for="re_pass">Confirm Password</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faLock" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
+                                            </div>
+                                            <input type="password" class="form-control mb-2" id="re_pass"
+                                                placeholder="Confirm your password" formControlName="re_pass" />
+                                        </div>
+                                        <div class="error-feedback"
+                                            *ngIf="hasDisplayableError('re_pass') && form.get('re_pass')?.hasError('passwordMismatch')">
+                                            Password doesn't match
+                                        </div>
+                                    </div>
+
+                                    <!-- Next Button -->
+                                    <div class="sign-info text-center">
+                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Next</button>
+                                        <span class="text-dark d-inline-block line-height-2">Already Have an Account? <a
+                                                routerLink="/login">Log In</a></span>
+                                    </div>
                                 </div>
+
+                                <!-- Step 2 Fields - Only X, Y, Z -->
+                                <div *ngIf="step === 2">
+                                    <!-- Field X -->
+                                    <div class="form-group">
+                                        <label for="fieldX">Total Number Of Family Members
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faUsers" style="font-size: 1.3rem;"></fa-icon>                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control mb-2" id="TotalNumberOfFamilyMembers
+                                            " placeholder="Enter field Total Number Of Family Members
+                                                " formControlName="totalNumberOfFamilyMembers" />
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Field Y -->
+                                    <div class="form-group">
+                                        <label for="fieldY">Total Number Of Family Members Employed</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <fa-icon [icon]="faBriefcase" style="font-size: 1.3rem;"></fa-icon> 
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control mb-2" id="fieldY"
+                                                placeholder="Total Number Of Family Members Employed"
+                                                formControlName="totalNumberOfFamilyMembersEmployed" />
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Field Z -->
+                                    <div class="form-group">
+                                        <label for="fieldZ">Agricultural House Hold Indicator</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                     <fa-icon [icon]="faTractor" style="font-size: 1.3rem;"></fa-icon> 
+                                                </span>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="fieldZ">Household Type</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <!-- <fa-icon [icon]="faInfoCircle" style="font-size: 1.3rem;"></fa-icon> -->
+                                                        </span>
+                                                    </div>
+                                                    <select class="form-control mb-2" id="fieldZ"
+                                                        formControlName="agriculturalHouseHoldIndicator">
+                                                        <option value="" disabled selected>Select household type...
+                                                        </option>
+                                                        <option value="0">Non-agricultural household</option>
+                                                        <option value="1">Agricultural household</option>
+                                                        <option value="2">Mixed or other category</option>
+                                                    </select>
+                                                </div>
+                                                <small class="form-text text-muted"
+                                                    *ngIf="form.get('fieldZ')?.value === '0'">
+                                                    Households not engaged in any agricultural activities, such as crop
+                                                    cultivation, livestock raising, or fishing.
+                                                </small>
+                                                <small class="form-text text-muted"
+                                                    *ngIf="form.get('fieldZ')?.value === '1'">
+                                                    Households primarily engaged in agricultural activities for their
+                                                    livelihood.
+                                                </small>
+                                                <small class="form-text text-muted"
+                                                    *ngIf="form.get('fieldZ')?.value === '2'">
+                                                    Households involved in both agricultural and non-agricultural
+                                                    activities, or those that do not fit neatly into the other two
+                                                    categories.
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Navigation Buttons -->
+                                    <div class="sign-info text-center">
+                                        <button type="button" class="btn btn-secondary d-block w-100 mb-2"
+                                            (click)="previousStep()">Previous</button>
+                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign
+                                            Up</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
+                    </div>
 
-                        <!-- Phone Number -->
-                        <div class="form-group">
-                            <label for="phoneNumber">Phone Number</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <fa-icon [icon]="faPhone" style="font-size: 1.3rem;"></fa-icon>
-                                    </span>
+                    <!-- Right Image Section -->
+                    <div class="col-md-7 text-center sign-in-page-image">
+                        <div class="sign-in-detail text-white">
+                            <a class="sign-in-logo mb-5" href="#"><img src="images/logo-full.png" class="img-fluid"
+                                    alt="logo"></a>
+                            <div class="owl-carousel" data-autoplay="true" data-loop="true" data-nav="false"
+                                data-dots="true" data-items="1" data-items-laptop="1" data-items-tab="1"
+                                data-items-mobile="1" data-items-mobile-sm="1" data-margin="0">
+                                <div class="item">
+                                    <img src="images/login/1.png" class="img-fluid mb-4" alt="logo">
+                                    <h4 class="mb-1 text-white">Manage your orders</h4>
+                                    <p>It is a long established fact that a reader will be distracted by the readable
+                                        content.</p>
                                 </div>
-                                <input type="text" class="form-control mb-2" id="phoneNumber"
-                                    placeholder="Your Phone number" formControlName="phoneNumber" />
-                            </div>
-                            <div class="error-feedback" *ngIf="hasDisplayableError('phoneNumber')">
-                                Please enter your phone number
                             </div>
                         </div>
-
-                        <!-- Email -->
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <fa-icon [icon]="faEmail" style="font-size: 1.3rem;"></fa-icon>
-                                    </span>
-                                </div>
-                                <input type="text" class="form-control mb-2" id="email" placeholder="Enter email"
-                                    formControlName="email" />
-                            </div>
-                            <div class="error-feedback" *ngIf="hasDisplayableError('email')">
-                                Please enter your email
-                            </div>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <fa-icon [icon]="faLock" style="font-size: 1.3rem;"></fa-icon>
-                                    </span>
-                                </div>
-                                <input type="password" class="form-control mb-2" id="password"
-                                    placeholder="Enter password" formControlName="password" />
-                            </div>
-                            <ng-container
-                                *ngIf="(form.get('password')?.touched || isSubmitted) && form.get('password')?.errors"
-                                [ngSwitch]="form.get('password')?.errors | firstKey">
-                                <div class="error-feedback" *ngSwitchCase="'required'">
-                                    Please enter your password.
-                                </div>
-                                <div class="error-feedback" *ngSwitchCase="'minlength'">
-                                    At least 6 characters required.
-                                </div>
-                                <div class="error-feedback" *ngSwitchCase="'pattern'">
-                                    One or more special character(s) required.
-                                </div>
-                            </ng-container>
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="form-group">
-                            <label for="re_pass">Confirm Password</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <fa-icon [icon]="faLock" style="font-size: 1.3rem;"></fa-icon>
-                                    </span>
-                                </div>
-                                <input type="password" class="form-control mb-2" id="re_pass"
-                                    placeholder="Confirm your password" formControlName="re_pass" />
-                            </div>
-                            <div class="error-feedback"
-                                *ngIf="hasDisplayableError('re_pass') && form.get('re_pass')?.hasError('passwordMismatch')">
-                                Password doesn't match
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="sign-info text-center">
-                            <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign Up</button>
-                            <span class="text-dark d-inline-block line-height-2">Already Have an Account? <a
-                                    routerLink="/login">Log In</a></span>
-                        </div>
-                        </form>
                     </div>
                 </div>
-
-                <!-- Right Image Section -->
-                <div class="col-md-7 text-center sign-in-page-image">
-                    <div class="sign-in-detail text-white">
-                        <a class="sign-in-logo mb-5" href="#"><img src="images/logo-full.png" class="img-fluid"
-                                alt="logo"></a>
-                        <div class="owl-carousel" data-autoplay="true" data-loop="true" data-nav="false"
-                            data-dots="true" data-items="1" data-items-laptop="1" data-items-tab="1"
-                            data-items-mobile="1" data-items-mobile-sm="1" data-margin="0">
-                            <div class="item">
-                                <img src="images/login/1.png" class="img-fluid mb-4" alt="logo">
-                                <h4 class="mb-1 text-white">Manage your orders</h4>
-                                <p>It is a long established fact that a reader will be distracted by the readable
-                                    content.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
     </div>
 </section>
 <!-- Sign Up End -->

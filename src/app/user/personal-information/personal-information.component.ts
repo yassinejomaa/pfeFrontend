@@ -43,7 +43,10 @@ export class PersonalInformationComponent implements OnInit {
       lastName: ['', Validators.required],
       firstName: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      avatar: ['']
+      avatar: [''],
+      totalNumberOfFamilyMembers:[''],
+      totalNumberOfFamilyMembersEmployed:[''],
+      agriculturalHouseHoldIndicator:[''],
     });
   
     const userDataString = localStorage.getItem("userData");
@@ -51,7 +54,7 @@ export class PersonalInformationComponent implements OnInit {
     if (userDataString) {
       try {
         const userData = JSON.parse(userDataString);
-  
+        
         if (userData) {
           console.log("Données récupérées du localStorage :", userData);
   
@@ -60,7 +63,10 @@ export class PersonalInformationComponent implements OnInit {
             firstName: userData.firstName || '',
             lastName: userData.lastName || '',
             phoneNumber: userData.phoneNumber || '',
-            avatar: userData.avatar || ''
+            avatar: userData.avatar || '',
+            totalNumberOfFamilyMembers: userData.totalNumberOfFamilyMembers|| '',
+            totalNumberOfFamilyMembersEmployed: userData.totalNumberOfFamilyMembersEmployed || '',
+            agriculturalHouseHoldIndicator: userData.agriculturalHouseHoldIndicator || ''
           });
   
           // Load existing avatar if available

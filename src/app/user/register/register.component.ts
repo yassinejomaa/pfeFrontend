@@ -9,6 +9,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { faUsers, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faTractor } from '@fortawesome/free-solid-svg-icons';
+
+
 
 
 
@@ -25,6 +29,12 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 export class RegisterComponent implements OnInit{
   form: FormGroup; 
   myFiles: [] = [];
+  step: number = 1;
+  faUsers = faUsers;
+faHome = faHome;
+faBriefcase = faBriefcase;  // Icône pour le travail (job)
+faTractor = faTractor; 
+
 
   ngOnInit(): void {
     if(this.service.isLoggedIn()){
@@ -44,7 +54,10 @@ export class RegisterComponent implements OnInit{
         Validators.pattern(/(?=.*[^a-zA-Z0-9])/)
       ]],
       avatar:'',
-      re_pass: ['']
+      re_pass: [''],
+      totalNumberOfFamilyMembers:null,
+      totalNumberOfFamilyMembersEmployed:null,
+      agriculturalHouseHoldIndicator:null
     }, { validators: this.passwordMatchValidator });
   }
   isSubmitted:boolean=false;
@@ -71,7 +84,7 @@ export class RegisterComponent implements OnInit{
   faLock = faLock;
   uploadFiles = async () => {
     if (!this.files[0]) {
-      alert("No file selected!");
+      
       return;
     }
   
@@ -232,5 +245,28 @@ export class RegisterComponent implements OnInit{
         // Lisez le fichier en tant que DataURL
         fileReader.readAsDataURL(file);
     }
+}
+nextStep() {
+    // Validate only step 1 fields before proceeding
+    const step1Valid = this.form.get('firstName')?.valid && 
+                      this.form.get('lastName')?.valid&&this.form.get('phoneNumber')?.valid
+                      &&this.form.get('email')?.valid
+                      &&this.form.get('password')?.valid&&this.form.get('re_pass')?.valid ;
+    
+    if (step1Valid) {
+        this.step = 2;
+    } else {
+        // Mark step 1 fields as touched to show validation messages
+        this.form.get('firstName')?.markAsTouched();
+        this.form.get('lastName')?.markAsTouched();
+        this.form.get('phoneNumber')?.markAsTouched();
+        this.form.get('email')?.markAsTouched();
+        this.form.get('password')?.markAsTouched();
+        this.form.get('re_pass')?.markAsTouched();
+    }
+}
+
+previousStep() {
+    this.step = 1;
 }
 }

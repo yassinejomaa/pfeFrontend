@@ -46,6 +46,7 @@ export class MainPageComponent implements OnInit {
   itemsPerPage: number = 4; // Adjust as needed
   paginatedBudgets: any[] = [];
   totalExpensePerDate:any[]=[];
+  prdected_expense:any;
   
   @ViewChild('dt') dt!: Table;
 
@@ -145,6 +146,8 @@ export class MainPageComponent implements OnInit {
 
     this.dashboardService.getData(this.authService.getUserId()).subscribe({
       next: (res: any) => {
+        console.log(res.budgetPeriod.predictedExpense);
+        this.prdected_expense=res.budgetPeriod.predictedExpense;
         this.dashboardData = res;
         this.totalExpensePerDate=res.expensesByDate;
         console.log("expense per date",this.totalExpensePerDate)
