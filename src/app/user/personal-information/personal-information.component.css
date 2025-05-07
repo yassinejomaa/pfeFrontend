@@ -1,70 +1,54 @@
-/*# sourceMappingURL=style.css.map */
-.error-feedback{
-    font-size: 0.9 rem;
-    color: crimson;
-    margin: 0.3rem !important;
-    margin-top:0.1rem !important;
-  }
 /* Main Form Styling */
 .form-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2.5rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 2rem;
+  border-radius: 12px;
   background-color: #fff;
 }
 
 .form-label {
   font-weight: 500;
   margin-bottom: 0.5rem;
+  color: #495057;
 }
 
 .form-control, .form-select {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .form-control:focus, .form-select:focus {
   border-color: #6c63ff;
-  box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.15);
+}
+
+.required-asterisk {
+  color: #dc3545;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  color: #495057;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .optional-label {
   color: #6c757d;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: normal;
-  margin-left: 0.25rem;
-}
-
-/* Button Styling */
-.btn-primary {
-  background-color: #6c63ff;
-  border-color: #6c63ff;
-}
-
-.btn-primary:hover {
-  background-color: #5a52d5;
-  border-color: #5a52d5;
-}
-
-.btn-outline-danger {
-  color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
 }
 
 /* Card Styling */
 .iq-card {
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: none;
 }
 
 .iq-card-header {
@@ -74,84 +58,245 @@
 }
 
 .iq-card-body {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .card-title {
   margin-bottom: 0;
   font-weight: 600;
   color: #343a40;
+  font-size: 1.5rem;
 }
 
-/* Image Upload Styling */
+/* Profile Image Styling */
 .profile-img-edit {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.profile-image-container {
+  display: flex;
+  justify-content: center;
   margin-bottom: 1.5rem;
 }
 
-.custom-dropzone {
-  transition: all 0.3s ease;
+.circle-upload {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-}
-
-.custom-dropzone:hover {
-  border-color: #6c63ff !important;
-  background-color: #f0f0ff !important;
-}
-
-.image-container {
+  overflow: hidden;
   position: relative;
-  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #6c757d;
+}
+
+.upload-placeholder i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.remove-btn {
+  opacity: 0;
+}/* Wrapper to position button outside */
+.circle-upload-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+/* The circular image container */
+.circle-upload {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #6c757d;
+}
+
+.upload-placeholder i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Remove button OUTSIDE the image */
+.remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #1e3e73;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background-color: #1e3e73;
+}
+
+.circle-upload:hover .remove-btn,
+.existing-image:hover .remove-btn {
+  opacity: 1;
 }
 
 .remove-btn {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  border-radius: 50%;
+  top: -10px; /* push it above the circle */
+  right: -10px; /* push it to the right side of the circle */
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.8;
+  padding: 0;
+  background-color: #1e3e73;
+  border: none;
+  color: white;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  opacity: 1; /* Always visible, adjust as needed */
 }
+
+.circle-upload {
+  position: relative; /* Ensure the remove-btn positions relative to this */
+}
+
 
 .remove-btn:hover {
-  opacity: 1;
-}
-.form-select {
-  display: block;
-  width: 100%;
-  padding: 0.625rem 2.25rem 0.625rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  background-color: #fff;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 16px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  background-color: #1e3e73;
 }
 
-.form-select:focus {
+.circle-upload:hover .remove-btn,
+.existing-image:hover .remove-btn {
+  opacity: 1;
+}
+
+.existing-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.existing-image .remove-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Button Styling */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #6c63ff;
   border-color: #6c63ff;
-  outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
+  box-shadow: 0 2px 10px rgba(108, 99, 255, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #5a52d5;
+  border-color: #5a52d5;
+  transform: translateY(-2px);
+}
+
+.btn-outline-secondary {
+  border-color: #e0e0e0;
+  color: #495057;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #d0d0d0;
+}
+
+/* Form Select Styling */
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  padding-right: 2.5rem;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .form-container {
+    padding: 1rem;
+  }
+  
+  .iq-card-body {
     padding: 1.5rem;
+  }
+  
+  .circle-upload {
+    width: 120px;
+    height: 120px;
   }
   
   .col-md-4, .col-md-6 {
     margin-bottom: 1rem;
   }
+}
+
+/* Error Styling */
+.invalid-feedback {
+  font-size: 0.85rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+.form-control.is-invalid, .form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus, .form-select.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }

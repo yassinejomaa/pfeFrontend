@@ -5,63 +5,59 @@
         <h4 class="card-title">Personal Information</h4>
       </div>
     </div>
+    <p-toast></p-toast>
     <div class="iq-card-body">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <!-- Zone d'upload d'image centrée -->
-        <div class="form-group row">
-          <div class="col-md-12 d-flex flex-column align-items-center mb-4">
-            <div class="profile-img-edit w-100 text-center">
-              <label for="image">Profile Image:</label>
-              <div class="d-flex justify-content-center">
-                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)"
-                  style="border: 2px dashed #ccc; border-radius: 8px; padding: 20px; background: #f8f9fa; width: auto; max-width: 100%; min-height: 150px;">
-
-                  <ngx-dropzone-label *ngIf="!imagePreview">
-                    <div class="text-center">
-                      <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #6c757d;"></i>
-                      <h5 class="mt-2">Click or drag image to upload</h5>
-                      <p class="text-muted small">Supports JPG, PNG, GIF</p>
-                    </div>
-                  </ngx-dropzone-label>
-
-                  <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let file of files"
-                    [file]="file" [removable]="true" (removed)="onRemove(file)">
-                    <div class="image-container" style="max-width: 100%; max-height: 300px;">
-                      <img [src]="imagePreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                    </div>
-                  </ngx-dropzone-image-preview>
-
-                  <!-- Affiche l'image existante si elle existe -->
-                  <div *ngIf="!files.length && form.get('avatar')?.value" class="existing-image">
-                    <div class="image-container" style="max-width: 100%; max-height: 300px;">
-                      <img [src]="form.get('avatar')?.value"
-                        style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 50%;">
-                      <button type="button" class="btn btn-sm btn-danger remove-btn" (click)="onRemoveExisting()">
-                        <i class="fas fa-times"></i>
-                      </button>
+        <!-- Circular Profile Image Upload -->
+        <div class="form-group row mb-4">
+          <div class="col-md-12 d-flex flex-column align-items-center">
+            <label class="form-label mb-3">Profile Photo</label>
+            <div class="profile-img-edit">
+              <div class="profile-image-container">
+                <div class="circle-upload-wrapper">
+                  <div class="circle-upload" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                    <ngx-dropzone-label *ngIf="!imagePreview">
+                      <div class="upload-placeholder">
+                        <i class="fa fa-camera"></i>
+                        <span>Upload Photo</span>
+                      </div>
+                    </ngx-dropzone-label>
+        
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let file of files"
+                      [file]="file" [removable]="true" (removed)="onRemove(file)">
+                      <img [src]="imagePreview" class="profile-image" />
+                    </ngx-dropzone-image-preview>
+        
+                    <div *ngIf="!files.length && form.get('avatar')?.value" class="existing-image">
+                      <img [src]="form.get('avatar')?.value" class="profile-image" />
                     </div>
                   </div>
+                  <!-- Remove button outside the circle -->
+                  <button type="button" class="remove-btn" (click)="onRemoveExisting()">
+                    <i class="fa fa-times"></i>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        
 
         <div class="container-fluid py-3">
           <div class="form-container">
             <div class="row g-4">
               <!-- Required Fields -->
               <div class="col-md-6">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" formControlName="firstName">
+                <label for="firstName" class="form-label">First Name <span class="required-asterisk">*</span></label>
+                <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="Enter your first name">
                 <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('firstName')">
                   Please enter your First Name
                 </div>
               </div>
 
               <div class="col-md-6">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" formControlName="lastName">
+                <label for="lastName" class="form-label">Last Name <span class="required-asterisk">*</span></label>
+                <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Enter your last name">
                 <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('lastName')">
                   Please enter your Last Name
                 </div>
@@ -73,8 +69,8 @@
               </div>
 
               <div class="col-md-6">
-                <label for="phoneNumber" class="form-label">Phone number</label>
-                <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+                <label for="phoneNumber" class="form-label">Phone number <span class="required-asterisk">*</span></label>
+                <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="Enter your phone number">
                 <div class="invalid-feedback d-block" *ngIf="hasDisplayableError('phoneNumber')">
                   Please enter your phone number
                 </div>
@@ -82,44 +78,37 @@
 
               <!-- Optional Fields -->
               <div class="col-12 mt-4">
-                <h5 class="fw-bold text-muted mb-3">Additional Information <span
-                    class="optional-label">(Optional)</span></h5>
+                <h5 class="section-title">Additional Information <span class="optional-label">(Optional)</span></h5>
               </div>
 
               <div class="col-md-4">
-                <label for="fieldX" class="form-label">total Number Of Family Members <span
-                    class="optional-label">(Optional)</span></label>
+                <label for="fieldX" class="form-label">Total Number Of Family Members</label>
                 <input type="number" class="form-control" id="fieldX" formControlName="totalNumberOfFamilyMembers"
-                  min="0" step="1">
+                  min="0" step="1" placeholder="Enter number">
               </div>
 
               <div class="col-md-4">
-                <label for="fieldY" class="form-label">total Number Of Family Members Employed<span
-                    class="optional-label">(Optional)</span></label>
+                <label for="fieldY" class="form-label">Total Number Of Family Members Employed</label>
                 <input type="number" class="form-control" id="fieldY"
-                  formControlName="totalNumberOfFamilyMembersEmployed" min="0" step="1">
-
+                  formControlName="totalNumberOfFamilyMembersEmployed" min="0" step="1" placeholder="Enter number">
               </div>
 
               <div class="col-md-4">
-                <label for="fieldZ" class="form-label">Agricultural House Hold<span
-                    class="optional-label">(Optional)</span></label>
+                <label for="fieldZ" class="form-label">Agricultural House Hold</label>
                 <select class="form-select" id="agriculturalHouseHold" formControlName="agriculturalHouseHoldIndicator">
-                  <option value="" disabled selected>Select household type...
-                  </option>
+                  <option value="" disabled selected>Select household type...</option>
                   <option value="0">Non-agricultural household</option>
                   <option value="1">Agricultural household</option>
                   <option value="2">Mixed or other category</option>
                 </select>
-
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Boutons de soumission -->
-        <div class="d-flex justify-content-end gap-3 mt-4">
-          <button type="reset" class="btn btn-outline-danger px-4">Cancel</button>
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end gap-3 mt-5">
+          <button type="reset" class="btn btn-outline-secondary px-4">Cancel</button>
           <button type="submit" class="btn btn-primary px-4">Save Changes</button>
         </div>
       </form>

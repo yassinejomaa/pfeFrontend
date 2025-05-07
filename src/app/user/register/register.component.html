@@ -15,12 +15,35 @@
                         <div class="sign-in-from">
                             <h1 class="mb-0 text-center" style="color: black;">Sign Up</h1>
                             <p class="text-center text-dark" *ngIf="step === 1">Enter your personal details</p>
-                            <p class="text-center text-dark" *ngIf="step === 2">Enter additional information (optionel)
-                            </p>
+                            <p class="text-center text-dark" *ngIf="step === 2">Enter additional information (optional)</p>
 
                             <form class="mt-4" [formGroup]="form" (ngSubmit)="step === 2 ? onSubmit() : nextStep()">
                                 <!-- Step 1 Fields -->
                                 <div *ngIf="step === 1">
+                                    <!-- Profile Image -->
+                                    <div class="form-group text-center">
+                                        <label for="image">Profile Image</label>
+                                        <div class="circle-upload-wrapper">
+                                        <div class="round-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                                            <ngx-dropzone-label>
+                                            <div>
+                                                <fa-icon [icon]="faCamera" style="font-size: 2rem;"></fa-icon>
+                                                <h4>Click to upload</h4>
+                                                <p>or drag and drop</p>
+                                            </div>
+                                            </ngx-dropzone-label>
+                                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                            <img class="round-preview-image">
+                                            </ngx-dropzone-image-preview>
+                                        </div>
+                                        <!-- Remove button outside the circle -->
+                                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let file of files"
+                                        [file]="file" [removable]="true" (removed)="onRemoveExisting()">
+                                        <img [src]="imagePreview" class="profile-image" />
+                                      </ngx-dropzone-image-preview>
+                                        </div>
+                                    </div>
+
                                     <!-- First Name -->
                                     <div class="form-group">
                                         <label for="firstName">First Name</label>
@@ -52,26 +75,6 @@
                                         </div>
                                         <div class="error-feedback" *ngIf="hasDisplayableError('lastName')">
                                             Please enter your Last Name
-                                        </div>
-                                    </div>
-
-                                    <!-- Image Upload -->
-                                    <div class="form-group">
-                                        <label for="image">Image:</label>
-                                        <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
-                                            (change)="onSelect($event)">
-                                            <ngx-dropzone-label>
-                                                <div>
-                                                    <h2>
-                                                        Click or drag image to this area to upload
-                                                    </h2>
-                                                </div>
-                                            </ngx-dropzone-label>
-                                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
-                                                *ngFor="let f of files" [file]="f" [removable]="true"
-                                                (removed)="onRemove(f)">
-                                                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                                            </ngx-dropzone-image-preview>
                                         </div>
                                     </div>
 
@@ -162,22 +165,20 @@
                                     </div>
                                 </div>
 
-                                <!-- Step 2 Fields - Only X, Y, Z -->
+                                <!-- Step 2 Fields -->
                                 <div *ngIf="step === 2">
                                     <!-- Field X -->
                                     <div class="form-group">
-                                        <label for="fieldX">Total Number Of Family Members
-                                        </label>
+                                        <label for="fieldX">Total Number Of Family Members</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <fa-icon [icon]="faUsers" style="font-size: 1.3rem;"></fa-icon>                                                </span>
+                                                    <fa-icon [icon]="faUsers" style="font-size: 1.3rem;"></fa-icon>
+                                                </span>
                                             </div>
-                                            <input type="number" class="form-control mb-2" id="TotalNumberOfFamilyMembers
-                                            " placeholder="Enter field Total Number Of Family Members
-                                                " formControlName="totalNumberOfFamilyMembers" />
+                                            <input type="number" class="form-control mb-2" id="TotalNumberOfFamilyMembers"
+                                                placeholder="Enter family members count" formControlName="totalNumberOfFamilyMembers" />
                                         </div>
-
                                     </div>
 
                                     <!-- Field Y -->
@@ -186,14 +187,13 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <fa-icon [icon]="faBriefcase" style="font-size: 1.3rem;"></fa-icon> 
+                                                    <fa-icon [icon]="faBriefcase" style="font-size: 1.3rem;"></fa-icon>
                                                 </span>
                                             </div>
                                             <input type="number" class="form-control mb-2" id="fieldY"
-                                                placeholder="Total Number Of Family Members Employed"
+                                                placeholder="Total employed family members"
                                                 formControlName="totalNumberOfFamilyMembersEmployed" />
                                         </div>
-
                                     </div>
 
                                     <!-- Field Z -->
@@ -202,54 +202,36 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                     <fa-icon [icon]="faTractor" style="font-size: 1.3rem;"></fa-icon> 
+                                                    <fa-icon [icon]="faTractor" style="font-size: 1.3rem;"></fa-icon>
                                                 </span>
-
                                             </div>
-                                            <div class="form-group">
-                                                <label for="fieldZ">Household Type</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <!-- <fa-icon [icon]="faInfoCircle" style="font-size: 1.3rem;"></fa-icon> -->
-                                                        </span>
-                                                    </div>
-                                                    <select class="form-control mb-2" id="fieldZ"
-                                                        formControlName="agriculturalHouseHoldIndicator">
-                                                        <option value="" disabled selected>Select household type...
-                                                        </option>
-                                                        <option value="0">Non-agricultural household</option>
-                                                        <option value="1">Agricultural household</option>
-                                                        <option value="2">Mixed or other category</option>
-                                                    </select>
-                                                </div>
-                                                <small class="form-text text-muted"
-                                                    *ngIf="form.get('fieldZ')?.value === '0'">
-                                                    Households not engaged in any agricultural activities, such as crop
-                                                    cultivation, livestock raising, or fishing.
-                                                </small>
-                                                <small class="form-text text-muted"
-                                                    *ngIf="form.get('fieldZ')?.value === '1'">
-                                                    Households primarily engaged in agricultural activities for their
-                                                    livelihood.
-                                                </small>
-                                                <small class="form-text text-muted"
-                                                    *ngIf="form.get('fieldZ')?.value === '2'">
-                                                    Households involved in both agricultural and non-agricultural
-                                                    activities, or those that do not fit neatly into the other two
-                                                    categories.
-                                                </small>
-                                            </div>
+                                            <select class="form-control mb-2" id="fieldZ"
+                                                formControlName="agriculturalHouseHoldIndicator">
+                                                <option value="" disabled selected>Select household type...</option>
+                                                <option value="0">Non-agricultural household</option>
+                                                <option value="1">Agricultural household</option>
+                                                <option value="2">Mixed or other category</option>
+                                            </select>
                                         </div>
-
+                                        <small class="form-text text-muted"
+                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '0'">
+                                            Households not engaged in any agricultural activities
+                                        </small>
+                                        <small class="form-text text-muted"
+                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '1'">
+                                            Households primarily engaged in agricultural activities
+                                        </small>
+                                        <small class="form-text text-muted"
+                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '2'">
+                                            Households involved in both agricultural and non-agricultural activities
+                                        </small>
                                     </div>
 
                                     <!-- Navigation Buttons -->
                                     <div class="sign-info text-center">
                                         <button type="button" class="btn btn-secondary d-block w-100 mb-2"
                                             (click)="previousStep()">Previous</button>
-                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign
-                                            Up</button>
+                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign Up</button>
                                     </div>
                                 </div>
                             </form>

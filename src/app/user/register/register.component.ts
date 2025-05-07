@@ -11,7 +11,7 @@ import { UserService } from '../../shared/services/user.service';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { faUsers, faHome } from '@fortawesome/free-solid-svg-icons';
 import { faBriefcase, faTractor } from '@fortawesome/free-solid-svg-icons';
-
+import { faCamera ,faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -34,8 +34,8 @@ export class RegisterComponent implements OnInit{
 faHome = faHome;
 faBriefcase = faBriefcase;  // Icône pour le travail (job)
 faTractor = faTractor; 
-
-
+faCamera = faCamera;
+faTimes = faTimes;
   ngOnInit(): void {
     if(this.service.isLoggedIn()){
       this.router.navigateByUrl("/mainPage");
@@ -268,5 +268,10 @@ nextStep() {
 
 previousStep() {
     this.step = 1;
+}
+onRemoveExisting() {
+  this.files = [];
+  this.form.patchValue({ avatar: null });
+  // Add any additional cleanup logic you need
 }
 }

@@ -6,11 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../shared/services/user.service';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-personal-information',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink, NgxDropzoneModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, NgxDropzoneModule, ToastModule],
+  providers: [MessageService],
   templateUrl: './personal-information.component.html',
   styleUrls: [
     './personal-information.component.css',
@@ -35,6 +38,7 @@ export class PersonalInformationComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -128,9 +132,16 @@ export class PersonalInformationComponent implements OnInit {
         next: (res: any) => {
           console.log("Réponse du serveur :", res);
           localStorage.setItem('userData', JSON.stringify(this.form.value));
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User information updated successfully!',
+            life: 3000
+          });
+          
           setTimeout(() => {
             window.location.reload();
-          }, 500);
+          }, 1000);
         },
         error: (err) => {
           console.error("Erreur lors de la mise à jour :", err);
