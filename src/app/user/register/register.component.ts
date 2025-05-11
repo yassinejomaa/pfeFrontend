@@ -126,12 +126,13 @@ faTimes = faTimes;
       console.error('Error uploading file:', error);
     }
   };
-  onRemove(event: any) {
-    // Supprimez le fichier de la liste des fichiers
-    this.files.splice(this.files.indexOf(event), 1);
+  onRemove(file: File) {
+    this.files = this.files.filter(f => f !== file);
+  }
   
-    // Réinitialisez l'aperçu de l'image
+  onRemoveExisting() {
     this.imagePreview = null;
+    this.files = []; // pour être sûr que l'autre image disparaît aussi
   }
   
     
@@ -269,9 +270,5 @@ nextStep() {
 previousStep() {
     this.step = 1;
 }
-onRemoveExisting() {
-  this.files = [];
-  this.form.patchValue({ avatar: null });
-  // Add any additional cleanup logic you need
-}
+
 }

@@ -175,6 +175,7 @@ export class PersonalInformationComponent implements OnInit {
       
       fileReader.readAsDataURL(file);
     }
+    console.log(this.files[0])
   }
 
   onRemove(event: any) {

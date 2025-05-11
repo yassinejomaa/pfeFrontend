@@ -33,7 +33,8 @@
                     </div>
                   </div>
                   <!-- Remove button outside the circle -->
-                  <button type="button" class="remove-btn" (click)="onRemoveExisting()">
+                  <button type="button" class="remove-btn" (click)="onRemoveExisting()"   *ngIf="files.length > 0"
+                  >
                     <i class="fa fa-times"></i>
                   </button>
                 </div>

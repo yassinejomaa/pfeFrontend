@@ -283,7 +283,7 @@ this.endDate = this.calculateEndDate(this.startDate, this.selectedPeriod);
     
       const formData = {
         id: this.budgetPeriod.id,
-        period: 0, // Utilisez la période existante
+        period: 1, // Utilisez la période existante
         income: this.totalBudget,
         savings: this.remainingBudget || 0,
         startDate: formattedStartDate,
