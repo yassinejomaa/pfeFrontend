@@ -21,28 +21,41 @@
                                 <!-- Step 1 Fields -->
                                 <div *ngIf="step === 1">
                                     <!-- Profile Image -->
-                                    <div class="form-group text-center">
-                                        <label for="image">Profile Image</label>
-                                        <div class="circle-upload-wrapper">
-                                        <div class="round-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
-                                            <ngx-dropzone-label>
-                                            <div>
-                                                <fa-icon [icon]="faCamera" style="font-size: 2rem;"></fa-icon>
-                                                <h4>Click to upload</h4>
-                                                <p>or drag and drop</p>
+                                    <div class="form-group row mb-4">
+                                        <div class="col-md-12 d-flex flex-column align-items-center">
+                                          <label class="form-label mb-3">Profile Image</label>
+                                          <div class="circle-upload-wrapper">
+                                            <div class="round-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                                              
+                                              <!-- Zone vide : affichage de l'icône et du texte -->
+                                              <ngx-dropzone-label *ngIf="!files.length && !imagePreview">
+                                                <div class="text-center">
+                                                  <fa-icon [icon]="faCamera" style="font-size: 2rem;"></fa-icon>
+                                                  <h4>Click to upload</h4>
+                                                  <p>or drag and drop</p>
+                                                </div>
+                                              </ngx-dropzone-label>
+                                      
+                                              <!-- Nouvelle image sélectionnée -->
+                                              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                                <img class="round-preview-image" />
+                                              </ngx-dropzone-image-preview>
+                                      
+                                              <!-- Image existante (déjà enregistrée) -->
+                                              <div *ngIf="!files.length && imagePreview" class="existing-image">
+                                                <img [src]="imagePreview" class="profile-image" />
+                                              </div>
                                             </div>
-                                            </ngx-dropzone-label>
-                                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-                                            <img class="round-preview-image">
-                                            </ngx-dropzone-image-preview>
+                                      
+                                            <!-- Bouton supprimer -->
+                                            <button type="button" class="remove-btn mt-2" (click)="onRemoveExisting()" *ngIf="files.length > 0">
+                                              <i class="fa fa-times"></i>
+                                            </button>
+                                          </div>
                                         </div>
-                                        <!-- Remove button outside the circle -->
-                                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let file of files"
-                                        [file]="file" [removable]="true" (removed)="onRemoveExisting()">
-                                        <img [src]="imagePreview" class="profile-image" />
-                                      </ngx-dropzone-image-preview>
-                                        </div>
-                                    </div>
+                                      </div>
+                                      
+                                      
 
                                     <!-- First Name -->
                                     <div class="form-group">
