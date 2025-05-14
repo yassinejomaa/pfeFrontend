@@ -108,7 +108,7 @@
 /* Add these styles to your existing CSS */
 .notification-container {
   position: relative;
-  min-height: 470px; /* Adjust based on your content height */
+  min-height: 535px; /* Adjust based on your content height */
   overflow: hidden;
 }
 
