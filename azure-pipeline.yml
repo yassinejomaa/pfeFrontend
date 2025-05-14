@@ -10,15 +10,17 @@ steps:
       versionSpec: '22.13.1'
     displayName: 'Install Node.js'
 
-  - script: |
-      echo "Node version:"
-      node -v
-      echo "NPM version:"
-      npm -v
-      echo "Directory contents:"
-      dir
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        echo "Node version:"
+        node -v
+        echo "NPM version:"
+        npm -v
+        echo "Directory contents:"
+        dir
     displayName: 'Environment Info'
-    shell: powershell
 
   - script: |
       npm config set strict-ssl false
@@ -31,26 +33,32 @@ steps:
 
       # Install Angular CLI globally
       npm install -g @angular/cli
-
-      # Add Angular CLI to the path for the current PowerShell session
-      $env:PATH = "$env:PATH;C:\Users\$env:USERNAME\AppData\Roaming\npm"
-      
-      # Verify Angular CLI installation
-      ng version
     displayName: 'Install Dependencies and Angular CLI'
-    shell: powershell
 
-  - script: |
-      # Build using the globally installed Angular CLI
-      ng build --configuration=production
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Add Angular CLI to the path for the current PowerShell session
+        $env:PATH = "$env:PATH;C:\Users\$env:USERNAME\AppData\Roaming\npm"
 
-      # If the build fails, try using npx
-      If ($LASTEXITCODE -ne 0) {
-        Write-Host "Trying with npx..."
-        npx ng build --configuration=production
-      }
+        # Verify Angular CLI installation
+        ng version
+    displayName: 'Verify Angular CLI'
+
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Build using the globally installed Angular CLI
+        ng build --configuration=production
+
+        # If the build fails, try using npx
+        If ($LASTEXITCODE -ne 0) {
+          Write-Host "Trying with npx..."
+          npx ng build --configuration=production
+        }
     displayName: 'Build Angular App'
-    shell: powershell
 
   - script: |
       echo "Directory after build:"
@@ -61,7 +69,6 @@ steps:
       dir /s /b | findstr dist
     displayName: 'Check Build Output'
     condition: succeededOrFailed()
-    shell: powershell
 
   - task: AzureWebApp@1
     inputs:
