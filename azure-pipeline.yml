@@ -39,9 +39,9 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        # Add Angular CLI to the path for the current PowerShell session
-        $env:PATH = "$env:PATH;C:\Users\$env:USERNAME\AppData\Roaming\npm"
-
+        # Ensure Angular CLI is installed
+        npm install -g @angular/cli
+        
         # Verify Angular CLI installation
         ng version
     displayName: 'Verify Angular CLI'
@@ -50,8 +50,8 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        # Add Angular CLI to the path for the current PowerShell session
-        $env:PATH = "$env:PATH;C:\Users\$env:USERNAME\AppData\Roaming\npm"
+        # Ensure Angular CLI is installed
+        npm install -g @angular/cli
 
         # Build using the globally installed Angular CLI
         ng build --configuration=production
