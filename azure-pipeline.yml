@@ -15,8 +15,6 @@ steps:
       node -v
       echo "NPM version:"
       npm -v
-      echo "Current directory:"
-      cd
       echo "Directory contents:"
       dir
     displayName: 'Environment Info'
@@ -29,14 +27,23 @@ steps:
       npm config set fetch-retry-maxtimeout 300000
       npm config set timeout 0
       npm ci
-    displayName: 'Install Dependencies'
+     
+      REM Install Angular CLI globally
+      npm install -g @angular/cli
+     
+      REM Verify Angular CLI is installed
+      ng version
+    displayName: 'Install Dependencies and Angular CLI'
    
   - script: |
-      echo "Contents of package.json:"
-      type package.json
-      echo "Angular.json contents:"
-      type angular.json
-      npm run build --prod
+      REM Build using globally installed Angular CLI
+      ng build --configuration=production
+     
+      REM If the above fails, try using npx
+      IF %ERRORLEVEL% NEQ 0 (
+        echo "Trying with npx..."
+        npx ng build --configuration=production
+      )
     displayName: 'Build Angular App'
    
   - script: |
