@@ -233,17 +233,29 @@ steps:
     displayName: 'Determine Publish Path'
     condition: succeededOrFailed()
   
-  # Publish the build artifacts
-  - publish: $(PublishPath)
-    artifact: drop
+  # Publish the build artifacts - Using the PublishBuildArtifacts task
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(PublishPath)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
     displayName: 'Publish Build Artifacts'
     condition: succeededOrFailed()
   
+  # Download artifacts before deployment
+  - task: DownloadBuildArtifacts@1
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'drop'
+      downloadPath: '$(System.ArtifactsDirectory)'
+    displayName: 'Download Build Artifacts'
+    
   # Deploy the artifact to Azure Web App
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'azure-connection-pfe'
       appName: 'pfe-frontend-app'
-      package: $(Pipeline.Workspace)/drop
+      package: '$(System.ArtifactsDirectory)/drop'
     displayName: 'Deploy to Azure Web App'
     condition: succeeded()
