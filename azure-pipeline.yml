@@ -10,9 +10,16 @@ steps:
     versionSpec: '22.13.1'
 
 - script: |
+    npm config set strict-ssl false
+    npm config set registry https://registry.npmjs.org/
+    npm config set fetch-retries 100
+    npm config set fetch-retry-mintimeout 60000
+    npm config set fetch-retry-maxtimeout 300000
+    npm config set timeout 0
     npm ci
     npm run build --prod
-  displayName: 'Install & Build Angular App'
+  displayName: 'Install & Build Angular App with No Timeout'
+
 
 - task: AzureWebApp@1
   inputs:
