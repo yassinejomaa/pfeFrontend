@@ -2,23 +2,20 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default
 
 steps:
-  - checkout: self
+- task: NodeTool@0
+  inputs:
+    versionSpec: '22.13.1'
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '22.13.1'
-    displayName: 'Install Node.js'
+- script: |
+    npm ci
+    npm run build --prod
+  displayName: 'Install & Build Angular App'
 
-  - script: |
-      npm ci
-      npm run build --prod
-    displayName: 'Install & Build Angular App'
-
-  - task: AzureWebApp@1
-    inputs:
-      azureSubscription: 'azure-connection-pfe'
-      appName: 'pfe-frontend-app'
-      package: '$(System.DefaultWorkingDirectory)/dist/pfe-frontend'
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'azure-connection-pfe'  # your service connection
+    appName: 'pfe-frontend-app'                # your Azure App Service name
+    package: '$(System.DefaultWorkingDirectory)/dist/pfe-frontend'  # adjust if needed
