@@ -21,7 +21,7 @@ steps:
     displayName: 'Environment Info'
   
   - script: |
-      # Install dependencies properly
+      # Install dependencies properly with more verbose output
       echo "Installing dependencies..."
       npm config set strict-ssl false
       npm config set registry https://registry.npmjs.org/
@@ -30,11 +30,21 @@ steps:
       npm config set fetch-retry-maxtimeout 300000
       npm config set timeout 0
       
-      # Clean install to ensure fresh dependencies
-      npm ci
+      # Try a full install instead of npm ci to ensure all peer dependencies are resolved
+      echo "Running npm install instead of npm ci for better dependency resolution..."
+      npm install
+      
+      # Explicitly install the build-angular package
+      echo "Explicitly installing @angular-devkit/build-angular..."
+      npm install --save-dev @angular-devkit/build-angular
       
       # Install Angular CLI locally
+      echo "Installing Angular CLI..."
       npm install @angular/cli
+      
+      # List installed packages to verify
+      echo "Installed packages:"
+      npm list --depth=0
     displayName: 'Install Dependencies'
   
   - task: PowerShell@2
@@ -106,23 +116,54 @@ steps:
         $budgets = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets
         $budgets | ConvertTo-Json
         
-        # Build the Angular app with production configuration and --force flag to bypass warnings
+        # Verify Angular packages are installed
+        echo "Checking if required Angular packages are installed..."
+        $packageJson = Get-Content -Raw package.json | ConvertFrom-Json
+        echo "Angular version: $($packageJson.dependencies.'@angular/core')"
+        
+        # Check if the build-angular package exists in node_modules
+        $buildAngularPath = "node_modules/@angular-devkit/build-angular"
+        if (Test-Path $buildAngularPath) {
+          echo "✅ @angular-devkit/build-angular is installed"
+        } else {
+          echo "⚠️ @angular-devkit/build-angular is NOT found, installing it..."
+          npm install --save-dev @angular-devkit/build-angular
+        }
+        
+        # Try to determine the builder type from angular.json
+        $builderType = $angularJson.projects.pfefrontend.architect.build.builder
+        echo "Builder type from angular.json: $builderType"
+        
+        # Build the Angular app with production configuration and --force flag
         echo "Building Angular app with increased budgets..."
-        npx ng build --configuration=production --force
+        $env:NODE_OPTIONS="--max_old_space_size=8192"
+        
+        # For new Angular projects using application builder
+        if ($builderType -eq "@angular-devkit/build-angular:application") {
+          echo "Using application builder..."
+          npx ng build --configuration=production --force
+        } 
+        # For older Angular projects using browser builder
+        else {
+          echo "Trying browser builder..."
+          npx ng build --configuration=production --force
+        }
         
         # Check exit code
         if ($LASTEXITCODE -ne 0) {
           echo "First build attempt failed with exit code $LASTEXITCODE"
-          echo "Trying alternative build approach with different configuration..."
-          
-          # Try disabling budget checks entirely as a last resort
-          echo "Attempting build with budget checks disabled..."
-          $env:NODE_OPTIONS="--max_old_space_size=4096"
-          npx ng build --configuration=production --force
+          echo "Trying with direct npx command..."
+          npx -p @angular/cli ng build --configuration=production --force
           
           if ($LASTEXITCODE -ne 0) {
-            echo "All build attempts failed"
-            exit 1
+            echo "Second build attempt failed with exit code $LASTEXITCODE"
+            echo "Trying with browser builder as fallback..."
+            npx ng build --configuration=production --force --builder=@angular-devkit/build-angular:browser
+            
+            if ($LASTEXITCODE -ne 0) {
+              echo "All build attempts failed"
+              exit 1
+            }
           }
         }
     displayName: 'Build Angular App'
