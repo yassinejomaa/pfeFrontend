@@ -8,7 +8,7 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '22.13.1'
-    displayName: 'Install node.js'
+    displayName: 'Install Node.js'
 
   - task: PowerShell@2
     inputs:
@@ -71,10 +71,16 @@ steps:
     displayName: 'Check Build Output'
     condition: succeededOrFailed()
 
+  # Publish the dist folder as a build artifact
+  - publish: $(System.DefaultWorkingDirectory)/dist/pfefrontend
+    artifact: drop
+    displayName: 'Publish Build Artifacts'
+
+  # Deploy the artifact to Azure Web App
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'azure-connection-pfe'
       appName: 'pfe-frontend-app'
-      package: '$(System.DefaultWorkingDirectory)/dist/pfefrontend'  # Ensure this path is correct
+      package: $(Build.ArtifactStagingDirectory)/drop  # Use the published artifact
     displayName: 'Deploy to Azure Web App'
     condition: succeeded()
