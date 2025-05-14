@@ -41,26 +41,23 @@ steps:
       script: |
         # Ensure Angular CLI is installed
         npm install -g @angular/cli
-        
+
         # Verify Angular CLI installation
         ng version
     displayName: 'Verify Angular CLI'
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        # Ensure Angular CLI is installed
-        npm install -g @angular/cli
+  - script: |
+      # Install all node dependencies (including @angular-devkit)
+      npm install
 
-        # Build using the globally installed Angular CLI
-        ng build --configuration=production
+      # Build using the globally installed Angular CLI
+      ng build --configuration=production
 
-        # If the build fails, try using npx
-        If ($LASTEXITCODE -ne 0) {
-          Write-Host "Trying with npx..."
-          npx ng build --configuration=production
-        }
+      # If the build fails, try using npx
+      If ($LASTEXITCODE -ne 0) {
+        Write-Host "Trying with npx..."
+        npx ng build --configuration=production
+      }
     displayName: 'Build Angular App'
 
   - script: |
