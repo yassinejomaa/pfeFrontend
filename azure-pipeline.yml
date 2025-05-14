@@ -18,6 +18,7 @@ steps:
       echo "Directory contents:"
       dir
     displayName: 'Environment Info'
+    shell: powershell
 
   - script: |
       npm config set strict-ssl false
@@ -28,26 +29,28 @@ steps:
       npm config set timeout 0
       npm ci
 
-      REM Install Angular CLI globally
+      # Install Angular CLI globally
       npm install -g @angular/cli
 
-      REM Add the global npm path to environment variables explicitly
-      set PATH=%PATH%;C:\Users\%USERNAME%\AppData\Roaming\npm
-
-      REM Verify Angular CLI is installed
+      # Add Angular CLI to the path for the current PowerShell session
+      $env:PATH = "$env:PATH;C:\Users\$env:USERNAME\AppData\Roaming\npm"
+      
+      # Verify Angular CLI installation
       ng version
     displayName: 'Install Dependencies and Angular CLI'
+    shell: powershell
 
   - script: |
-      REM Build using globally installed Angular CLI
+      # Build using the globally installed Angular CLI
       ng build --configuration=production
 
-      REM If the above fails, try using npx
-      IF %ERRORLEVEL% NEQ 0 (
-        echo "Trying with npx..."
+      # If the build fails, try using npx
+      If ($LASTEXITCODE -ne 0) {
+        Write-Host "Trying with npx..."
         npx ng build --configuration=production
-      )
+      }
     displayName: 'Build Angular App'
+    shell: powershell
 
   - script: |
       echo "Directory after build:"
@@ -58,6 +61,7 @@ steps:
       dir /s /b | findstr dist
     displayName: 'Check Build Output'
     condition: succeededOrFailed()
+    shell: powershell
 
   - task: AzureWebApp@1
     inputs:
