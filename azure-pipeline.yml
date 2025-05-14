@@ -134,35 +134,41 @@ steps:
         $builderType = $angularJson.projects.pfefrontend.architect.build.builder
         echo "Builder type from angular.json: $builderType"
         
-        # Build the Angular app with production configuration and --force flag
+        # Build the Angular app with production configuration
         echo "Building Angular app with increased budgets..."
         $env:NODE_OPTIONS="--max_old_space_size=8192"
         
         # For new Angular projects using application builder
         if ($builderType -eq "@angular-devkit/build-angular:application") {
           echo "Using application builder..."
-          npx ng build --configuration=production --force
+          npx ng build --configuration=production
         } 
         # For older Angular projects using browser builder
         else {
           echo "Trying browser builder..."
-          npx ng build --configuration=production --force
+          npx ng build --configuration=production
         }
         
         # Check exit code
         if ($LASTEXITCODE -ne 0) {
           echo "First build attempt failed with exit code $LASTEXITCODE"
           echo "Trying with direct npx command..."
-          npx -p @angular/cli ng build --configuration=production --force
+          npx -p @angular/cli ng build --configuration=production
           
           if ($LASTEXITCODE -ne 0) {
             echo "Second build attempt failed with exit code $LASTEXITCODE"
-            echo "Trying with browser builder as fallback..."
-            npx ng build --configuration=production --force --builder=@angular-devkit/build-angular:browser
+            echo "Trying a build with --no-progress option..."
+            npx ng build --configuration=production --no-progress
             
             if ($LASTEXITCODE -ne 0) {
-              echo "All build attempts failed"
-              exit 1
+              echo "Third build attempt failed with exit code $LASTEXITCODE"
+              echo "Trying one last approach with browser builder..."
+              npx ng build --configuration=production --project pfefrontend
+              
+              if ($LASTEXITCODE -ne 0) {
+                echo "All build attempts failed"
+                exit 1
+              }
             }
           }
         }
