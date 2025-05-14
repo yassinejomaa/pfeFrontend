@@ -177,7 +177,6 @@ steps:
     displayName: 'Build Angular App'
 
 - task: PowerShell@2
-  displayName: 'Inspect Build Output'
   inputs:
     targetType: 'inline'
     script: |
@@ -210,11 +209,11 @@ steps:
         echo "Looking for any output directories:"
         dir /s /b | findstr dist
       }
-  condition: succeededOrFailed()
+    displayName: 'Inspect Build Output'
+    condition: succeededOrFailed()
 
 # Determine the correct path and prepare for publishing
 - task: PowerShell@2
-  displayName: 'Prepare for Publishing'
   inputs:
     targetType: 'inline'
     script: |
@@ -254,7 +253,8 @@ steps:
       
       # Create variable for publish task
       Write-Host "##vso[task.setvariable variable=PublishPath]$sourceDir"
-  condition: succeededOrFailed()
+    displayName: 'Prepare for Publishing'
+    condition: succeededOrFailed()
 
 # Publish the build artifacts from the browser directory
 - task: PublishBuildArtifacts@1
@@ -267,74 +267,18 @@ steps:
 
 # Download artifacts before deployment
 - task: DownloadBuildArtifacts@1
-  displayName: 'Download Build Artifacts'
   inputs:
     buildType: 'current'
     downloadType: 'single'
     artifactName: 'drop'
     downloadPath: '$(System.ArtifactsDirectory)'
+  displayName: 'Download Build Artifacts'
 
-# Fix deployment structure - NEW STEP
-- task: PowerShell@2
-  displayName: 'Fix Deployment Structure'
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Create deployment directory if not exists
-      $deployDir = "$(System.ArtifactsDirectory)/WebAppDeploy"
-      echo "Creating deployment directory at: $deployDir"
-      
-      if (Test-Path $deployDir) {
-        Remove-Item -Path $deployDir -Recurse -Force
-      }
-      
-      New-Item -ItemType Directory -Path $deployDir -Force
-      
-      # Copy all files from drop folder to the deployment directory
-      echo "Copying files from $(System.ArtifactsDirectory)/drop to $deployDir"
-      Copy-Item -Path "$(System.ArtifactsDirectory)/drop/*" -Destination $deployDir -Recurse -Force
-      
-      # Create web.config file for Angular routing
-      $webConfigContent = @"
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <system.webServer>
-    <rewrite>
-      <rules>
-        <rule name="Angular Routes" stopProcessing="true">
-          <match url=".*" />
-          <conditions logicalGrouping="MatchAll">
-            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
-            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
-          </conditions>
-          <action type="Rewrite" url="index.html" />
-        </rule>
-      </rules>
-    </rewrite>
-    <staticContent>
-      <mimeMap fileExtension=".json" mimeType="application/json" />
-      <mimeMap fileExtension=".woff" mimeType="application/font-woff" />
-      <mimeMap fileExtension=".woff2" mimeType="application/font-woff2" />
-    </staticContent>
-  </system.webServer>
-</configuration>
-"@
-      
-      echo "Creating web.config file for Angular routing"
-      Set-Content -Path "$deployDir/web.config" -Value $webConfigContent
-      
-      # Show the final deployment structure
-      echo "Final deployment directory structure:"
-      dir $deployDir -Recurse | Select-Object FullName | Format-Table -AutoSize
-      
-      # Set variable for the deploy task
-      Write-Host "##vso[task.setvariable variable=DeploymentPath]$deployDir"
-
-# Deploy the artifact to Azure Web App with the fixed structure
+# Deploy the artifact to Azure Web App
 - task: AzureWebApp@1
-  displayName: 'Deploy to Azure Web App'
   inputs:
     azureSubscription: 'azure-connection-pfe'
     appName: 'pfe-frontend-app'
-    package: '$(DeploymentPath)'
+    package: '$(System.ArtifactsDirectory)/drop'
+    displayName: 'Deploy to Azure Web App'
   condition: succeeded()
