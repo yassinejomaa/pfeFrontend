@@ -27,11 +27,13 @@ steps:
       npm config set fetch-retry-maxtimeout 300000
       npm config set timeout 0
       npm ci
-     
-      REM Install Angular CLI globally and locally
+
+      REM Install Angular CLI globally
       npm install -g @angular/cli
-      npm install @angular/cli --save-dev  # Local installation too
-     
+
+      REM Add the global npm path to environment variables explicitly
+      set PATH=%PATH%;C:\Users\%USERNAME%\AppData\Roaming\npm
+
       REM Verify Angular CLI is installed
       ng version
     displayName: 'Install Dependencies and Angular CLI'
@@ -39,7 +41,7 @@ steps:
   - script: |
       REM Build using globally installed Angular CLI
       ng build --configuration=production
-     
+
       REM If the above fails, try using npx
       IF %ERRORLEVEL% NEQ 0 (
         echo "Trying with npx..."
@@ -61,6 +63,6 @@ steps:
     inputs:
       azureSubscription: 'azure-connection-pfe'
       appName: 'pfe-frontend-app'
-      package: '$(System.DefaultWorkingDirectory)/dist/*'
+      package: '$(System.DefaultWorkingDirectory)/dist/pfe-frontend'
     displayName: 'Deploy to Azure Web App'
     condition: succeeded()
