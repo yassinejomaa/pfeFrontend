@@ -1,15 +1,15 @@
 trigger:
   - main
- 
+
 pool:
   name: Default
- 
+
 steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '22.13.1'
     displayName: 'Install Node.js'
- 
+
   - script: |
       echo "Node version:"
       node -v
@@ -18,7 +18,7 @@ steps:
       echo "Directory contents:"
       dir
     displayName: 'Environment Info'
-   
+
   - script: |
       npm config set strict-ssl false
       npm config set registry https://registry.npmjs.org/
@@ -28,13 +28,14 @@ steps:
       npm config set timeout 0
       npm ci
      
-      REM Install Angular CLI globally
+      REM Install Angular CLI globally and locally
       npm install -g @angular/cli
+      npm install @angular/cli --save-dev  # Local installation too
      
       REM Verify Angular CLI is installed
       ng version
     displayName: 'Install Dependencies and Angular CLI'
-   
+
   - script: |
       REM Build using globally installed Angular CLI
       ng build --configuration=production
@@ -45,7 +46,7 @@ steps:
         npx ng build --configuration=production
       )
     displayName: 'Build Angular App'
-   
+
   - script: |
       echo "Directory after build:"
       dir
@@ -55,7 +56,7 @@ steps:
       dir /s /b | findstr dist
     displayName: 'Check Build Output'
     condition: succeededOrFailed()
- 
+
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'azure-connection-pfe'
