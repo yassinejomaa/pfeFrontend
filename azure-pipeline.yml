@@ -16,11 +16,11 @@ steps:
       echo "NPM version:"
       npm -v
       echo "Current directory:"
-      pwd
+      cd
       echo "Directory contents:"
-      ls -la
+      dir
     displayName: 'Environment Info'
- 
+   
   - script: |
       npm config set strict-ssl false
       npm config set registry https://registry.npmjs.org/
@@ -32,20 +32,20 @@ steps:
     displayName: 'Install Dependencies'
    
   - script: |
-      echo "Contents of package.json build script:"
-      cat package.json | grep -A 5 \"scripts\"
-      echo "Angular.json output path:"
-      cat angular.json | grep -A 3 outputPath
-      npm run build --prod -- --verbose
-    displayName: 'Build Angular App with Verbose Output'
+      echo "Contents of package.json:"
+      type package.json
+      echo "Angular.json contents:"
+      type angular.json
+      npm run build --prod
+    displayName: 'Build Angular App'
    
   - script: |
       echo "Directory after build:"
-      ls -la
+      dir
       echo "Dist directory contents (if exists):"
-      ls -la dist || echo "Dist directory not found"
+      dir dist 2>nul || echo "Dist directory not found"
       echo "Looking for any dist-like directories:"
-      find . -name "dist*" -type d
+      dir /s /b | findstr dist
     displayName: 'Check Build Output'
     condition: succeededOrFailed()
  
