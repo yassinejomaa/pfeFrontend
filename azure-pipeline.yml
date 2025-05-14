@@ -1,13 +1,15 @@
 trigger:
   - main
+
 pool:
   name: Default
+
 steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '22.13.1'
     displayName: 'Install Node.js'
-  
+
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
@@ -19,7 +21,7 @@ steps:
         echo "Directory contents:"
         dir
     displayName: 'Environment Info'
-  
+
   - script: |
       # Install dependencies properly with more verbose output
       echo "Installing dependencies..."
@@ -46,7 +48,7 @@ steps:
       echo "Installed packages:"
       npm list --depth=0
     displayName: 'Install Dependencies'
-  
+
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
@@ -105,7 +107,7 @@ steps:
           echo "WARNING: angular.json file not found!"
         }
     displayName: 'Fix Angular Configuration'
-  
+
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
@@ -203,45 +205,63 @@ steps:
         }
     displayName: 'Inspect Build Output'
     condition: succeededOrFailed()
-  
-  # Publish the build artifacts - adjusted to handle either location
+
+  # Install Express server
+  - script: |
+      echo "Installing Express..."
+      npm install express --save
+    displayName: 'Install Express Web Server'
+
+  # Copy server.js to artifact staging
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
+      Contents: 'server.js'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy server.js to Artifact Staging'
+
+  # Copy Angular build output to staging
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: 'dist/pfefrontend'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/dist/pfefrontend'
+    displayName: 'Copy Angular Build to Artifact Staging'
+
+  # Determine publish path (not used directly now, but retained for logging/debugging)
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
       script: |
-        # Determine the correct path to publish
         $distPath = "dist/pfefrontend"
         if (Test-Path $distPath) {
           echo "Publishing from expected path: $distPath"
         } elseif (Test-Path "dist") {
-          # Find the first directory in dist
           $firstDir = Get-ChildItem -Path "dist" -Directory | Select-Object -First 1
           if ($firstDir) {
             $distPath = "dist/$($firstDir.Name)"
             echo "Publishing from alternate path: $distPath"
           } else {
-            echo "Publishing from dist directory itself"
             $distPath = "dist"
+            echo "Publishing from dist directory itself"
           }
         } else {
           echo "ERROR: Cannot find build output directory"
           exit 1
         }
-        
-        # Create variable for publish task
         Write-Host "##vso[task.setvariable variable=PublishPath]$distPath"
     displayName: 'Determine Publish Path'
     condition: succeededOrFailed()
-  
+
   # Publish the build artifacts - Using the PublishBuildArtifacts task
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(PublishPath)'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'drop'
       publishLocation: 'Container'
     displayName: 'Publish Build Artifacts'
     condition: succeededOrFailed()
-  
+
   # Download artifacts before deployment
   - task: DownloadBuildArtifacts@1
     inputs:
@@ -251,7 +271,7 @@ steps:
       downloadPath: '$(System.ArtifactsDirectory)'
     displayName: 'Download Build Artifacts'
     
-  # Deploy the artifact to Azure Web App
+  # Deploy to Azure Web App
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'azure-connection-pfe'
