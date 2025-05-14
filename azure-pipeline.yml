@@ -8,7 +8,7 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '22.13.1'
-    displayName: 'Install Node.js'
+    displayName: 'Install node.js'
 
   - task: PowerShell@2
     inputs:
