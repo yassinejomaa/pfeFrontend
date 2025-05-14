@@ -50,6 +50,10 @@ steps:
       # Install all node dependencies
       npm install
 
+      # Check the current directory (make sure it's correct)
+      echo "Current directory:"
+      dir
+
       # Build the Angular app
       ng build --configuration=production
 
