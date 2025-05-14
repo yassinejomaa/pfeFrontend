@@ -47,10 +47,10 @@ steps:
     displayName: 'Verify Angular CLI'
 
   - script: |
-      # Install all node dependencies (including @angular-devkit)
+      # Install all node dependencies
       npm install
 
-      # Build using the globally installed Angular CLI
+      # Build the Angular app
       ng build --configuration=production
 
       # If the build fails, try using npx
@@ -61,6 +61,7 @@ steps:
     displayName: 'Build Angular App'
 
   - script: |
+      # List contents of dist directory to ensure output exists
       echo "Directory after build:"
       dir
       echo "Dist directory contents (if exists):"
@@ -74,6 +75,6 @@ steps:
     inputs:
       azureSubscription: 'azure-connection-pfe'
       appName: 'pfe-frontend-app'
-      package: '$(System.DefaultWorkingDirectory)/dist/pfe-frontend'
+      package: '$(System.DefaultWorkingDirectory)/dist/pfefrontend'  # Ensure this path is correct
     displayName: 'Deploy to Azure Web App'
     condition: succeeded()
