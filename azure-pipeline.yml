@@ -1,261 +1,284 @@
 trigger:
-  - main
+- main
+
 pool:
   name: Default
+
 steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '22.13.1'
-    displayName: 'Install Node.js'
-  
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        echo "Node version:"
-        node -v
-        echo "NPM version:"
-        npm -v
-        echo "Directory contents:"
-        dir
+- task: NodeTool@0
+  inputs:
+    versionSpec: '22.13.1'
+  displayName: 'Install Node.js'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "Node version:"
+      node -v
+      echo "NPM version:"
+      npm -v
+      echo "Directory contents:"
+      dir
     displayName: 'Environment Info'
-  
-  - script: |
-      # Install dependencies properly with more verbose output
-      echo "Installing dependencies..."
-      npm config set strict-ssl false
-      npm config set registry https://registry.npmjs.org/
-      npm config set fetch-retries 100
-      npm config set fetch-retry-mintimeout 60000
-      npm config set fetch-retry-maxtimeout 300000
-      npm config set timeout 0
-      
-      # Try a full install instead of npm ci to ensure all peer dependencies are resolved
-      echo "Running npm install instead of npm ci for better dependency resolution..."
-      npm install
-      
-      # Explicitly install the build-angular package
-      echo "Explicitly installing @angular-devkit/build-angular..."
-      npm install --save-dev @angular-devkit/build-angular
-      
-      # Install Angular CLI locally
-      echo "Installing Angular CLI..."
-      npm install @angular/cli
-      
-      # List installed packages to verify
-      echo "Installed packages:"
-      npm list --depth=0
-    displayName: 'Install Dependencies'
-  
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        # Fix potential issues in angular.json
-        echo "Checking and fixing angular.json..."
-        $angularJsonPath = "angular.json"
-        if (Test-Path $angularJsonPath) {
-          # Read and parse angular.json
-          $angularJsonContent = Get-Content -Raw $angularJsonPath
-          $angularJson = $angularJsonContent | ConvertFrom-Json
-          
-          # Output original configuration for reference
-          echo "Original angular.json structure:"
-          echo $angularJsonContent
-          
-          # Fix budget issues
-          echo "Increasing budget limits to accommodate your application size..."
-          if ($angularJson.projects.pfefrontend.architect.build.configurations.production.budgets) {
-            # Update initial budget (increase to 10MB)
-            $initialBudget = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets | 
-                Where-Object { $_.type -eq "initial" } | Select-Object -First 1
-            if ($initialBudget) {
-              $initialBudget.maximumWarning = "5MB"
-              $initialBudget.maximumError = "10MB"
-              echo "Updated initial budget to 10MB"
-            }
-            
-            # Update component style budgets (increase to 100kB)
-            $styleBudgets = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets | 
-                Where-Object { $_.type -eq "anyComponentStyle" }
-            if ($styleBudgets) {
-              foreach ($budget in $styleBudgets) {
-                $budget.maximumWarning = "50kB"
-                $budget.maximumError = "100kB"
-              }
-              echo "Updated component style budgets to 100kB"
-            }
-          } else {
-            echo "Warning: Could not find budgets configuration in angular.json"
+
+- script: |
+    # Install dependencies properly with more verbose output
+    echo "Installing dependencies..."
+    npm config set strict-ssl false
+    npm config set registry https://registry.npmjs.org/
+    npm config set fetch-retries 100
+    npm config set fetch-retry-mintimeout 60000
+    npm config set fetch-retry-maxtimeout 300000
+    npm config set timeout 0
+
+    # Try a full install instead of npm ci to ensure all peer dependencies are resolved
+    echo "Running npm install instead of npm ci for better dependency resolution..."
+    npm install
+
+    # Explicitly install the build-angular package
+    echo "Explicitly installing @angular-devkit/build-angular..."
+    npm install --save-dev @angular-devkit/build-angular
+
+    # Install Angular CLI locally
+    echo "Installing Angular CLI..."
+    npm install @angular/cli
+
+    # List installed packages to verify
+    echo "Installed packages:"
+    npm list --depth=0
+  displayName: 'Install Dependencies'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Fix potential issues in angular.json
+      echo "Checking and fixing angular.json..."
+      $angularJsonPath = "angular.json"
+      if (Test-Path $angularJsonPath) {
+        # Read and parse angular.json
+        $angularJsonContent = Get-Content -Raw $angularJsonPath
+        $angularJson = $angularJsonContent | ConvertFrom-Json
+
+        # Output original configuration for reference
+        echo "Original angular.json structure:"
+        echo $angularJsonContent
+        
+        # Fix budget issues
+        echo "Increasing budget limits to accommodate your application size..."
+        if ($angularJson.projects.pfefrontend.architect.build.configurations.production.budgets) {
+          # Update initial budget (increase to 10MB)
+          $initialBudget = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets | 
+              Where-Object { $_.type -eq "initial" } | Select-Object -First 1
+          if ($initialBudget) {
+            $initialBudget.maximumWarning = "5MB"
+            $initialBudget.maximumError = "10MB"
+            echo "Updated initial budget to 10MB"
           }
           
-          # Ensure scripts section is properly formatted
-          if ($angularJson.projects.pfefrontend.architect.build.options.scripts) {
-            echo "Checking scripts configuration..."
-            # Keep the scripts simple
-            $angularJson.projects.pfefrontend.architect.build.options.scripts = @(
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            )
+          # Update component style budgets (increase to 100kB)
+          $styleBudgets = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets | 
+              Where-Object { $_.type -eq "anyComponentStyle" }
+          if ($styleBudgets) {
+            foreach ($budget in $styleBudgets) {
+              $budget.maximumWarning = "50kB"
+              $budget.maximumError = "100kB"
+            }
+            echo "Updated component style budgets to 100kB"
           }
-          
-          # Save the fixed configuration back
-          $angularJson | ConvertTo-Json -Depth 10 | Set-Content $angularJsonPath
-          echo "Angular.json has been updated with increased budgets."
         } else {
-          echo "WARNING: angular.json file not found!"
+          echo "Warning: Could not find budgets configuration in angular.json"
         }
+        
+        # Ensure scripts section is properly formatted
+        if ($angularJson.projects.pfefrontend.architect.build.options.scripts) {
+          echo "Checking scripts configuration..."
+          # Keep the scripts simple
+          $angularJson.projects.pfefrontend.architect.build.options.scripts = @(
+            "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+          )
+        }
+        
+        # Save the fixed configuration back
+        $angularJson | ConvertTo-Json -Depth 10 | Set-Content $angularJsonPath
+        echo "Angular.json has been updated with increased budgets."
+      } else {
+        echo "WARNING: angular.json file not found!"
+      }
     displayName: 'Fix Angular Configuration'
-  
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        # Inspect angular.json again to confirm changes
-        $angularJson = Get-Content -Raw angular.json | ConvertFrom-Json
-        echo "Updated budget values:"
-        $budgets = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets
-        $budgets | ConvertTo-Json
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Inspect angular.json again to confirm changes
+      $angularJson = Get-Content -Raw angular.json | ConvertFrom-Json
+      echo "Updated budget values:"
+      $budgets = $angularJson.projects.pfefrontend.architect.build.configurations.production.budgets
+      $budgets | ConvertTo-Json
+
+      # Verify Angular packages are installed
+      echo "Checking if required Angular packages are installed..."
+      $packageJson = Get-Content -Raw package.json | ConvertFrom-Json
+      echo "Angular version: $($packageJson.dependencies.'@angular/core')"
+
+      # Check if the build-angular package exists in node_modules
+      $buildAngularPath = "node_modules/@angular-devkit/build-angular"
+      if (Test-Path $buildAngularPath) {
+        echo "✅ @angular-devkit/build-angular is installed"
+      } else {
+        echo "⚠️ @angular-devkit/build-angular is NOT found, installing it..."
+        npm install --save-dev @angular-devkit/build-angular
+      }
+
+      # Try to determine the builder type from angular.json
+      $builderType = $angularJson.projects.pfefrontend.architect.build.builder
+      echo "Builder type from angular.json: $builderType"
+
+      # Build the Angular app with production configuration
+      echo "Building Angular app with increased budgets..."
+      $env:NODE_OPTIONS="--max_old_space_size=8192"
+
+      # For new Angular projects using application builder
+      if ($builderType -eq "@angular-devkit/build-angular:application") {
+        echo "Using application builder..."
+        npx ng build --configuration=production
+      } 
+      # For older Angular projects using browser builder
+      else {
+        echo "Trying browser builder..."
+        npx ng build --configuration=production
+      }
+
+      # Check exit code
+      if ($LASTEXITCODE -ne 0) {
+        echo "First build attempt failed with exit code $LASTEXITCODE"
+        echo "Trying with direct npx command..."
+        npx -p @angular/cli ng build --configuration=production
         
-        # Verify Angular packages are installed
-        echo "Checking if required Angular packages are installed..."
-        $packageJson = Get-Content -Raw package.json | ConvertFrom-Json
-        echo "Angular version: $($packageJson.dependencies.'@angular/core')"
-        
-        # Check if the build-angular package exists in node_modules
-        $buildAngularPath = "node_modules/@angular-devkit/build-angular"
-        if (Test-Path $buildAngularPath) {
-          echo "✅ @angular-devkit/build-angular is installed"
-        } else {
-          echo "⚠️ @angular-devkit/build-angular is NOT found, installing it..."
-          npm install --save-dev @angular-devkit/build-angular
-        }
-        
-        # Try to determine the builder type from angular.json
-        $builderType = $angularJson.projects.pfefrontend.architect.build.builder
-        echo "Builder type from angular.json: $builderType"
-        
-        # Build the Angular app with production configuration
-        echo "Building Angular app with increased budgets..."
-        $env:NODE_OPTIONS="--max_old_space_size=8192"
-        
-        # For new Angular projects using application builder
-        if ($builderType -eq "@angular-devkit/build-angular:application") {
-          echo "Using application builder..."
-          npx ng build --configuration=production
-        } 
-        # For older Angular projects using browser builder
-        else {
-          echo "Trying browser builder..."
-          npx ng build --configuration=production
-        }
-        
-        # Check exit code
         if ($LASTEXITCODE -ne 0) {
-          echo "First build attempt failed with exit code $LASTEXITCODE"
-          echo "Trying with direct npx command..."
-          npx -p @angular/cli ng build --configuration=production
+          echo "Second build attempt failed with exit code $LASTEXITCODE"
+          echo "Trying a build with --no-progress option..."
+          npx ng build --configuration=production --no-progress
           
           if ($LASTEXITCODE -ne 0) {
-            echo "Second build attempt failed with exit code $LASTEXITCODE"
-            echo "Trying a build with --no-progress option..."
-            npx ng build --configuration=production --no-progress
+            echo "Third build attempt failed with exit code $LASTEXITCODE"
+            echo "Trying one last approach with browser builder..."
+            npx ng build --configuration=production --project pfefrontend
             
             if ($LASTEXITCODE -ne 0) {
-              echo "Third build attempt failed with exit code $LASTEXITCODE"
-              echo "Trying one last approach with browser builder..."
-              npx ng build --configuration=production --project pfefrontend
-              
-              if ($LASTEXITCODE -ne 0) {
-                echo "All build attempts failed"
-                exit 1
-              }
+              echo "All build attempts failed"
+              exit 1
             }
           }
         }
+      }
     displayName: 'Build Angular App'
-    
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        # Check build output in great detail
-        echo "Build output inspection:"
-        echo "Current directory:"
-        dir
-        
-        # Check for dist directory
-        if (Test-Path dist) {
-          echo "Dist directory exists:"
-          dir dist
-          # Check for pfefrontend subdirectory
-          if (Test-Path dist/pfefrontend) {
-            echo "pfefrontend directory exists:"
-            dir dist/pfefrontend
-          } else {
-            echo "WARNING: dist exists but pfefrontend subdirectory not found"
-            echo "Contents of dist:"
-            dir dist
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Check build output in great detail
+      echo "Build output inspection:"
+      echo "Current directory:"
+      dir
+
+      # Check for dist directory
+      if (Test-Path dist) {
+        echo "Dist directory exists:"
+        dir dist
+        # Check for pfefrontend subdirectory
+        if (Test-Path dist/pfefrontend) {
+          echo "pfefrontend directory exists:"
+          dir dist/pfefrontend
+          
+          # Check for browser directory
+          if (Test-Path dist/pfefrontend/browser) {
+            echo "browser directory exists:"
+            dir dist/pfefrontend/browser
           }
         } else {
-          echo "WARNING: dist directory not found"
-          echo "Looking for any output directories:"
-          dir /s /b | findstr dist
+          echo "WARNING: dist exists but pfefrontend subdirectory not found"
+          echo "Contents of dist:"
+          dir dist
         }
+      } else {
+        echo "WARNING: dist directory not found"
+        echo "Looking for any output directories:"
+        dir /s /b | findstr dist
+      }
     displayName: 'Inspect Build Output'
     condition: succeededOrFailed()
-  
-  # Publish the build artifacts - adjusted to handle either location
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        # Determine the correct path to publish
-        $distPath = "dist/pfefrontend"
-        if (Test-Path $distPath) {
-          echo "Publishing from expected path: $distPath"
+
+# Determine the correct path and prepare for publishing
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Correctly identify the browser subfolder
+      $sourceDir = "dist/pfefrontend/browser"
+      
+      # Verify if the browser directory exists
+      if (Test-Path $sourceDir) {
+        echo "Found browser directory at: $sourceDir"
+      } else {
+        echo "Browser directory not found, checking for alternatives..."
+        
+        # Try to find alternative paths
+        if (Test-Path "dist/pfefrontend") {
+          $firstSubDir = Get-ChildItem -Path "dist/pfefrontend" -Directory | Select-Object -First 1
+          if ($firstSubDir) {
+            $sourceDir = "dist/pfefrontend/$($firstSubDir.Name)"
+            echo "Using alternative directory: $sourceDir"
+          } else {
+            $sourceDir = "dist/pfefrontend"
+            echo "Using pfefrontend directory directly: $sourceDir"
+          }
         } elseif (Test-Path "dist") {
-          # Find the first directory in dist
           $firstDir = Get-ChildItem -Path "dist" -Directory | Select-Object -First 1
           if ($firstDir) {
-            $distPath = "dist/$($firstDir.Name)"
-            echo "Publishing from alternate path: $distPath"
+            $sourceDir = "dist/$($firstDir.Name)"
+            echo "Using first directory in dist: $sourceDir"
           } else {
-            echo "Publishing from dist directory itself"
-            $distPath = "dist"
+            $sourceDir = "dist"
+            echo "Using dist directory directly: $sourceDir"
           }
         } else {
-          echo "ERROR: Cannot find build output directory"
+          echo "ERROR: Cannot find any suitable build output directory"
           exit 1
         }
-        
-        # Create variable for publish task
-        Write-Host "##vso[task.setvariable variable=PublishPath]$distPath"
-    displayName: 'Determine Publish Path'
+      }
+      
+      # Create variable for publish task
+      Write-Host "##vso[task.setvariable variable=PublishPath]$sourceDir"
+    displayName: 'Prepare for Publishing'
     condition: succeededOrFailed()
-  
-  # Publish the build artifacts - Using the PublishBuildArtifacts task
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(PublishPath)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
-    displayName: 'Publish Build Artifacts'
-    condition: succeededOrFailed()
-  
-  # Download artifacts before deployment
-  - task: DownloadBuildArtifacts@1
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'drop'
-      downloadPath: '$(System.ArtifactsDirectory)'
-    displayName: 'Download Build Artifacts'
-    
-  # Deploy the artifact to Azure Web App
-  - task: AzureWebApp@1
-    inputs:
-      azureSubscription: 'azure-connection-pfe'
-      appName: 'pfe-frontend-app'
-      package: '$(System.ArtifactsDirectory)/drop'
+
+# Publish the build artifacts from the browser directory
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(PublishPath)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish Build Artifacts'
+  condition: succeededOrFailed()
+
+# Download artifacts before deployment
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'drop'
+    downloadPath: '$(System.ArtifactsDirectory)'
+  displayName: 'Download Build Artifacts'
+
+# Deploy the artifact to Azure Web App
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'azure-connection-pfe'
+    appName: 'pfe-frontend-app'
+    package: '$(System.ArtifactsDirectory)/drop'
     displayName: 'Deploy to Azure Web App'
-    condition: succeeded()
+  condition: succeeded()
