@@ -1,28 +1,58 @@
 trigger:
-- main
-
+  - main
+ 
 pool:
   name: Default
-
+ 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '22.13.1'
-
-- script: |
-    npm config set strict-ssl false
-    npm config set registry https://registry.npmjs.org/
-    npm config set fetch-retries 100
-    npm config set fetch-retry-mintimeout 60000
-    npm config set fetch-retry-maxtimeout 300000
-    npm config set timeout 0
-    npm ci
-    npm run build --prod
-  displayName: 'Install & Build Angular App with No Timeout'
-
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'azure-connection-pfe'  # your service connection
-    appName: 'pfe-frontend-app'                # your Azure App Service name
-    package: '$(System.DefaultWorkingDirectory)/dist/pfe-frontend'  # adjust if needed
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '22.13.1'
+    displayName: 'Install Node.js'
+ 
+  - script: |
+      echo "Node version:"
+      node -v
+      echo "NPM version:"
+      npm -v
+      echo "Current directory:"
+      pwd
+      echo "Directory contents:"
+      ls -la
+    displayName: 'Environment Info'
+ 
+  - script: |
+      npm config set strict-ssl false
+      npm config set registry https://registry.npmjs.org/
+      npm config set fetch-retries 100
+      npm config set fetch-retry-mintimeout 60000
+      npm config set fetch-retry-maxtimeout 300000
+      npm config set timeout 0
+      npm ci
+    displayName: 'Install Dependencies'
+   
+  - script: |
+      echo "Contents of package.json build script:"
+      cat package.json | grep -A 5 \"scripts\"
+      echo "Angular.json output path:"
+      cat angular.json | grep -A 3 outputPath
+      npm run build --prod -- --verbose
+    displayName: 'Build Angular App with Verbose Output'
+   
+  - script: |
+      echo "Directory after build:"
+      ls -la
+      echo "Dist directory contents (if exists):"
+      ls -la dist || echo "Dist directory not found"
+      echo "Looking for any dist-like directories:"
+      find . -name "dist*" -type d
+    displayName: 'Check Build Output'
+    condition: succeededOrFailed()
+ 
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'azure-connection-pfe'
+      appName: 'pfe-frontend-app'
+      package: '$(System.DefaultWorkingDirectory)/dist/*'
+    displayName: 'Deploy to Azure Web App'
+    condition: succeeded()
