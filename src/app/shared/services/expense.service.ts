@@ -36,17 +36,33 @@ predictCategoy(product :any){
 
 }
 
-recommendation(expenses: string[]): Observable<any> {
-  const payload = {
-    expenses: expenses
-  };
+// recommendation(expenses: string[]): Observable<any> {
+//   const payload = {
+//     expenses: expenses
+//   };
 
-  // Spécifier explicitement responseType: 'text'
-  return this.http.post(environment.flaskApi + '/generate_advice', payload, {
-    responseType: 'text'
-  });
-}
+//   // Spécifier explicitement responseType: 'text'
+//   return this.http.post(environment.flaskApi + '/generate_advice', payload, {
+//     responseType: 'text'
+//   });
+// }
+recommendation(expenses: string[], language: string = 'english', tone: string = 'formal'): Observable<string> {
+    const payload = {
+      expenses: expenses,
+      language: language,
+      tone: tone
+    };
 
+    // Return the observable with text response type
+    return this.http.post(environment.flaskApi + '/generate_advice', payload, {
+      responseType: 'text'
+    });
+  }
+  transformExpenses(expenses: any[]): string[] {
+    return expenses.map(expense => 
+      `${expense.name}: ${expense.amount} TND (${expense.categoryName})`
+    );
+  }
 
   
 }

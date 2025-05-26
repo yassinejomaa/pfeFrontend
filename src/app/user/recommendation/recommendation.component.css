@@ -173,3 +173,25 @@
   width: 1em;
   margin-left: -1em;
 }
+
+/***added****/
+.recommendation-options {
+  display: flex;
+  flex-wrap: wrap; /* pour petits écrans */
+  gap: 1rem;
+  align-items: center;
+  margin-left:5%;
+}
+
+.option-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+}
+
+.option-container label {
+  margin: 0;
+  white-space: nowrap;
+}
+

@@ -57,7 +57,8 @@ faTimes = faTimes;
       re_pass: [''],
       totalNumberOfFamilyMembers:null,
       totalNumberOfFamilyMembersEmployed:null,
-      agriculturalHouseHoldIndicator:null
+      totalNumberOfCars:null,
+      totalNumberOfBedrooms:null
     }, { validators: this.passwordMatchValidator });
   }
   isSubmitted:boolean=false;

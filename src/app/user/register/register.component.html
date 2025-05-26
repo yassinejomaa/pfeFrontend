@@ -15,7 +15,8 @@
                         <div class="sign-in-from">
                             <h1 class="mb-0 text-center" style="color: black;">Sign Up</h1>
                             <p class="text-center text-dark" *ngIf="step === 1">Enter your personal details</p>
-                            <p class="text-center text-dark" *ngIf="step === 2">Enter additional information (optional)</p>
+                            <p class="text-center text-dark" *ngIf="step === 2">Enter additional information (optional)
+                            </p>
 
                             <form class="mt-4" [formGroup]="form" (ngSubmit)="step === 2 ? onSubmit() : nextStep()">
                                 <!-- Step 1 Fields -->
@@ -23,39 +24,44 @@
                                     <!-- Profile Image -->
                                     <div class="form-group row mb-4">
                                         <div class="col-md-12 d-flex flex-column align-items-center">
-                                          <label class="form-label mb-3">Profile Image</label>
-                                          <div class="circle-upload-wrapper">
-                                            <div class="round-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
-                                              
-                                              <!-- Zone vide : affichage de l'icône et du texte -->
-                                              <ngx-dropzone-label *ngIf="!files.length && !imagePreview">
-                                                <div class="text-center">
-                                                  <fa-icon [icon]="faCamera" style="font-size: 2rem;"></fa-icon>
-                                                  <h4>Click to upload</h4>
-                                                  <p>or drag and drop</p>
+                                            <label class="form-label mb-3">Profile Image</label>
+                                            <div class="circle-upload-wrapper">
+                                                <div class="round-dropzone" ngx-dropzone [accept]="'image/*'"
+                                                    (change)="onSelect($event)">
+
+                                                    <!-- Zone vide : affichage de l'icône et du texte -->
+                                                    <ngx-dropzone-label *ngIf="!files.length && !imagePreview">
+                                                        <div class="text-center">
+                                                            <fa-icon [icon]="faCamera"
+                                                                style="font-size: 2rem;"></fa-icon>
+                                                            <h4>Click to upload</h4>
+                                                            <p>or drag and drop</p>
+                                                        </div>
+                                                    </ngx-dropzone-label>
+
+                                                    <!-- Nouvelle image sélectionnée -->
+                                                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                                                        *ngFor="let f of files" [file]="f" [removable]="true"
+                                                        (removed)="onRemove(f)">
+                                                        <img class="round-preview-image" />
+                                                    </ngx-dropzone-image-preview>
+
+                                                    <!-- Image existante (déjà enregistrée) -->
+                                                    <div *ngIf="!files.length && imagePreview" class="existing-image">
+                                                        <img [src]="imagePreview" class="profile-image" />
+                                                    </div>
                                                 </div>
-                                              </ngx-dropzone-label>
-                                      
-                                              <!-- Nouvelle image sélectionnée -->
-                                              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-                                                <img class="round-preview-image" />
-                                              </ngx-dropzone-image-preview>
-                                      
-                                              <!-- Image existante (déjà enregistrée) -->
-                                              <div *ngIf="!files.length && imagePreview" class="existing-image">
-                                                <img [src]="imagePreview" class="profile-image" />
-                                              </div>
+
+                                                <!-- Bouton supprimer -->
+                                                <button type="button" class="remove-btn mt-2"
+                                                    (click)="onRemoveExisting()" *ngIf="files.length > 0">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
                                             </div>
-                                      
-                                            <!-- Bouton supprimer -->
-                                            <button type="button" class="remove-btn mt-2" (click)="onRemoveExisting()" *ngIf="files.length > 0">
-                                              <i class="fa fa-times"></i>
-                                            </button>
-                                          </div>
                                         </div>
-                                      </div>
-                                      
-                                      
+                                    </div>
+
+
 
                                     <!-- First Name -->
                                     <div class="form-group">
@@ -186,11 +192,12 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <fa-icon [icon]="faUsers" style="font-size: 1.3rem;"></fa-icon>
+                                                    <i class="ri-group-3-fill" style="font-size: 1.3rem;"></i>
                                                 </span>
                                             </div>
-                                            <input type="number" class="form-control mb-2" id="TotalNumberOfFamilyMembers"
-                                                placeholder="Enter family members count" formControlName="totalNumberOfFamilyMembers" />
+                                            <input type="number" class="form-control mb-2"
+                                                id="TotalNumberOfFamilyMembers" placeholder="Enter family members "
+                                                formControlName="totalNumberOfFamilyMembers" />
                                         </div>
                                     </div>
 
@@ -200,7 +207,7 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <fa-icon [icon]="faBriefcase" style="font-size: 1.3rem;"></fa-icon>
+                                                    <i class="ri-briefcase-4-fill" style="font-size: 1.3rem;"></i>
                                                 </span>
                                             </div>
                                             <input type="number" class="form-control mb-2" id="fieldY"
@@ -211,40 +218,42 @@
 
                                     <!-- Field Z -->
                                     <div class="form-group">
-                                        <label for="fieldZ">Agricultural House Hold Indicator</label>
+                                        <label for="fieldZ">Number of Car</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <fa-icon [icon]="faTractor" style="font-size: 1.3rem;"></fa-icon>
+                                                    <i class="ri-roadster-fill" style="font-size: 1.3rem"></i>
                                                 </span>
                                             </div>
-                                            <select class="form-control mb-2" id="fieldZ"
-                                                formControlName="agriculturalHouseHoldIndicator">
-                                                <option value="" disabled selected>Select household type...</option>
-                                                <option value="0">Non-agricultural household</option>
-                                                <option value="1">Agricultural household</option>
-                                                <option value="2">Mixed or other category</option>
-                                            </select>
+                                            <input type="number" class="form-control mb-2" id="fieldY"
+                                                placeholder="Total Number of Car" formControlName="totalNumberOfCars" />
                                         </div>
-                                        <small class="form-text text-muted"
-                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '0'">
-                                            Households not engaged in any agricultural activities
-                                        </small>
-                                        <small class="form-text text-muted"
-                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '1'">
-                                            Households primarily engaged in agricultural activities
-                                        </small>
-                                        <small class="form-text text-muted"
-                                            *ngIf="form.get('agriculturalHouseHoldIndicator')?.value === '2'">
-                                            Households involved in both agricultural and non-agricultural activities
-                                        </small>
+
                                     </div>
+
+                                    <!-- Field room -->
+                                    <div class="form-group">
+                                        <label for="fieldZ">Number of bedrooms</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="ri-home-4-line" style="font-size: 1.3rem"></i>
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control mb-2" id="fieldY"
+                                                placeholder="Total Number of bedrooms"
+                                                formControlName="totalNumberOfBedrooms" />
+                                        </div>
+
+                                    </div>
+
 
                                     <!-- Navigation Buttons -->
                                     <div class="sign-info text-center">
                                         <button type="button" class="btn btn-secondary d-block w-100 mb-2"
                                             (click)="previousStep()">Previous</button>
-                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign Up</button>
+                                        <button type="submit" class="btn btn-primary d-block w-100 mb-2">Sign
+                                            Up</button>
                                     </div>
                                 </div>
                             </form>

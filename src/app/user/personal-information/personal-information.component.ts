@@ -50,7 +50,8 @@ export class PersonalInformationComponent implements OnInit {
       avatar: [''],
       totalNumberOfFamilyMembers:[''],
       totalNumberOfFamilyMembersEmployed:[''],
-      agriculturalHouseHoldIndicator:[''],
+      totalNumberOfCars:[''],
+      totalNumberOfBedrooms:['']
     });
   
     const userDataString = localStorage.getItem("userData");
@@ -70,7 +71,8 @@ export class PersonalInformationComponent implements OnInit {
             avatar: userData.avatar || '',
             totalNumberOfFamilyMembers: userData.totalNumberOfFamilyMembers|| '',
             totalNumberOfFamilyMembersEmployed: userData.totalNumberOfFamilyMembersEmployed || '',
-            agriculturalHouseHoldIndicator: userData.agriculturalHouseHoldIndicator || ''
+            totalNumberOfCars: userData.totalNumberOfCars || '',
+            totalNumberOfBedrooms: userData.totalNumberOfBedrooms || ''
           });
   
           // Load existing avatar if available
