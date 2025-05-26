@@ -110,7 +110,7 @@
                     <div class="chart-summary p-4 bg-light rounded">
                       <div class="text-center mb-4">
                         <h5 class="mb-1"><b>Total Expenses</b></h5>
-                        <h2 class="text-primary"><b>{{TotalExpenseIndateRange || 0}} TND</b></h2>
+                        <h2 class="text-primary"><b>{{TotalExpenseIndateRange || 0 | number: '1.2-2'}} TND</b></h2>
                       </div>
                       <div [ngClass]="isHide ? 'hide' : 'd-flex justify-content-between align-items-center mb-3'">
                         <div class="d-flex align-items-center">

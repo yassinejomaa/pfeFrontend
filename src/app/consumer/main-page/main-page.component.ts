@@ -149,6 +149,20 @@ export class MainPageComponent implements OnInit {
         console.log(res.budgetPeriod.predictedExpense);
         this.prdected_expense=res.budgetPeriod.predictedExpense;
         this.dashboardData = res;
+
+        if (res.budgetPeriod) {
+          // Add 1 day to the start date
+          const start = new Date(res.budgetPeriod.startDate);
+          start.setDate(start.getDate() + 1);
+          this.startDate = start.toISOString().split('T')[0];
+        
+          // Add 1 day to the end date
+          const end = new Date(res.budgetPeriod.endDate);
+          end.setDate(end.getDate() + 1);
+          this.endDate = end.toISOString().split('T')[0];
+        }
+        
+
         this.totalExpensePerDate=res.expensesByDate;
         console.log("expense per date",this.totalExpensePerDate)
         console.log(this.dashboardData)
