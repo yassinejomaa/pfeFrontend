@@ -19,8 +19,8 @@ import { DropdownModule } from 'primeng/dropdown';
   standalone: true,
   imports: [
     CommonModule,
-    SideNavbarComponent, 
-    TopNavBarComponent, 
+    SideNavbarComponent,
+    TopNavBarComponent,
     PickListModule,
     DragDropModule,
     ProgressBarModule,
@@ -41,28 +41,30 @@ export class RecommendationComponent implements OnInit {
   sourceExpenses: Expense[] = [];
   targetExpenses: Expense[] = [];
   recommendations: string = '';
+  lastDisplayedContent: string = '';
+  isStreaming: boolean = false;
   isLoading: boolean = false;
   loadingProgress: number = 0;
   loading: boolean = false; // Indicateur de chargement pour la barre de progression
   selectedTone: { name: string; emoji: string } | null = null;
-selectedLanguage?: { name: string; code: string ;image:any};
-tones = [
+  selectedLanguage?: { name: string; code: string; image: any };
+  tones = [
     { name: 'Formal', emoji: '🧐' },
     { name: 'Humorous', emoji: '😄' },
   ];
 
   languages = [
-    { name: 'English', code: 'GB',image:'images/englich.png' },
-    { name: 'French', code: 'FR' ,image:'images/french.png'},
+    { name: 'English', code: 'GB', image: 'images/englich.png' },
+    { name: 'French', code: 'FR', image: 'images/french.png' },
   ];
- 
-  
+
+
 
 
   categoryImages = [
     { src: "images/electronics.png", num: 5 },
     { src: "images/entertainement.png", num: 3 },
-    { src: "images/fashion.png", num: 6},
+    { src: "images/fashion.png", num: 6 },
     { src: "images/food.png", num: 1 },
     { src: "images/health.png", num: 4 },
     { src: "images/housing.png", num: 7 },
@@ -74,7 +76,7 @@ tones = [
     private cdr: ChangeDetectorRef,
     private expenseService: ExpenseService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.expenseService.getExpensesOfUser(this.authService.getUserId()).subscribe(expenses => {
@@ -111,31 +113,7 @@ tones = [
   //     }
   //   });
   // }
-  getRecommendations() {
-    this.loading = true; // Début du chargement
 
-    
-    // Get formatted expenses from the service
-    const formattedExpenses = this.expenseService.transformExpenses(this.targetExpenses);
-    
-    // Call service method to get recommendations
-    this.expenseService.recommendation(
-      formattedExpenses, 
-      this.selectedLanguage?.name, 
-       this.selectedTone?.name
-    ).subscribe({
-      next: (response) => {
-        this.recommendations = response;
-        this.loading = false;
-        console.log('Recommendations received');
-      },
-      error: (error) => {
-        console.error("Error getting recommendations:", error);
-        this.recommendations = 'Error: Unable to generate recommendations at this time.';
-        this.loading = false;
-      }
-    });
-  }
   getCategoryImage(categoryId: number): string {
     const category = this.categoryImages.find(item => item.num === categoryId);
     return category ? category.src : 'images/default.png'; // Si non trouvé, retourne une image par défaut
@@ -144,5 +122,59 @@ tones = [
   recevoirMessage(message: boolean) {
     this.changeMenu = message;
   }
+
+
+
+  // Fonction d'effet typewriter
+  typeWriterEffect(words: string[], callback: (word: string) => void): void {
+    words.forEach((word, index) => {
+      setTimeout(() => {
+        callback(word);
+      }, index * 100);
+    });
+  }
+
+  // Alternative avec méthode EventSource
+
+
+  // Méthode pour nettoyer le HTML si nécessaire
+  cleanHtmlResponse(html: string): string {
+    // Supprimer les balises <body> si elles sont redondantes
+    return html.replace(/<\/?body[^>]*>/g, '');
+  }
+
+  getRecommendations() {
+    this.isStreaming = true;
+    this.recommendations = '';
+
+    const formattedExpenses = this.expenseService.transformExpenses(this.targetExpenses);
+
+    this.expenseService.recommendationStreamFetch(
+      formattedExpenses,
+      this.selectedLanguage?.name.toLowerCase(),
+      this.selectedTone?.name.toLowerCase()
+    ).subscribe({
+      next: (text) => {
+        this.recommendations = text;
+        console.log(text)
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.recommendations = `<div>Error: ${err}</div>`;
+        this.isStreaming = false;
+      },
+      complete: () => {
+        this.isStreaming = false;
+      }
+    });
+  }
+
+
+
+
+
+
+
+
 }
 
